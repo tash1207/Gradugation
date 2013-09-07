@@ -22,6 +22,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.gradugation.NewGameActivity"
+            android:label="@string/title_activity_new_game" >
+        </activity>
+        <activity
+            android:name="com.gradugation.ChooseCharacterActivity"
+            android:label="@string/title_activity_choose_character" >
+        </activity>
+        
     </application>
 
 </manifest>

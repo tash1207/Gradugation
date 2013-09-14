@@ -30,7 +30,11 @@
             android:name="com.gradugation.ChooseCharacterActivity"
             android:label="@string/title_activity_choose_character" >
         </activity>
-        
+        <activity
+            android:name="com.gradugation.SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
+        <service android:name="BackgroundMusicService"></service>
     </application>
 
 </manifest>

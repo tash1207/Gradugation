@@ -21,6 +21,7 @@ local.properties
 project.properties
 proguard-project.txt
 .settings/
+.metadata/
 
 # Mac files
 .DS_Store

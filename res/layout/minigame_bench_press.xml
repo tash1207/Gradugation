@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/gator_blue" >
+
+        <TextView
+            android:id="@+id/bench_press_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:padding="10dp"
+            android:text="Time Left: 10 secs"
+            android:textColor="@color/gator_orange"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/bench_press_reps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:padding="10dp"
+            android:text="Reps: 0"
+            android:textColor="@color/gator_orange"
+            android:textSize="18sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_alignParentBottom="true"
+            android:background="#80666666" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/bench_press_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header"
+        android:background="#FFFFFF"
+        android:scaleType="fitCenter"
+        android:src="@drawable/bench_press1"
+        android:onClick="benchPress" />
+
+</RelativeLayout>

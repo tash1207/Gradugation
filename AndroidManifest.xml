@@ -34,7 +34,13 @@
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
-        <service android:name="BackgroundMusicService"></service>
+        <activity
+            android:name=".BenchPressMinigame"
+            android:label="@string/title_activity_bench_press_minigame" >
+        </activity>
+
+        <service android:name="BackgroundMusicService" >
+        </service>
     </application>
 
 </manifest>

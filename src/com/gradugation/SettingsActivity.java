@@ -47,5 +47,20 @@ public class SettingsActivity extends Activity {
 	    	SongPlayer.stopSong();
 	    }
 	}
+	
+	public void onPause() {
+		super.onPause();
+		SongPlayer.stopSongDelayed();
+	}
+	
+	protected void onResume() {
+    	super.onResume();
+    	SharedPreferences settings = getSharedPreferences(SettingsActivity.SOUND_PREFERENCE, 0);
+		boolean isSoundOn = settings.getBoolean(SettingsActivity.SOUND_ON, true);
+		
+		if (isSoundOn) {
+			SongPlayer.playSong();
+		}
+    }
 
 }

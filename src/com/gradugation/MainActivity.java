@@ -42,7 +42,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onPause() {
     	super.onPause();
-    	SongPlayer.stopSong();
+    	SongPlayer.stopSongDelayed();
     }
     
     protected void onResume() {
@@ -53,8 +53,6 @@ public class MainActivity extends Activity {
 		if (isSoundOn) {
 			SongPlayer.playSong();
 		}
-    	// TODO: when we save user settings, will need to check settings to see if sound is turned off
-        //backgroundMusic.start();
     }
     
     @Override

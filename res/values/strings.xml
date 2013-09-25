@@ -23,4 +23,16 @@
     <string name="music_on">Music</string>
     <string name="okay">Okay</string>
 
+    <!-- Bench Press Minigame -->
+    <string name="bench_press_instructions1">Tap the screen as fast as possible to make your character do reps.
+        </string>
+    <string name="bench_press_instructions2">You need to finish %1$d reps in 10 seconds to earn the credits for 
+        this minigame.</string>
+    <string name="bench_press_time">Time Left: 10 secs</string>
+    <string name="bench_press_reps">Reps: 0</string>
+    <string name="bench_press_success">Congratulations! You finished %1$d reps in 10 seconds.
+        You have earned %2$d credits!</string>
+    <string name="bench_press_failure">Sorry! You only finished %1$d reps in 10 seconds.
+        You did not earn any credits!</string>
+
 </resources>

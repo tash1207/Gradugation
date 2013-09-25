@@ -36,7 +36,8 @@
         </activity>
         <activity
             android:name=".BenchPressMinigame"
-            android:label="@string/title_activity_bench_press_minigame" >
+            android:label="@string/title_activity_bench_press_minigame"
+            android:screenOrientation="portrait" >
         </activity>
 
         <service android:name="BackgroundMusicService" >

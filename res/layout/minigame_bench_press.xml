@@ -53,7 +53,7 @@
     <RelativeLayout
         android:id="@id/footer"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/gator_blue" >
 
@@ -64,11 +64,20 @@
             android:background="#80666666" />
 
         <Button
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:layout_margin="8dp"
+            android:background="@drawable/button_rectangle_orange"
+            android:onClick="ContinueGame"
+            android:paddingBottom="16dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="16dp"
             android:text="@string/continue_game"
-            android:onClick="ContinueGame" />
+            android:textColor="#111111"
+            android:textSize="20sp"
+            android:textStyle="bold" />
     </RelativeLayout>
 
 </RelativeLayout>

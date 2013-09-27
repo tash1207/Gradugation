@@ -34,7 +34,14 @@
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
-        <service android:name="BackgroundMusicService"></service>
+
+        <service android:name="BackgroundMusicService" >
+        </service>
+
+        <activity
+            android:name=".ContinueActivity"
+            android:label="@string/title_activity_continue" >
+        </activity>
     </application>
 
 </manifest>

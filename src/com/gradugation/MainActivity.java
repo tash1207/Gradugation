@@ -39,6 +39,11 @@ public class MainActivity extends Activity {
     	
     }
     
+    public void continueGameButtonClick(View view) {
+    	Intent intent = new Intent(this, ContinueActivity.class);
+    	startActivity(intent);
+    }
+    
     @Override
     protected void onPause() {
     	super.onPause();

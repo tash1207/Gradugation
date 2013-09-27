@@ -3,8 +3,10 @@ package com.gradugation;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
@@ -18,6 +20,16 @@ public class MainActivity extends Activity {
         SongPlayer.initializePlayer(this);
 		
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
+        
+        //Open Database
+        DbHelper dbhelper = new DbHelper(this); 
+        SQLiteDatabase db = dbhelper.getWritableDatabase();
+        
+        //Close Database
+        db.close();
+        dbhelper.close();
+        
+        Log.d("TEST", "I hope this worked");
     }
 
 

@@ -35,17 +35,20 @@
             android:label="@string/title_activity_settings" >
         </activity>
 
-        <service android:name="BackgroundMusicService" >
-        </service>
 
         <activity
             android:name=".WiresMiniGame"
             android:label="@string/title_activity_wires_mini_game" >
         </activity>
+
         <activity
-            android:name=".Minigame3"
-            android:label="@string/title_activity_minigame3" >
+            android:name=".BenchPressMinigame"
+            android:label="@string/title_activity_bench_press_minigame"
+            android:screenOrientation="portrait" >
         </activity>
+
+        <service android:name="BackgroundMusicService" >
+        </service>
     </application>
 
 </manifest>

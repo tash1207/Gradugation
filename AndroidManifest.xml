@@ -15,7 +15,8 @@
         android:theme="@android:style/Theme.NoTitleBar" >
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -38,7 +39,8 @@
 
         <activity
             android:name=".WiresMiniGame"
-            android:label="@string/title_activity_wires_mini_game" >
+            android:label="@string/title_activity_wires_mini_game"
+            android:screenOrientation="landscape" >
         </activity>
 
         <activity

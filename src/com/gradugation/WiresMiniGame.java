@@ -105,7 +105,7 @@ public class WiresMiniGame extends Activity {
 			AlertDialog.Builder alertDialogBuilder2 = new AlertDialog.Builder(context2);
 			
 			// set title and message
-			alertDialogBuilder2.setTitle("Sorry, you lose.");
+			alertDialogBuilder2.setTitle("Congradugation! You win!");
 			alertDialogBuilder2.setMessage("Press Continue.");
 			alertDialogBuilder2.setCancelable(false);
 			

@@ -19,5 +19,8 @@
     <string name="music_on">Music</string>
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="okay">Okay</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_wires_mini_game">WiresMiniGame</string>
+    <string name="title_activity_minigame3">Minigame3</string>
 
 </resources>

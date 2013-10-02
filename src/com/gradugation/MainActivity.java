@@ -39,6 +39,11 @@ public class MainActivity extends Activity {
     	
     }
     
+    public void wiresMiniGameClick(View view){
+    	Intent intent = new Intent(this, WiresMiniGame.class);
+    	startActivity(intent);
+    }
+    
     @Override
     protected void onPause() {
     	super.onPause();

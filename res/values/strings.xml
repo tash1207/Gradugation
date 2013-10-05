@@ -9,28 +9,31 @@
     <string name="title_activity_new_game">NewGameActivity</string>
     <string name="title_activity_choose_character">ChooseCharacterActivity</string>
     <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_how_to_play">HowToPlayActivity</string>
+    <string name="title_activity_minigames">MinigamesActivity</string>
     <string name="title_activity_bench_press_minigame">BenchPressMinigame</string>
+    <string name="title_activity_wires_mini_game">WiresMiniGame</string>
 
     <!-- Main Activity -->
     <string name="new_game">New Game</string>
     <string name="continue_game">Continue</string>
     <string name="how_to_play">How To Play</string>
+    <string name="settings">Settings</string>
+    <string name="minigames">Minigames</string>
     <string name="how_many_players">How many players?</string>
     <string name="albert_name">Albert</string>
     <string name="alberta_name">Alberta</string>
     <string name="gradugator_name">Gradugator</string>
-    <string name="settings">Settings</string>
     <string name="music_on">Music</string>
     <string name="okay">Okay</string>
     <string name="menu_settings">Settings</string>
-    <string name="title_activity_wires_mini_game">WiresMiniGame</string>
-    <string name="title_activity_minigame3">Minigame3</string>
-    <string name="title_activity_how_to_play">HowToPlayActivity</string>
 
+    <!-- Minigames Screen -->
+    <string name="wires">Wires</string>
+    <string name="bench_press">Bench Press</string>
 
     <!-- Bench Press Minigame -->
-    <string name="bench_press_instructions1">Tap the screen as fast as possible to make your character do reps.
-        </string>
+    <string name="bench_press_instructions1">Tap the screen as fast as possible to make your character do reps.</string>
     <string name="bench_press_instructions2">You need to finish %1$d reps in 10 seconds to earn the credits for 
         this minigame.</string>
     <string name="bench_press_time">Time Left: 10 secs</string>
@@ -40,21 +43,21 @@
     <string name="bench_press_failure">Sorry! You only finished %1$d reps in 10 seconds.
         You did not earn any credits!</string>
 
-	<!-- How To Play / Tutorial Screen -->
-	<string name="how_to_play_title">How To Play Gradugation</string>
-	<string name="main_game_instructions">The main goal of Gradugation is to graduate, of course! 
+    <!-- How To Play / Tutorial Screen -->
+    <string name="how_to_play_title">How To Play Gradugation</string>
+    <string name="main_game_instructions">The main goal of Gradugation is to graduate, of course! 
 	    Begin the game by selecting a preferred character. Afterwards, you will see the main game board.
 	    After a dice roll determines your turn, you may begin on the path to graduation. The number that
 	    the dice rolls determines the number of squares your character may move. Use your finger to 
 	    drag your character across the screen. If your character visits a building, he or she can take courses
 	    in the form of minigames to accumulate credits.</string>
-	<string name="mini_game_title">Mini Game Instructions</string>
-	<string name="wires_title">1. Wires</string>
-	<string name="wires_body">The purpose of this game is to find the end of a wire, the number of which is specified
+    <string name="mini_game_title">Mini Game Instructions</string>
+    <string name="wires_title">1. Wires</string>
+    <string name="wires_body">The purpose of this game is to find the end of a wire, the number of which is specified
 	    by the dialogue box at the beginning of the wires game. The time allotted to to the player is not very long,
 	    so be quick!</string>
-	<string name="bench_press_title">2. Bench Press</string>
-	<string name="bench_press_body">Quickly tap the screen, right onto the dapper, weight-lifting engineer on the screen
+    <string name="bench_press_title">2. Bench Press</string>
+    <string name="bench_press_body">Quickly tap the screen, right onto the dapper, weight-lifting engineer on the screen
 	    to perform as many reps as possible in the allotted time.</string>
 
 </resources>

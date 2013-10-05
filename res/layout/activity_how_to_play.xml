@@ -1,0 +1,112 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"    
+    android:layout_height="wrap_content" >
+    
+<LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#2040B8"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin" >
+
+    <TextView
+        android:id="@+id/gradugation_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/how_to_play_title"
+        android:textColor="#E67022"
+        android:textSize="38sp"
+        android:textStyle="italic"
+        android:typeface="serif" />
+
+    <ImageView
+        android:id="@+id/gradugation_logo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/app_name"
+        android:scaleType="fitCenter"
+        android:src="@drawable/gradugation_logo" />
+    
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="@string/main_game_instructions"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="15sp"
+        android:textStyle="normal"
+        android:typeface="sans" />
+
+    <TextView
+        android:id="@+id/testView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:scrollHorizontally="true"
+        android:text="@string/mini_game_title"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="#000000"
+        android:textSize="17sp"
+        android:textStyle="bold|italic"
+        android:typeface="serif" />
+    
+    <TextView
+        android:id="@+id/testView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:scrollHorizontally="true"
+        android:text="@string/wires_title"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:typeface="sans" />
+    
+    <TextView
+        android:id="@+id/testView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:scrollHorizontally="true"
+        android:text="@string/wires_body"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="15sp"
+        android:textStyle="normal"
+        android:typeface="sans" />
+    
+    
+    <TextView
+        android:id="@+id/testView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:paddingLeft="15dp"
+        android:scrollHorizontally="true"
+        android:text="@string/bench_press_title"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:typeface="sans" />
+    
+    <TextView
+        android:id="@+id/testView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:scrollHorizontally="true"
+        android:text="@string/bench_press_body"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="15sp"
+        android:textStyle="normal"
+        android:typeface="sans" />
+
+    </LinearLayout>
+</ScrollView>

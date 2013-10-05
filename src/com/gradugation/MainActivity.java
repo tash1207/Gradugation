@@ -7,14 +7,14 @@ import android.view.Menu;
 import android.view.View;
 
 public class MainActivity extends BaseActivity {
-	
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
         SongPlayer.initializePlayer(this);
-		
+
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
 
@@ -41,5 +41,9 @@ public class MainActivity extends BaseActivity {
     	Intent intent = new Intent(this, WiresMiniGame.class);
     	startActivity(intent);
     }
-    
+
+    public void howToPlayClick(View view) {
+    	Intent intent = new Intent(this, HowToPlayActivity.class);
+    	startActivity(intent);
+    }
 }

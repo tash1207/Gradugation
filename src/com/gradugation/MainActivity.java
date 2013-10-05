@@ -39,7 +39,7 @@ public class MainActivity extends Activity {
     	
     }
     
-    public void wiresMiniGameClick(View view){
+    public void minigamesButtonClick(View view){
     	Intent intent = new Intent(this, WiresMiniGame.class);
     	startActivity(intent);
     }

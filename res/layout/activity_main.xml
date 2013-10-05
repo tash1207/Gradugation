@@ -62,6 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
+            android:onClick="howToPlayClick"
             android:text="@string/how_to_play"
             android:textSize="16sp" />
 

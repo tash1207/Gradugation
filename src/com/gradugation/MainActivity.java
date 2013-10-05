@@ -9,14 +9,14 @@ import android.view.Menu;
 import android.view.View;
 
 public class MainActivity extends Activity {
-	
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
         SongPlayer.initializePlayer(this);
-		
+
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
 
@@ -44,6 +44,11 @@ public class MainActivity extends Activity {
     	startActivity(intent);
     }
     
+    public void howToPlayClick(View view) {
+    	Intent intent = new Intent(this, HowToPlayActivity.class);
+    	startActivity(intent);
+    }
+    
     @Override
     protected void onPause() {
     	super.onPause();
@@ -54,7 +59,7 @@ public class MainActivity extends Activity {
     	super.onResume();
     	SharedPreferences settings = getSharedPreferences(SettingsActivity.SOUND_PREFERENCE, 0);
 		boolean isSoundOn = settings.getBoolean(SettingsActivity.SOUND_ON, true);
-		
+
 		if (isSoundOn) {
 			SongPlayer.playSong();
 		}

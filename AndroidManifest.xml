@@ -35,14 +35,11 @@
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
-
-
         <activity
             android:name=".WiresMiniGame"
             android:label="@string/title_activity_wires_mini_game"
             android:screenOrientation="landscape" >
         </activity>
-
         <activity
             android:name=".BenchPressMinigame"
             android:label="@string/title_activity_bench_press_minigame"
@@ -51,6 +48,11 @@
 
         <service android:name="BackgroundMusicService" >
         </service>
+
+        <activity
+            android:name=".HowToPlayActivity"
+            android:label="@string/title_activity_how_to_play" >
+        </activity>
     </application>
 
 </manifest>

@@ -41,11 +41,18 @@ public class MainActivity extends BaseActivity {
     	Intent intent = new Intent(this, WiresMiniGame.class);
     	startActivity(intent);
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> f79d15159bf43b525ecd1dfd28534eb3c246518c
     public void howToPlayClick(View view) {
     	Intent intent = new Intent(this, HowToPlayActivity.class);
     	startActivity(intent);
     }
+<<<<<<< HEAD
     
   
+=======
+>>>>>>> f79d15159bf43b525ecd1dfd28534eb3c246518c
 }

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gator_blue"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/activity_vertical_margin" >
+
+        <TextView
+            android:id="@+id/gradugation_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/app_name"
+            android:textColor="@color/gator_orange"
+            android:textSize="48sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="27dp"
+            android:text="@string/minigames"
+            android:textColor="#E67022"
+            android:textSize="36sp" />
+
+        <RelativeLayout
+            android:id="@+id/minigame_wires_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            android:background="@drawable/button_rectangle_orange"
+            android:clickable="true"
+            android:onClick="minigameWiresButtonClick"
+            android:padding="8dp" >
+
+            <ImageView
+                android:id="@+id/minigame_wires_image"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_centerVertical="true"
+                android:background="@android:color/black"
+                android:contentDescription="@string/wires"
+                android:src="@drawable/wires1" />
+
+            <TextView
+                android:id="@+id/minigame_wires_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_margin="8dp"
+                android:layout_toRightOf="@id/minigame_wires_image"
+                android:text="@string/wires"
+                android:textColor="@color/gator_blue"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/minigame_bench_press_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            android:background="@drawable/button_rectangle_orange"
+            android:clickable="true"
+            android:onClick="minigameBenchPressButtonClick"
+            android:padding="8dp" >
+
+            <ImageView
+                android:id="@+id/minigame_bench_press_image"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_centerVertical="true"
+                android:background="@android:color/white"
+                android:contentDescription="@string/bench_press"
+                android:src="@drawable/bench_press1" />
+
+            <TextView
+                android:id="@+id/minigame_bench_press_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_margin="8dp"
+                android:layout_toRightOf="@id/minigame_bench_press_image"
+                android:text="@string/bench_press"
+                android:textColor="@color/gator_blue"
+                android:textSize="16sp" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</ScrollView>

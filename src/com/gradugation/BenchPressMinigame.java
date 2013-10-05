@@ -107,8 +107,7 @@ public class BenchPressMinigame extends Activity {
 	
 	public void ContinueGame(View view) {
 		if (game_finished) {
-			Toast.makeText(this, "Now we would continue back to the main game board", 
-					Toast.LENGTH_LONG).show();
+			finish();
 		}
 		else {
 			Toast.makeText(this, "The minigame is still going on so this button is disabled", 

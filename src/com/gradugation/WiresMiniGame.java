@@ -9,9 +9,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 
 public class WiresMiniGame extends Activity {
+	static int CREDITS_EARNED = 3;
+	
 	// Which wire you will find (1-4).
 	private int gameNumber;
-
+	
 	boolean win;
 	final Context context = this;
 	final Context context2 = this;
@@ -91,6 +93,8 @@ public class WiresMiniGame extends Activity {
 	}
 
 	public void win() {
+		//update the player's credits
+		
 		AlertDialog.Builder alertDialogBuilder2 = new AlertDialog.Builder(
 				context2);
 

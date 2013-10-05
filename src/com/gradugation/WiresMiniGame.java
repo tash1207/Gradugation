@@ -8,9 +8,11 @@ import android.view.Menu;
 import android.view.View;
 
 public class WiresMiniGame extends Activity {
+	static int CREDITS_EARNED = 3;
+	
 	// Which wire you will find (1-4).
 	private int gameNumber;
-
+	
 	boolean win;
 
 	@Override
@@ -86,6 +88,7 @@ public class WiresMiniGame extends Activity {
 	}
 
 	public void win() {
+		//update the player's credits
 		AlertDialog.Builder alertDialogBuilder2 = new AlertDialog.Builder(this);
 
 		// set title and message

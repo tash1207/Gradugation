@@ -1,21 +1,17 @@
 package com.gradugation;
 
-import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 
 public class WiresMiniGame extends Activity {
 	// Which wire you will find (1-4).
 	private int gameNumber;
 
 	boolean win;
-	final Context context = this;
-	final Context context2 = this;
-	final Context context3 = this;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -25,8 +21,7 @@ public class WiresMiniGame extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_wires_mini_game);
 
-		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-				context);
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
 		// set title and message
 		alertDialogBuilder.setTitle("Press the button that goes to Wire "
@@ -91,8 +86,7 @@ public class WiresMiniGame extends Activity {
 	}
 
 	public void win() {
-		AlertDialog.Builder alertDialogBuilder2 = new AlertDialog.Builder(
-				context2);
+		AlertDialog.Builder alertDialogBuilder2 = new AlertDialog.Builder(this);
 
 		// set title and message
 		alertDialogBuilder2.setTitle("Congradugation! You win!");
@@ -115,8 +109,7 @@ public class WiresMiniGame extends Activity {
 	}
 
 	public void lose() {
-		AlertDialog.Builder alertDialogBuilder3 = new AlertDialog.Builder(
-				context3);
+		AlertDialog.Builder alertDialogBuilder3 = new AlertDialog.Builder(this);
 
 		// set title and message
 		alertDialogBuilder3.setTitle("Sorry, you lose.");

@@ -21,12 +21,15 @@
     <string name="settings">Settings</string>
     <string name="minigames">Minigames</string>
     <string name="how_many_players">How many players?</string>
-    <string name="albert_name">Albert</string>
-    <string name="alberta_name">Alberta</string>
-    <string name="gradugator_name">Gradugator</string>
     <string name="music_on">Music</string>
     <string name="okay">Okay</string>
     <string name="menu_settings">Settings</string>
+    
+    <!-- Choose Character -->
+    <string name="choose_character">Choose a character</string>
+    <string name="character_engineer">Engineer</string>
+    <string name="character_football">Football Player</string>
+    <string name="character_gradugator">Gradugator</string>
 
     <!-- Minigames Screen -->
     <string name="wires">Wires</string>

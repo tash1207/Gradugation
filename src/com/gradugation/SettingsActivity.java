@@ -1,13 +1,12 @@
 package com.gradugation;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.CheckBox;
 
-public class SettingsActivity extends Activity {
+public class SettingsActivity extends BaseActivity {
 
 	public final static String SOUND_PREFERENCE = "com.gradugation.SOUND_PREFERENCE";
 	public final static String SOUND_ON = "com.gradugation.SOUND_ON";
@@ -47,20 +46,5 @@ public class SettingsActivity extends Activity {
 	    	SongPlayer.stopSong();
 	    }
 	}
-	
-	public void onPause() {
-		super.onPause();
-		SongPlayer.stopSongDelayed();
-	}
-	
-	protected void onResume() {
-    	super.onResume();
-    	SharedPreferences settings = getSharedPreferences(SettingsActivity.SOUND_PREFERENCE, 0);
-		boolean isSoundOn = settings.getBoolean(SettingsActivity.SOUND_ON, true);
-		
-		if (isSoundOn) {
-			SongPlayer.playSong();
-		}
-    }
 
 }

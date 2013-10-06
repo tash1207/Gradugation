@@ -1,22 +1,20 @@
 package com.gradugation;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 
-public class MainActivity extends Activity {
-	
+public class MainActivity extends BaseActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
         SongPlayer.initializePlayer(this);
-		
+
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
 
@@ -39,32 +37,14 @@ public class MainActivity extends Activity {
     	
     }
     
-    public void wiresMiniGameClick(View view){
-    	Intent intent = new Intent(this, WiresMiniGame.class);
+    public void minigamesButtonClick(View view){
+    	Intent intent = new Intent(this, MinigamesActivity.class);
     	startActivity(intent);
     }
-    
-    @Override
-    protected void onPause() {
-    	super.onPause();
-    	SongPlayer.stopSongDelayed();
+
+    public void howToPlayClick(View view) {
+    	Intent intent = new Intent(this, HowToPlayActivity.class);
+    	startActivity(intent);
     }
-    
-    protected void onResume() {
-    	super.onResume();
-    	SharedPreferences settings = getSharedPreferences(SettingsActivity.SOUND_PREFERENCE, 0);
-		boolean isSoundOn = settings.getBoolean(SettingsActivity.SOUND_ON, true);
-		
-		if (isSoundOn) {
-			SongPlayer.playSong();
-		}
-    }
-    
-    @Override
-    protected void onDestroy(){
-       super.onDestroy();
-       SongPlayer.stopSong();
-       
-    }
-    
+
 }

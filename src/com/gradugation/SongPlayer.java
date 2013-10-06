@@ -62,7 +62,6 @@ public class SongPlayer {
 		    @Override
 		    public void run() {
 		        handler.post(new Runnable() {
-		            @Override
 		            public void run() {
 		            	if (lastTimePlayed == 0) {
 		            		return;

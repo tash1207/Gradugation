@@ -23,28 +23,28 @@
         android:id="@+id/radioGroup1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
-
+
         <RadioButton
             android:id="@+id/radio0"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
             android:drawableRight="@drawable/athlete"
-            android:text="Athlete" />
-
+            android:text="@string/character_athlete" />
+
         <RadioButton
             android:id="@+id/radio1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableRight="@drawable/engineer"
-            android:text="Engineer" />
+            android:text="@string/character_engineer" />
 
         <RadioButton
             android:id="@+id/radio2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/gradugator_name"
-            android:drawableRight="@drawable/ic_launcher" />
+            android:drawableRight="@drawable/ic_launcher"
+            android:text="@string/character_gradugator" />
     </RadioGroup>
 
     <Button

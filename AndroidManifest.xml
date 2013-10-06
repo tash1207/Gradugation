@@ -32,9 +32,20 @@
             android:label="@string/title_activity_choose_character" >
         </activity>
         <activity
+            android:name=".HowToPlayActivity"
+            android:label="@string/title_activity_how_to_play" >
+        </activity>
+        <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
+
+        <activity
+            android:name=".MinigamesActivity"
+            android:label="@string/title_activity_minigames"
+            android:screenOrientation="portrait" >
+        </activity>
+
         <activity
             android:name=".WiresMiniGame"
             android:label="@string/title_activity_wires_mini_game"
@@ -48,11 +59,7 @@
 
         <service android:name="BackgroundMusicService" >
         </service>
-
-        <activity
-            android:name=".HowToPlayActivity"
-            android:label="@string/title_activity_how_to_play" >
-        </activity>
+        <activity android:name=".MainGameScreen" android:label="@string/title_activity_main_game_screen"></activity>
     </application>
 
 </manifest>

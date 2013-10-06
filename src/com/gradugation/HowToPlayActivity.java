@@ -1,10 +1,9 @@
 package com.gradugation;
 
 import android.os.Bundle;
-import android.app.Activity;
 import android.view.Menu;
 
-public class HowToPlayActivity extends Activity {
+public class HowToPlayActivity extends BaseActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

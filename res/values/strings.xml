@@ -38,6 +38,7 @@
         You have earned %2$d credits!</string>
     <string name="bench_press_failure">Sorry! You only finished %1$d reps in 10 seconds.
         You did not earn any credits!</string>
+    <string name="title_activity_main_game_screen">MainGameScreen</string>
 
 
 </resources>

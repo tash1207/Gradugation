@@ -31,7 +31,7 @@ public class ChooseCharacterActivity extends Activity {
     }
 	
 	public void startGame(View view) {
-    	Intent intent = new Intent(this, BenchPressMinigame.class);
+    	Intent intent = new Intent(this, MainGameScreen.class);
     	startActivity(intent);
 	}
 

@@ -35,7 +35,7 @@
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
-
+       
 
         <activity
             android:name=".WiresMiniGame"
@@ -51,6 +51,7 @@
 
         <service android:name="BackgroundMusicService" >
         </service>
+        <activity android:name=".MainGameScreen" android:label="@string/title_activity_main_game_screen"></activity>
     </application>
 
 </manifest>

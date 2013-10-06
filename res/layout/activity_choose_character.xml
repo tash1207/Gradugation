@@ -19,6 +19,16 @@
         android:textColor="#E67022"
         android:textSize="48sp" />
 
+    <TextView
+        android:id="@+id/choose_character_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:layout_marginTop="28dp"
+        android:text="@string/choose_character"
+        android:textColor="@color/gator_orange"
+        android:textSize="36sp" />
+
     <RadioGroup
         android:id="@+id/radioGroup1"
         android:layout_width="wrap_content"
@@ -52,9 +62,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
+        android:background="@drawable/button_rectangle_orange"
         android:onClick="startGame"
+        android:padding="14dp"
         android:text="@string/continue_game"
-        android:textColor="#FAFAFA"
+        android:textColor="@android:color/black"
         android:textSize="16sp" />
 
 </LinearLayout>

@@ -24,6 +24,9 @@ public class BenchPressMinigame extends Activity {
 	
 	boolean game_finished = false;
 	
+	private AlertDialog.Builder builder;
+	private AlertDialog dialog2;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -56,7 +59,7 @@ public class BenchPressMinigame extends Activity {
 			
 		};
 		
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.bench_press_instructions1));
         builder.setCancelable(false);
         builder.setPositiveButton("Next", new DialogInterface.OnClickListener() {
@@ -65,7 +68,7 @@ public class BenchPressMinigame extends Activity {
                 public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         
-                		AlertDialog.Builder builder = new AlertDialog.Builder(BenchPressMinigame.this);
+                		builder = new AlertDialog.Builder(BenchPressMinigame.this);
                         builder.setMessage(getString(R.string.bench_press_instructions2, REPS_REQUIRED));
                         builder.setCancelable(false);
                         builder.setPositiveButton("Start", new DialogInterface.OnClickListener() {
@@ -77,13 +80,13 @@ public class BenchPressMinigame extends Activity {
                                 }
                         });
                         
-                        AlertDialog dialog2 = builder.create();
+                        dialog2 = builder.create();
                         dialog2.show();
                 }
         });
         
-        AlertDialog dialog1 = builder.create();
-        dialog1.show();
+        dialog2 = builder.create();
+        dialog2.show();
 	}
 	
 	public void benchPress(View view) {
@@ -113,5 +116,11 @@ public class BenchPressMinigame extends Activity {
 			Toast.makeText(this, "The minigame is still going on so this button is disabled", 
 					Toast.LENGTH_SHORT).show();
 		}
+	}
+	
+	public void onPause() {
+		super.onPause();
+		dialog2.dismiss();
+		timer.cancel();
 	}
 }

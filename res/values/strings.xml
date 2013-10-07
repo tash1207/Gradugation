@@ -35,6 +35,12 @@
     <string name="wires">Wires</string>
     <string name="bench_press">Bench Press</string>
 
+    <string name="title_activity_continue">MainActivity</string>
+    <string name="saved_game">Load Saved Game</string>
+    <string name="saved_game1">saved game1</string>
+    <string name="saved_game2">saved game2</string>
+
+
     <!-- Bench Press Minigame -->
     <string name="bench_press_instructions1">Tap the screen as fast as possible to make your character do reps.</string>
     <string name="bench_press_instructions2">You need to finish %1$d reps in 10 seconds to earn the credits for 

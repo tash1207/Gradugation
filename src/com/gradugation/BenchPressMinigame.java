@@ -65,6 +65,8 @@ public class BenchPressMinigame extends Activity {
         builder.setPositiveButton("Next", new DialogInterface.OnClickListener() {
                 
 
+                //@Override
+
                 public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         
@@ -73,6 +75,8 @@ public class BenchPressMinigame extends Activity {
                         builder.setCancelable(false);
                         builder.setPositiveButton("Start", new DialogInterface.OnClickListener() {
                                 
+
+                                //@Override
 
                                 public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();

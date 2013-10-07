@@ -37,31 +37,14 @@ public class MainActivity extends BaseActivity {
     	
     }
     
-
     public void minigamesButtonClick(View view){
     	Intent intent = new Intent(this, MinigamesActivity.class);
     	startActivity(intent);
+    }
 
     public void continueGameButtonClick(View view) {
     	Intent intent = new Intent(this, ContinueActivity.class);
     	startActivity(intent);
-    }
-    
-    @Override
-    protected void onPause() {
-    	super.onPause();
-    	SongPlayer.stopSongDelayed();
-    }
-    
-    protected void onResume() {
-    	super.onResume();
-    	SharedPreferences settings = getSharedPreferences(SettingsActivity.SOUND_PREFERENCE, 0);
-		boolean isSoundOn = settings.getBoolean(SettingsActivity.SOUND_ON, true);
-		
-		if (isSoundOn) {
-			SongPlayer.playSong();
-		}
-
     }
 
     public void howToPlayClick(View view) {

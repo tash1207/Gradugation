@@ -41,6 +41,7 @@
         </activity>
 
         <activity
+
             android:name=".MinigamesActivity"
             android:label="@string/title_activity_minigames"
             android:screenOrientation="portrait" >
@@ -51,6 +52,13 @@
             android:label="@string/title_activity_wires_mini_game"
             android:screenOrientation="landscape" >
         </activity>
+        
+        </activity>
+            android:name=".ContinueActivity"
+            android:label="@string/title_activity_continue" >
+        </activity>
+
+
         <activity
             android:name=".BenchPressMinigame"
             android:label="@string/title_activity_bench_press_minigame"
@@ -59,7 +67,11 @@
 
         <service android:name="BackgroundMusicService" >
         </service>
+
         <activity android:name=".MainGameScreen" android:label="@string/title_activity_main_game_screen"></activity>
+
+
+
     </application>
 
 </manifest>

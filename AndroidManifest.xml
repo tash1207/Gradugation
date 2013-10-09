@@ -25,11 +25,13 @@
         </activity>
         <activity
             android:name=".NewGameActivity"
-            android:label="@string/title_activity_new_game" >
+            android:label="@string/title_activity_new_game"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".ChooseCharacterActivity"
-            android:label="@string/title_activity_choose_character" >
+            android:label="@string/title_activity_choose_character"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".HowToPlayActivity"
@@ -53,7 +55,7 @@
             android:screenOrientation="landscape" >
         </activity>
         
-        <activity>
+        <activity
             android:name=".ContinueActivity"
             android:label="@string/title_activity_continue" >
         </activity>

@@ -10,7 +10,7 @@ How to run game
 
 https://github.com/nicolasgramlich/AndEngine/tree/GLES2-AnchorCenter
 
-https://github.com/nicolasgramlich/AndEngineTMXTiledMapExtension
+https://github.com/nicolasgramlich/AndEngineTMXTiledMapExtension/tree/GLES2-AnchorCenter
 
 2. Extract the zip files.
 

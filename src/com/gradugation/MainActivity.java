@@ -24,12 +24,16 @@ public class MainActivity extends Activity {
         //Open Database
         DbHelper dbhelper = new DbHelper(this); 
         SQLiteDatabase db = dbhelper.getWritableDatabase();
+        Log.d("TEST", "Database has been created");
+        
+        //Insert Some Data into Database
+        
+        Log.d("TEST", "Data has been put into database");
         
         //Close Database
         db.close();
         dbhelper.close();
-        
-        Log.d("TEST", "I hope this worked");
+        Log.d("TEST", "Database has been closed");
     }
 
 

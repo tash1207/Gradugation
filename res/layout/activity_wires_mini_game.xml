@@ -1,6 +1,6 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/RelativeLayout1"
+    android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/wires2"
@@ -11,77 +11,70 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <RadioButton
-        android:id="@+id/radioButton1"
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="15dp"
+        android:orientation="vertical" >
+
+        <CheckedTextView
+            android:id="@+id/checkedTextView1"
+            android:layout_width="wrap_content"
+            android:layout_height="68dp"
+            android:layout_weight="0.43"
+            android:text="Wire 1" />
+
+        <CheckedTextView
+            android:id="@+id/CheckedTextView01"
+            android:layout_width="wrap_content"
+            android:layout_height="65dp"
+            android:text="Wire 2" />
+
+        <CheckedTextView
+            android:id="@+id/CheckedTextView02"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_weight="1.08"
+            android:text="Wire 3" />
+
+        <CheckedTextView
+            android:id="@+id/CheckedTextView03"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:text="Wire 4" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="31dp"
-        android:text="" 
-        android:onClick="buttonOneClick" />
+        android:layout_marginLeft="350dp"
+        android:orientation="vertical" >
 
-    <RadioButton
-        android:id="@+id/RadioButton02"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/radioButton1"
-        android:layout_below="@+id/radioButton1"
-        android:layout_marginTop="28dp" 
-        android:onClick="buttonTwoClick"/>
+        <RadioButton
+            android:id="@+id/radioButton1"
+            android:layout_width="wrap_content"
+            android:layout_height="68dp"
+            android:onClick="buttonOneClick" />
 
-    <RadioButton
-        android:id="@+id/RadioButton01"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/RadioButton02"
-        android:layout_below="@+id/RadioButton02"
-        android:layout_marginTop="22dp"
-        android:onClick="buttonThreeClick"/>
+        <RadioButton
+            android:id="@+id/RadioButton03"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:onClick="buttonFourClick" />
 
-    <RadioButton
-        android:id="@+id/RadioButton03"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/RadioButton01"
-        android:layout_below="@+id/RadioButton01"
-        android:layout_marginTop="14dp" 
-        android:onClick="buttonFourClick"/>
+        <RadioButton
+            android:id="@+id/RadioButton02"
+            android:layout_width="wrap_content"
+            android:layout_height="85dp"
+            android:onClick="buttonTwoClick" />
 
-    <CheckedTextView
-        android:id="@+id/checkedTextView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/radioButton1"
-        android:layout_alignBottom="@+id/radioButton1"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="19dp"
-        android:text="Wire 1" />
+        <RadioButton
+            android:id="@+id/RadioButton01"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:onClick="buttonThreeClick" />
+    </LinearLayout>
 
-    <CheckedTextView
-        android:id="@+id/CheckedTextView01"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/RadioButton02"
-        android:layout_alignBottom="@+id/RadioButton02"
-        android:layout_alignLeft="@+id/checkedTextView1"
-        android:text="Wire 2" />
-
-    <CheckedTextView
-        android:id="@+id/CheckedTextView02"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/RadioButton01"
-        android:layout_alignBottom="@+id/RadioButton01"
-        android:layout_alignLeft="@+id/CheckedTextView01"
-        android:text="Wire 3" />
-
-    <CheckedTextView
-        android:id="@+id/CheckedTextView03"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/RadioButton03"
-        android:layout_alignLeft="@+id/CheckedTextView02"
-        android:text="Wire 4" />
-
-</RelativeLayout>
+</LinearLayout>

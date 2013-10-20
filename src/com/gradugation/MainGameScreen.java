@@ -4,16 +4,19 @@ package com.gradugation;
 import java.io.IOException;
 
 import org.andengine.engine.camera.BoundCamera;
+import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
+import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.MoveModifier;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.text.Text;
 import org.andengine.entity.util.FPSLogger;
 import org.andengine.extension.tmx.TMXLayer;
 import org.andengine.extension.tmx.TMXLoader;
@@ -24,16 +27,22 @@ import org.andengine.extension.tmx.TMXTileProperty;
 import org.andengine.extension.tmx.TMXTiledMap;
 import org.andengine.extension.tmx.util.exception.TMXLoadException;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.opengl.font.Font;
+import org.andengine.opengl.font.StrokeFont;
+import org.andengine.opengl.texture.EmptyTexture;
 import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
+import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 import org.andengine.util.debug.Debug;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.view.MotionEvent;
 
 public class MainGameScreen extends SimpleBaseGameActivity implements IOnSceneTouchListener{
@@ -56,9 +65,13 @@ public class MainGameScreen extends SimpleBaseGameActivity implements IOnSceneTo
 		private TMXTiledMap mTMXTiledMap;
 		protected int mCactusCount;
 		
+		private HUD mHUD;
+		
 	    private BitmapTextureAtlas characterTextureAtlas;
 	    public ITextureRegion character;
 	    
+	    private Font mFont;
+	    private StrokeFont mStrokeFont;
 
 	    private float currentX;
 	    private float currentY;
@@ -105,13 +118,84 @@ public class MainGameScreen extends SimpleBaseGameActivity implements IOnSceneTo
 			this.characterTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 512,512,TextureOptions.BILINEAR);
 			this.character = BitmapTextureAtlasTextureRegionFactory.createFromAsset(characterTextureAtlas, this, "splash2.png", 0, 0);;
 			this.characterTextureAtlas.load();
+			
+			// UI Fonts
+            final ITexture fontTexture = new EmptyTexture(this.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
+            final ITexture strokeFontTexture = new EmptyTexture(this.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
+
+            this.mFont = new Font(this.getFontManager(), fontTexture, Typeface.create(Typeface.DEFAULT, Typeface.BOLD), 18, true, Color.BLACK);
+            this.mFont.load();
+
+            this.mStrokeFont = new StrokeFont(this.getFontManager(), strokeFontTexture, Typeface.create(Typeface.DEFAULT, Typeface.BOLD), 18, true, Color.WHITE, 1, Color.BLACK);
+            this.mStrokeFont.load();
+
 		}
 
 		@Override
 		public Scene onCreateScene() {
 			this.mEngine.registerUpdateHandler(new FPSLogger());
 
-			final Scene scene = new Scene();
+			final Scene scene = new Scene();			
+						
+			
+			/* User Interface Scene
+			 * At each corner of the screen, will display player's information
+			 * Include number of credits
+			 * There will be a button to roll dice and turn number will be displayed. 
+			 */
+			final VertexBufferObjectManager vertexBufferObjectManager = this.getVertexBufferObjectManager();
+            final Text textNormal = new Text(CAMERA_WIDTH / 2, CAMERA_HEIGHT / 3, this.mFont, "[Player Name]", vertexBufferObjectManager);
+            
+            final Text textStroke1 = new Text(100, 300, this.mStrokeFont, "[Player 1 Name]\nCredits: ", vertexBufferObjectManager);
+            final Text textStroke2 = new Text(400, 300, this.mStrokeFont, "[Player 2 Name]\nCredits: ", vertexBufferObjectManager);
+            final Text textStroke3 = new Text(100, 50, this.mStrokeFont, "[Player 3 Name]\nCredits: ", vertexBufferObjectManager);
+            final Text textStroke4 = new Text(400, 50, this.mStrokeFont, "[Player 4 Name]\nCredits: ", vertexBufferObjectManager);
+            
+            /*
+             *  To update text, use [text].setText("blah blah");
+             *  In which "blah blah" is whatever you want to change the text to.
+             *  You can use variables.
+             */
+            
+            mHUD = new HUD();
+            mHUD.attachChild(scene);
+            
+            /* Where the button should go
+             * A fancier button should go here, but to test the randomizer, I believe this should suffice.
+             */
+            
+            final Rectangle button = new Rectangle(250, 0, 100, 100, vertexBufferObjectManager)
+            {
+            	
+                public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y)
+                {
+                	/*
+                	 * Here, you can update the randomizer when the user presses the button.
+                	 * Disregard the effect, just lets you know that the button is being pressed.
+                	 */
+                    if (touchEvent.isActionUp())
+                    {
+                        this.setColor(Color.BLACK);
+                    }
+                    if (touchEvent.isActionDown()) {
+                    	this.setColor(Color.WHITE);
+                    }
+                    return true;
+                };
+            };
+            
+            mHUD.attachChild(textStroke1);
+            mHUD.attachChild(textStroke2);
+            mHUD.attachChild(textStroke3);
+            mHUD.attachChild(textStroke4);
+            
+            mHUD.registerTouchArea(button);
+            mHUD.attachChild(button);
+            
+            mCamera.setHUD(mHUD);
+
+            
+			/* Main Map Scene */
 			
 			scene.setOnSceneTouchListener(this);
 
@@ -134,6 +218,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements IOnSceneTo
 			}
 
 			scene.attachChild(this.mTMXTiledMap);
+			//scene.attachChild(textNormal);
+            //scene.attachChild(textStroke);
 
 			/* Make the camera not exceed the bounds of the TMXEntity. */
 			this.mCamera.setBoundsEnabled(false);

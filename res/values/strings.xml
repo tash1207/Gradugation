@@ -67,7 +67,7 @@
     <string name="bench_press_title">2. Bench Press</string>
     <string name="bench_press_body">Quickly tap the screen, right onto the dapper, weight-lifting engineer on the screen
 	    to perform as many reps as possible in the allotted time.</string>
-    <string name="title_activity_whack_aflyer">WhackAFlyerActivity</string>
+    <string name="title_activity_whack_aflyer">WhackAFlyerGame</string>
     <string name="whack_aflyer">Whack-A-Flyer</string>
 
 </resources>

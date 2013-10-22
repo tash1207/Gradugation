@@ -31,9 +31,11 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity {
 	private ITexture mFaceTexture;
 	private BitmapTextureAtlas characterTextureAtlas;
     public ITextureRegion character;
-    private AssetBitmapTexture mParallaxBack;
-    private TextureRegion mParallaxBackRegion;
+    private BitmapTextureAtlas mParallaxBackAtlas;
+    private ITextureRegion mParallaxBackRegion;
     private Sprite sprImage;
+    private float currentX;
+    private float currentY;
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -53,9 +55,13 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity {
 	@Override
 	protected void onCreateResources() throws IOException {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-		this.characterTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 1024,1024,TextureOptions.BILINEAR);
-		this.character = BitmapTextureAtlasTextureRegionFactory.createFromAsset(characterTextureAtlas, this, "bricks.png", 0, 0);;
+		this.characterTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 512,512,TextureOptions.BILINEAR);
+		this.character = BitmapTextureAtlasTextureRegionFactory.createFromAsset(characterTextureAtlas, this, "splash2.png", 0, 0);;
 		this.characterTextureAtlas.load();
+		
+		this.mParallaxBackAtlas = new BitmapTextureAtlas(this.getTextureManager(), 1024,1024,TextureOptions.BILINEAR);
+		this.mParallaxBackRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mParallaxBackAtlas, this, "bricks.png", 0, 0);;
+		this.mParallaxBackAtlas.load();
 	}
 	
 	/*protected void onLoadResources() throws IOException {
@@ -67,12 +73,23 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity {
 	@Override
 	protected Scene onCreateScene() {
 		this.mEngine.registerUpdateHandler(new FPSLogger());
+		
+		final float centerX = 239;
+		final float centerY = 0;
+		currentX = centerX;
+		currentY = centerY;
+
 		final Scene scene = new Scene();
 		
 		scene.setBackground(new Background(Color.WHITE));
 		   
-		  sprImage = new Sprite(0, 0, character, this.getVertexBufferObjectManager());
+		  sprImage = new Sprite(0, 0, mParallaxBackRegion, this.getVertexBufferObjectManager());
 		  scene.attachChild(sprImage);
+		  
+		  final Sprite mySprite = new Sprite(currentX,currentY, character, this.getVertexBufferObjectManager());
+			mySprite.setScale((float) .1);
+			scene.attachChild(mySprite);
+			
         return scene;
 	}
 

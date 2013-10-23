@@ -5,6 +5,8 @@ import java.io.IOException;
 import org.andengine.engine.camera.BoundCamera;
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.handler.IUpdateHandler;
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
@@ -22,6 +24,7 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 import org.andengine.util.adt.color.Color;
+import org.andengine.util.math.MathUtils;
 
 import android.os.Handler;
 import android.view.Menu;
@@ -30,6 +33,9 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
 
 	private static final int CAMERA_WIDTH = 480;
 	private static final int CAMERA_HEIGHT = 320;
+	private static final int MAX_NUMBER_OF_FLYERS = 4;
+	private static final int MAX_TIME_DELAY_FOR_FLYER = 5;
+	private static final int MIN_TIME_DELAY_FOR_FLYER = 2;
 
 	private BitmapTextureAtlas characterTextureAtlas;
     public ITextureRegion character;
@@ -38,7 +44,11 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
     private Sprite sprImage;
     private float currentX;
     private float currentY;
+    private float mEffectSpawnDelay;
     final Scene scene = new Scene();
+    private int[][] flyerPositions = new int[MAX_NUMBER_OF_FLYERS][2];
+    private ITextureRegion[] flyers = new ITextureRegion[MAX_NUMBER_OF_FLYERS];
+    private BitmapTextureAtlas[] flyerAtlas = new BitmapTextureAtlas[MAX_NUMBER_OF_FLYERS];
     
  // Need handler for callbacks to the UI thread
     final Handler mHandler = new Handler();
@@ -76,6 +86,19 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
 		this.bgRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(bgTextureAtlas, this, "bricks.png", 0, 0);;
 		this.bgTextureAtlas.load();
 		
+		for (int i = 0, pos = 0; i < MAX_NUMBER_OF_FLYERS; i++, pos += CAMERA_WIDTH / MAX_NUMBER_OF_FLYERS) {
+			//X position
+			flyerPositions[i][0] = 0;
+			//Y position
+			flyerPositions[i][1] = pos;
+		}
+		
+		for (int i = 0; i < MAX_NUMBER_OF_FLYERS; i++) {
+			String imgName = "flyer_" + (i+1) + ".png";
+			this.flyerAtlas[i] = new BitmapTextureAtlas(this.getTextureManager(), 1024,1024,TextureOptions.BILINEAR);
+			this.flyers[i] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(flyerAtlas[i], this, imgName, 0, 0);;
+			this.flyerAtlas[i].load(); 
+		}
 	}
  
 
@@ -103,8 +126,9 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
 		scene.attachChild(sprImage);
 		
 		mHandler.post(mUpdateResults);
-			
 		
+		mEffectSpawnDelay = 5;
+		createFlyerSpawnTimeHandler();
 
         return scene;
 	}
@@ -144,5 +168,51 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
 				}
 			}
 		});
+	}
+	
+	private void createSprite(float pX, float pY, ITextureRegion spriteTexture) {
+        final Sprite sprite = new Sprite(pX, pY, spriteTexture, this.getVertexBufferObjectManager());
+        sprite.setScale((float) .1);
+        this.mEngine.getScene().attachChild(sprite);
+        
+        TimerHandler spriteTimerHandler;
+        final int timeToKeepFlyer = MathUtils.random(MIN_TIME_DELAY_FOR_FLYER, MAX_TIME_DELAY_FOR_FLYER);
+        this.getEngine().registerUpdateHandler(spriteTimerHandler = new TimerHandler(timeToKeepFlyer, new ITimerCallback()
+        {
+        	
+			@Override
+			public void onTimePassed(TimerHandler pTimerHandler) {
+				removeSprite(sprite);
+				
+			} }));
+	}
+	
+	private void removeSprite (Sprite sprite) {
+		this.mEngine.getScene().detachChild(sprite);
+	}
+	
+	private void createFlyerSpawnTimeHandler()
+	{
+	        TimerHandler spriteTimerHandler;
+	       
+	        this.getEngine().registerUpdateHandler(spriteTimerHandler = new TimerHandler(mEffectSpawnDelay, new ITimerCallback()
+	        {                      
+	            @Override
+	            public void onTimePassed(final TimerHandler pTimerHandler)
+	            {
+	                float xPos, yPos = MathUtils.random(0, CAMERA_HEIGHT-64.0f);
+	                final int imgPos = MathUtils.random(MAX_NUMBER_OF_FLYERS);
+	                
+	                if (imgPos < MAX_NUMBER_OF_FLYERS / 2) {
+	                	// image is for the right side of the board
+	                	xPos = CAMERA_WIDTH - 64.0f;
+	                } else {
+	                	// image is for the left side of the board
+	                	xPos = 0;
+	                }
+	                       
+	                createSprite(xPos, yPos, flyers[imgPos]);
+	            }
+	        }));
 	}
 }

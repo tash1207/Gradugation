@@ -66,6 +66,12 @@
             android:label="@string/title_activity_bench_press_minigame"
             android:screenOrientation="portrait" >
         </activity>
+        
+        <activity
+            android:name=".WaitInLineMinigame"
+            android:label="@string/title_activity_waitinline_minigame"
+            android:screenOrientation="landscape" >
+        </activity>
 
         <service android:name="BackgroundMusicService" >
         </service>

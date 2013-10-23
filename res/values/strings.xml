@@ -13,6 +13,7 @@
     <string name="title_activity_minigames">MinigamesActivity</string>
     <string name="title_activity_bench_press_minigame">BenchPressMinigame</string>
     <string name="title_activity_wires_mini_game">WiresMiniGame</string>
+    <string name="title_activity_waitinline_minigame">WaitInLineMinigame</string>
 
     <!-- Main Activity -->
     <string name="new_game">New Game</string>
@@ -34,6 +35,7 @@
     <!-- Minigames Screen -->
     <string name="wires">Wires</string>
     <string name="bench_press">Bench Press</string>
+    <string name="wait_in_line">Wait In Line</string>
 
     <string name="title_activity_continue">MainActivity</string>
     <string name="saved_game">Load Saved Game</string>

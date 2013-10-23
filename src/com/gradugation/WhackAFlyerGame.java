@@ -27,6 +27,7 @@ import org.andengine.util.adt.color.Color;
 import org.andengine.util.math.MathUtils;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 
 public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneTouchListener {
@@ -36,19 +37,7 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
     private static final int MAX_NUMBER_OF_FLYERS = 4;
     private static final int MAX_TIME_DELAY_FOR_FLYER = 5;
     private static final int MIN_TIME_DELAY_FOR_FLYER = 2;
-
-    private BitmapTextureAtlas characterTextureAtlas;
-    public ITextureRegion character;
-    private BitmapTextureAtlas bgTextureAtlas;
-    private ITextureRegion bgRegion;
-    private Sprite sprImage;
-    private float currentX;
-    private float currentY;
-    private float mEffectSpawnDelay;
-    final Scene scene = new Scene();
-    private int[][] flyerPositions = new int[MAX_NUMBER_OF_FLYERS][2];
-    private ITextureRegion[] flyers = new ITextureRegion[MAX_NUMBER_OF_FLYERS];
-    private BitmapTextureAtlas[] flyerAtlas = new BitmapTextureAtlas[MAX_NUMBER_OF_FLYERS];
+    private int points;
     
     // Need handler for callbacks to the UI thread
     final Handler mHandler = new Handler();
@@ -59,6 +48,17 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
             updateResultsInUi();
         }
     };
+    
+    private BitmapTextureAtlas characterTextureAtlas;
+    private ITextureRegion character;
+    private BitmapTextureAtlas bgTextureAtlas;
+    private ITextureRegion bgRegion;
+    private Sprite sprImage;
+    private float currentX;
+    private float currentY;
+    private float mEffectSpawnDelay;
+    private ITextureRegion[] flyers = new ITextureRegion[MAX_NUMBER_OF_FLYERS];
+    private BitmapTextureAtlas[] flyerAtlas = new BitmapTextureAtlas[MAX_NUMBER_OF_FLYERS];
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -77,6 +77,8 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
 
     @Override
     protected void onCreateResources() throws IOException {
+        this.points = 0;
+
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
         this.characterTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(),
                 512,512,TextureOptions.BILINEAR);
@@ -89,14 +91,6 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
         this.bgRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(bgTextureAtlas,
                 this, "bricks.png", 0, 0);;
         this.bgTextureAtlas.load();
-        
-        for (int i = 0, pos = 0; i < MAX_NUMBER_OF_FLYERS; i++,
-                pos += CAMERA_WIDTH / MAX_NUMBER_OF_FLYERS) {
-            //X position
-            flyerPositions[i][0] = 0;
-            //Y position
-            flyerPositions[i][1] = pos;
-        }
     
         for (int i = 0; i < MAX_NUMBER_OF_FLYERS; i++) {
             String imgName = "flyer_" + (i+1) + ".png";
@@ -113,6 +107,7 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
     protected Scene onCreateScene() {
         this.mEngine.registerUpdateHandler(new FPSLogger());
     
+        Scene scene = new Scene();
         scene.setOnSceneTouchListener(this);
         
         final float centerX = 239;
@@ -120,11 +115,13 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
         currentX = centerX;
         currentY = centerY;
     
+        scene.setTouchAreaBindingOnActionDownEnabled(true);
+        scene.setTouchAreaBindingOnActionMoveEnabled(true);
         scene.setBackground(new Background(Color.WHITE));
        
         final Sprite mySprite = new Sprite(0, 0, bgRegion,
                 this.getVertexBufferObjectManager());
-
+        
         sprImage = new Sprite(currentX,currentY, character,
                 this.getVertexBufferObjectManager());
         sprImage.setScale((float) .1);
@@ -136,27 +133,35 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
         mEffectSpawnDelay = 5;
         createFlyerSpawnTimeHandler();
 
+        
+        
         return scene;
     }
     
+    private void flyerWhacked(Sprite spriteWhacked) {
+    	this.mEngine.getScene().detachChild(spriteWhacked);
+    	this.points += 1;
+    	Log.d(DISPLAY_SERVICE, "IN HERE");
+    }
+
     @Override
     public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
         if (pSceneTouchEvent.isActionDown()) {
-        
+
         }
         return false;
     }
     
     public void updateResultsInUi() {
-        scene.registerUpdateHandler(new IUpdateHandler() {
+    	this.mEngine.getScene().registerUpdateHandler(new IUpdateHandler() {
             @Override
             public void reset() { }
     
             @Override
             public void onUpdate(final float pSecondsElapsed) {        
                 if (currentY <= CAMERA_HEIGHT) {
-                    sprImage.registerEntityModifier(new MoveModifier(0.8f,
-                            currentX,currentY, currentX, currentY + 8) {
+                    sprImage.registerEntityModifier(new MoveModifier(0.05f,
+                            currentX,currentY, currentX, currentY + 2) {
                     @Override
                     protected void onModifierStarted(IEntity pItem) {
                         super.onModifierStarted(pItem);
@@ -170,7 +175,7 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
                     }
                 });
                 } else {
-
+                	gameFinished();
                 }
             }
         });
@@ -178,7 +183,18 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
     
     private Sprite createSprite(float pX, float pY, ITextureRegion spriteTexture) {
         final Sprite sprite = new Sprite(pX, pY, spriteTexture,
-                this.getVertexBufferObjectManager());
+                this.getVertexBufferObjectManager()) {
+        	@Override
+        	public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
+        		//if (touchEvent.isActionDown()) {
+        			//sprite;
+        		//}
+        		return false;
+        	}
+        	
+        };
+        this.mEngine.getScene().registerTouchArea(sprite);
+
         sprite.setScale((float) .1);
         this.mEngine.getScene().attachChild(sprite);
         
@@ -224,6 +240,10 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
                 createFlyerDestroyTimeHandler(spriteCreated);
             }
         }));
+    }
+    
+    private void gameFinished() {
+    	
     }
 }
 

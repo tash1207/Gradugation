@@ -163,34 +163,34 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
     }
     
     public void updateResultsInUi() {
-        if (!this.finished) {
-            this.mEngine.getScene().registerUpdateHandler(new IUpdateHandler() {
-                @Override
-                public void reset() { }
-        
-                @Override
-                public void onUpdate(final float pSecondsElapsed) {        
-                    if (currentY <= CAMERA_HEIGHT) {
-                        sprImage.registerEntityModifier(new MoveModifier(0.05f,
-                                currentX,currentY, currentX, currentY + 2) {
-                        @Override
-                        protected void onModifierStarted(IEntity pItem) {
-                            super.onModifierStarted(pItem);
-                        }
-        
-                        @Override
-                        protected void onModifierFinished(IEntity pItem) {
-                            currentX=sprImage.getX();
-                            currentY=sprImage.getY();
-                            super.onModifierFinished(pItem);
-                        }
-                    });
-                    } else {
-                        mHandler.post(finishGame);
-                    }
-                }
-            });
-        }
+        this.mEngine.getScene().registerUpdateHandler(new IUpdateHandler() {
+            @Override
+            public void reset() { }
+    
+            @Override
+            public void onUpdate(final float pSecondsElapsed) {  
+            	if (!finished) {
+	                if (currentY <= CAMERA_HEIGHT) {
+	                    sprImage.registerEntityModifier(new MoveModifier(0.05f,
+	                            currentX,currentY, currentX, currentY + 2) {
+	                    @Override
+	                    protected void onModifierStarted(IEntity pItem) {
+	                        super.onModifierStarted(pItem);
+	                    }
+	    
+	                    @Override
+	                    protected void onModifierFinished(IEntity pItem) {
+	                        currentX=sprImage.getX();
+	                        currentY=sprImage.getY();
+	                        super.onModifierFinished(pItem);
+	                    }
+	                });
+	                } else {
+	                    mHandler.post(finishGame);
+	                }
+	            }
+            }
+        });
     }
     
     private Sprite createSprite(float pX, float pY, ITextureRegion spriteTexture) {

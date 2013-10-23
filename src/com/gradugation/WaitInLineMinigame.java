@@ -37,8 +37,11 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
 	private BitmapTextureAtlas characterTextureAtlas;
     public ITextureRegion character;
     
-    private BitmapTextureAtlas spr1TextureAtlas;
-    public ITextureRegion spr1TextureRegion;
+    private BitmapTextureAtlas athleteTextureAtlas;
+    public ITextureRegion athleteTextureRegion;
+    
+    private BitmapTextureAtlas engineerTextureAtlas;
+    public ITextureRegion engineerTextureRegion;
     
     private BitmapTextureAtlas bgTextureAtlas;
     private ITextureRegion bgRegion;
@@ -46,13 +49,17 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
     private Sprite sprChar;
     private Sprite sprBg;
     private Sprite spr1;
+    private Sprite spr2;
     
     // Coordinates of sprites
-    private float currentX = 250;
-    private float currentY = 20;
+    private float currentX = 275;
+    private float currentY = 15;
     
-    private float spr1X = 40;
-    private float spr1Y = 200;
+    private float spr1X = -50;
+    private float spr1Y = 210;
+    
+    private float spr2X = 400;
+    private float spr2Y = 120;
     
     final Scene scene = new Scene();
     
@@ -90,11 +97,17 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
 				"splash2.png", 0, 0);
 		this.characterTextureAtlas.load();
 		
-		this.spr1TextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 512, 512, 
+		this.athleteTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 72, 71, 
 				TextureOptions.BILINEAR);
-		this.spr1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(spr1TextureAtlas, this, 
-				"splash2.png", 0, 0);
-		this.spr1TextureAtlas.load();
+		this.athleteTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(athleteTextureAtlas, this, 
+				"athlete.png", 0, 0);
+		this.athleteTextureAtlas.load();
+		
+		this.engineerTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 69, 72, 
+				TextureOptions.BILINEAR);
+		this.engineerTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(engineerTextureAtlas, this, 
+				"engineer.png", 0, 0);
+		this.engineerTextureAtlas.load();
 		
 		this.bgTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 960, 720, 
 				TextureOptions.NEAREST_PREMULTIPLYALPHA);
@@ -116,12 +129,16 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
 		sprChar = new Sprite(currentX, currentY, character, this.getVertexBufferObjectManager());
 		sprChar.setScale(0.125f);
 		
-		spr1 = new Sprite(spr1X, spr1Y, spr1TextureRegion, this.getVertexBufferObjectManager());
-		spr1.setScale(0.1f);
+		spr1 = new Sprite(spr1X, spr1Y, athleteTextureRegion, this.getVertexBufferObjectManager());
+		spr1.setScale(0.8f);
+		
+		spr2 = new Sprite(spr2X, spr2Y, engineerTextureRegion, this.getVertexBufferObjectManager());
+		spr2.setScale(0.8f);
 		
 		scene.attachChild(sprBg);
-		scene.attachChild(sprChar);
 		scene.attachChild(spr1);
+		scene.attachChild(spr2);
+		scene.attachChild(sprChar);
 		
 //        scene.setBackground(new SpriteBackground(new Sprite(0, 0, DEVICE_WIDTH, DEVICE_HEIGHT, 
 //        		this.bgRegion, getVertexBufferObjectManager())));
@@ -164,9 +181,24 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
 			            super.onModifierFinished(pItem);
 			        }
 				});
+				// Motion for sprite 2
+				spr2.registerEntityModifier(new MoveModifier(0.03f,
+						spr2X, spr2Y, spr2X - 2, spr2Y) {
+					@Override
+			    	protected void onModifierStarted(IEntity pItem) {
+			        	super.onModifierStarted(pItem);
+					}
+
+			        @Override
+			        protected void onModifierFinished(IEntity pItem) {
+			        	spr2X = spr2.getX();
+			        	spr2Y = spr2.getY();
+			            super.onModifierFinished(pItem);
+			        }
+				});
 				// Motion for current character
 				if (currentY <= CAMERA_HEIGHT + 32 && !motionDown) {
-					sprChar.registerEntityModifier(new MoveModifier(0.04f,
+					sprChar.registerEntityModifier(new MoveModifier(0.03f,
 							currentX, currentY, currentX, currentY + 1) {
 						@Override
 				    	protected void onModifierStarted(IEntity pItem) {

@@ -15,30 +15,35 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+
         android:orientation="vertical" >
 
         <CheckedTextView
             android:id="@+id/checkedTextView1"
             android:layout_width="wrap_content"
             android:layout_height="92dp"
+
             android:text="Wire 1" />
 
         <CheckedTextView
             android:id="@+id/CheckedTextView01"
             android:layout_width="wrap_content"
             android:layout_height="74dp"
+
             android:text="Wire 2" />
 
         <CheckedTextView
             android:id="@+id/CheckedTextView02"
             android:layout_width="wrap_content"
             android:layout_height="49dp"
+
             android:text="Wire 3" />
 
         <CheckedTextView
             android:id="@+id/CheckedTextView03"
             android:layout_width="wrap_content"
             android:layout_height="33dp"
+
             android:text="Wire 4" />
     </LinearLayout>
 
@@ -67,6 +72,7 @@
             android:layout_height="64dp"
             android:onClick="buttonOneClick" />
 
+
         <RadioButton
             android:id="@+id/RadioButton03"
             android:layout_width="wrap_content"
@@ -77,12 +83,14 @@
             android:id="@+id/RadioButton02"
             android:layout_width="wrap_content"
             android:layout_height="94dp"
+
             android:onClick="buttonTwoClick" />
 
         <RadioButton
             android:id="@+id/RadioButton01"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
             android:onClick="buttonThreeClick" />
     </LinearLayout>
 

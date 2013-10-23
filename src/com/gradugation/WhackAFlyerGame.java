@@ -89,17 +89,17 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
     protected void onCreateResources() throws IOException {
         this.points = 0;
 
-        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
         this.characterTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(),
                 512,512,TextureOptions.BILINEAR);
         this.character = BitmapTextureAtlasTextureRegionFactory.createFromAsset
-                (characterTextureAtlas, this, "splash2.png", 0, 0);;
+                (characterTextureAtlas, this, "gfx/splash2.png", 0, 0);;
         this.characterTextureAtlas.load();
         
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/whack_aflyer_img/");
         this.bgTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(),
                 951,720,TextureOptions.NEAREST_PREMULTIPLYALPHA);
         this.bgRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(bgTextureAtlas,
-                this, "bricks.png", 0, 0);;
+                this, "bricks.png", 0, 0);
         this.bgTextureAtlas.load();
     
         for (int i = 0; i < MAX_NUMBER_OF_FLYERS; i++) {
@@ -107,7 +107,7 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
             this.flyerAtlas[i] = new BitmapTextureAtlas(this.getTextureManager(),
                     1024,1024,TextureOptions.BILINEAR);
             this.flyers[i] = BitmapTextureAtlasTextureRegionFactory.createFromAsset
-                    (flyerAtlas[i], this, imgName, 0, 0);;
+                    (flyerAtlas[i], this, imgName, 0, 0);
             this.flyerAtlas[i].load(); 
         }
     }
@@ -170,7 +170,7 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
             @Override
             public void onUpdate(final float pSecondsElapsed) {  
             	if (!finished) {
-	                if (currentY <= CAMERA_HEIGHT) {
+	                if (currentY <= CAMERA_HEIGHT+32f) {
 	                    sprImage.registerEntityModifier(new MoveModifier(0.05f,
 	                            currentX,currentY, currentX, currentY + 2) {
 	                    @Override
@@ -265,6 +265,32 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
             Toast.makeText(WhackAFlyerGame.this, getString(R.string.whack_aflyer_failure, this.points), 
                     Toast.LENGTH_LONG).show();
         }
+        
+        BitmapTextureAtlas continueButtonAtlas = new BitmapTextureAtlas(this.getTextureManager(),
+                951,720,TextureOptions.NEAREST_PREMULTIPLYALPHA);
+        ITextureRegion continueButton = BitmapTextureAtlasTextureRegionFactory.createFromAsset(continueButtonAtlas,
+                this, "continue_button.png", 0, 0);
+        continueButtonAtlas.load();
+        
+        final Sprite continueSprite = new Sprite(CAMERA_WIDTH/2, 32f, continueButton,
+                this.getVertexBufferObjectManager()) {
+            @Override
+            public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
+                if (touchEvent.isActionDown()) {
+                   finish();
+                }
+                return false;
+            }
+            
+        };
+        continueSprite.setScale((float) .25);
+        this.mEngine.getScene().registerTouchArea(continueSprite);
+        this.mEngine.getScene().attachChild(continueSprite);
+    }
+    
+    @Override
+    public void finish() {
+    	super.finish();
     }
 }
 

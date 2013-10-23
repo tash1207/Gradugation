@@ -11,14 +11,19 @@ public class MinigamesActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_minigames);
 	}
-	
+
 	public void minigameWiresButtonClick(View v) {
 		Intent intent = new Intent(this, WiresMiniGame.class);
-    	startActivity(intent);
+		startActivity(intent);
 	}
-	
+
 	public void minigameBenchPressButtonClick(View v) {
 		Intent intent = new Intent(this, BenchPressMinigame.class);
-    	startActivity(intent);
+		startActivity(intent);
+	}
+
+	public void minigameBalanceButtonClick(View v) {
+		Intent intent = new Intent(this, BalanceMinigame.class);
+		startActivity(intent);
 	}
 }

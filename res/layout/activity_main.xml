@@ -57,6 +57,7 @@
                 android:layout_marginBottom="12dp"
                 android:layout_weight="1"
                 android:background="@drawable/button_rectangle_orange"
+                android:onClick="continueGameButtonClick"
                 android:padding="14dp"
                 android:text="@string/continue_game"
                 android:textSize="16sp" />
@@ -72,22 +73,6 @@
                 android:padding="14dp"
                 android:text="@string/how_to_play"
                 android:textSize="16sp" />
-
-        <Button
-            android:id="@+id/btn_continue_game"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="continueGameButtonClick"
-            android:text="@string/continue_game"
-            android:textSize="16sp" />
-    </LinearLayout>
-    
-	<LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="22dp" >
-
 
             <Button
                 android:id="@+id/btn_settings"

@@ -24,7 +24,7 @@
     <string name="music_on">Music</string>
     <string name="okay">Okay</string>
     <string name="menu_settings">Settings</string>
-    
+
     <!-- Choose Character -->
     <string name="choose_character">Choose a character</string>
     <string name="character_engineer">Engineer</string>
@@ -34,12 +34,10 @@
     <!-- Minigames Screen -->
     <string name="wires">Wires</string>
     <string name="bench_press">Bench Press</string>
-
     <string name="title_activity_continue">MainActivity</string>
     <string name="saved_game">Load Saved Game</string>
     <string name="saved_game1">saved game1</string>
     <string name="saved_game2">saved game2</string>
-
 
     <!-- Bench Press Minigame -->
     <string name="bench_press_instructions1">Tap the screen as fast as possible to make your character do reps.</string>
@@ -69,5 +67,6 @@
     <string name="bench_press_title">2. Bench Press</string>
     <string name="bench_press_body">Quickly tap the screen, right onto the dapper, weight-lifting engineer on the screen
 	    to perform as many reps as possible in the allotted time.</string>
+    <string name="title_activity_balance_minigame">BalanceMinigame</string>
 
 </resources>

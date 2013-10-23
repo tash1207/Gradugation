@@ -36,14 +36,24 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
 
 	private BitmapTextureAtlas characterTextureAtlas;
     public ITextureRegion character;
+    
+    private BitmapTextureAtlas spr1TextureAtlas;
+    public ITextureRegion spr1TextureRegion;
+    
     private BitmapTextureAtlas bgTextureAtlas;
     private ITextureRegion bgRegion;
     
     private Sprite sprChar;
     private Sprite sprBg;
+    private Sprite spr1;
     
-    private float currentX;
-    private float currentY;
+    // Coordinates of sprites
+    private float currentX = 250;
+    private float currentY = 20;
+    
+    private float spr1X = 40;
+    private float spr1Y = 200;
+    
     final Scene scene = new Scene();
     
     private boolean motionDown = false;
@@ -68,7 +78,7 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
 		final Camera mCamera = new Camera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
 
 		return new EngineOptions(true, ScreenOrientation.LANDSCAPE_SENSOR,
-				new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT), mCamera);
+				new RatioResolutionPolicy(DEVICE_WIDTH, DEVICE_HEIGHT), mCamera);
 	}
 
 	@Override
@@ -77,13 +87,19 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
 		this.characterTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 512, 512, 
 				TextureOptions.BILINEAR);
 		this.character = BitmapTextureAtlasTextureRegionFactory.createFromAsset(characterTextureAtlas, this, 
-				"splash2.png", 0, 0);;
+				"splash2.png", 0, 0);
 		this.characterTextureAtlas.load();
+		
+		this.spr1TextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 512, 512, 
+				TextureOptions.BILINEAR);
+		this.spr1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(spr1TextureAtlas, this, 
+				"splash2.png", 0, 0);
+		this.spr1TextureAtlas.load();
 		
 		this.bgTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 960, 720, 
 				TextureOptions.NEAREST_PREMULTIPLYALPHA);
 		this.bgRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(bgTextureAtlas, this, 
-				"hub.png", 0, 0);;
+				"hub.png", 0, 0);
 		this.bgTextureAtlas.load();
 		
 	}
@@ -94,19 +110,18 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
 		
 		scene.setOnSceneTouchListener(this);
 		
-		final float centerX = 250;
-		final float centerY = 20;
-		currentX = centerX;
-		currentY = centerY;
-		
-		scene.setBackground(new Background(Color.WHITE));		  
-		sprChar = new Sprite(currentX, currentY, character, this.getVertexBufferObjectManager());
-		sprChar.setScale(0.15f);
-		
+		scene.setBackground(new Background(Color.WHITE));
 		sprBg = new Sprite(CAMERA_WIDTH - 80, CAMERA_HEIGHT - 10, bgRegion, this.getVertexBufferObjectManager());
+
+		sprChar = new Sprite(currentX, currentY, character, this.getVertexBufferObjectManager());
+		sprChar.setScale(0.125f);
+		
+		spr1 = new Sprite(spr1X, spr1Y, spr1TextureRegion, this.getVertexBufferObjectManager());
+		spr1.setScale(0.1f);
 		
 		scene.attachChild(sprBg);
 		scene.attachChild(sprChar);
+		scene.attachChild(spr1);
 		
 //        scene.setBackground(new SpriteBackground(new Sprite(0, 0, DEVICE_WIDTH, DEVICE_HEIGHT, 
 //        		this.bgRegion, getVertexBufferObjectManager())));
@@ -133,10 +148,26 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
 			public void reset() { }
 
 			@Override
-			public void onUpdate(final float pSecondsElapsed) {		
+			public void onUpdate(final float pSecondsElapsed) {
+				// Motion for sprite 1
+				spr1.registerEntityModifier(new MoveModifier(0.05f,
+						spr1X, spr1Y, spr1X + 2, spr1Y) {
+					@Override
+			    	protected void onModifierStarted(IEntity pItem) {
+			        	super.onModifierStarted(pItem);
+					}
+
+			        @Override
+			        protected void onModifierFinished(IEntity pItem) {
+			        	spr1X = spr1.getX();
+			        	spr1Y = spr1.getY();
+			            super.onModifierFinished(pItem);
+			        }
+				});
+				// Motion for current character
 				if (currentY <= CAMERA_HEIGHT + 32 && !motionDown) {
-					sprChar.registerEntityModifier(new MoveModifier(0.05f,
-							currentX, currentY, currentX, currentY + 2) {
+					sprChar.registerEntityModifier(new MoveModifier(0.04f,
+							currentX, currentY, currentX, currentY + 1) {
 						@Override
 				    	protected void onModifierStarted(IEntity pItem) {
 				        	super.onModifierStarted(pItem);
@@ -149,8 +180,6 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
 				            super.onModifierFinished(pItem);
 				        }
 					});
-				} else {
-					
 				}
 			}
 		});

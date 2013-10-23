@@ -29,6 +29,7 @@ import org.andengine.util.math.MathUtils;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
+import android.widget.Toast;
 
 public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneTouchListener {
 
@@ -37,7 +38,8 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
     private static final int MAX_NUMBER_OF_FLYERS = 4;
     private static final int MAX_TIME_DELAY_FOR_FLYER = 5;
     private static final int MIN_TIME_DELAY_FOR_FLYER = 2;
-    private int points;
+    private static final int POINTS_REQUIRED = 10;
+    private static final int CREDITS_EARNED = 3;
     
     // Need handler for callbacks to the UI thread
     final Handler mHandler = new Handler();
@@ -46,6 +48,12 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
     final Runnable mUpdateResults = new Runnable() {
         public void run() {
             updateResultsInUi();
+        }
+    };
+    
+    final Runnable finishGame = new Runnable() {
+        public void run() {
+            gameFinished();
         }
     };
     
@@ -59,6 +67,8 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
     private float mEffectSpawnDelay;
     private ITextureRegion[] flyers = new ITextureRegion[MAX_NUMBER_OF_FLYERS];
     private BitmapTextureAtlas[] flyerAtlas = new BitmapTextureAtlas[MAX_NUMBER_OF_FLYERS];
+    private int points;
+    private boolean finished = false;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -139,9 +149,9 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
     }
     
     private void flyerWhacked(Sprite spriteWhacked) {
-    	this.mEngine.getScene().detachChild(spriteWhacked);
-    	this.points += 1;
-    	Log.d(DISPLAY_SERVICE, "IN HERE");
+        this.mEngine.getScene().detachChild(spriteWhacked);
+        this.points += 1;
+        Log.d(DISPLAY_SERVICE, "IN HERE" + this.points);
     }
 
     @Override
@@ -153,45 +163,47 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
     }
     
     public void updateResultsInUi() {
-    	this.mEngine.getScene().registerUpdateHandler(new IUpdateHandler() {
-            @Override
-            public void reset() { }
-    
-            @Override
-            public void onUpdate(final float pSecondsElapsed) {        
-                if (currentY <= CAMERA_HEIGHT) {
-                    sprImage.registerEntityModifier(new MoveModifier(0.05f,
-                            currentX,currentY, currentX, currentY + 2) {
-                    @Override
-                    protected void onModifierStarted(IEntity pItem) {
-                        super.onModifierStarted(pItem);
+        if (!this.finished) {
+            this.mEngine.getScene().registerUpdateHandler(new IUpdateHandler() {
+                @Override
+                public void reset() { }
+        
+                @Override
+                public void onUpdate(final float pSecondsElapsed) {        
+                    if (currentY <= CAMERA_HEIGHT) {
+                        sprImage.registerEntityModifier(new MoveModifier(0.05f,
+                                currentX,currentY, currentX, currentY + 2) {
+                        @Override
+                        protected void onModifierStarted(IEntity pItem) {
+                            super.onModifierStarted(pItem);
+                        }
+        
+                        @Override
+                        protected void onModifierFinished(IEntity pItem) {
+                            currentX=sprImage.getX();
+                            currentY=sprImage.getY();
+                            super.onModifierFinished(pItem);
+                        }
+                    });
+                    } else {
+                        mHandler.post(finishGame);
                     }
-    
-                    @Override
-                    protected void onModifierFinished(IEntity pItem) {
-                        currentX=sprImage.getX();
-                        currentY=sprImage.getY();
-                        super.onModifierFinished(pItem);
-                    }
-                });
-                } else {
-                	gameFinished();
                 }
-            }
-        });
+            });
+        }
     }
     
     private Sprite createSprite(float pX, float pY, ITextureRegion spriteTexture) {
         final Sprite sprite = new Sprite(pX, pY, spriteTexture,
                 this.getVertexBufferObjectManager()) {
-        	@Override
-        	public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
-        		//if (touchEvent.isActionDown()) {
-        			//sprite;
-        		//}
-        		return false;
-        	}
-        	
+            @Override
+            public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
+                if (touchEvent.isActionDown()) {
+                    flyerWhacked(this);
+                }
+                return false;
+            }
+            
         };
         this.mEngine.getScene().registerTouchArea(sprite);
 
@@ -243,7 +255,16 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
     }
     
     private void gameFinished() {
-    	
+        finished = true;
+        if (this.points >= POINTS_REQUIRED) {
+            Toast.makeText(WhackAFlyerGame.this, getString(R.string.whack_aflyer_success, this.points, 
+                    CREDITS_EARNED), Toast.LENGTH_LONG).show();
+            // Code to add CREDITS_EARNED number of credits to the character
+        }
+        else {
+            Toast.makeText(WhackAFlyerGame.this, getString(R.string.whack_aflyer_failure, this.points), 
+                    Toast.LENGTH_LONG).show();
+        }
     }
 }
 

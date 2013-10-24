@@ -73,5 +73,8 @@
         You have earned %2$d credits!</string>
     <string name="whack_aflyer_failure">Sorry! You only whacked %1$d flyers.
         You did not earn any credits!</string>
+    <string name="whack_aflyer_instructions">Oh no! It\'s noon in turlington plaza, and people are handing out flyers!
+        In order to get through turlington plaza, you need to whack %1$d flyers!
+        Whack them by tapping on them. Good luck!</string>
 
 </resources>

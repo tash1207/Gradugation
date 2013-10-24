@@ -17,11 +17,8 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
-import org.andengine.entity.text.TextOptions;
 import org.andengine.entity.util.FPSLogger;
 import org.andengine.input.touch.TouchEvent;
-import org.andengine.opengl.font.Font;
-import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
@@ -30,7 +27,8 @@ import org.andengine.ui.activity.SimpleBaseGameActivity;
 import org.andengine.util.adt.color.Color;
 import org.andengine.util.math.MathUtils;
 
-import android.graphics.Typeface;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
@@ -82,6 +80,7 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
     private BitmapTextureAtlas[] flyerAtlas = new BitmapTextureAtlas[MAX_NUMBER_OF_FLYERS];
     private int points;
     private boolean finished = false;
+    private boolean gameStarted = false;
     private Text pointsLabel;
 
     @Override
@@ -184,45 +183,64 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
     }
     
     public void updateResultsInUi() {
-        this.mEngine.getScene().registerUpdateHandler(new IUpdateHandler() {
+    	this.mEngine.getScene().registerUpdateHandler(new IUpdateHandler () {
             @Override
             public void reset() { }
     
             @Override
             public void onUpdate(final float pSecondsElapsed) {  
-            	
-            	if (!finished) {
-	                if (currentY <= CAMERA_HEIGHT+32f) {
-	                    sprImage.registerEntityModifier(new MoveModifier(0.05f,
-	                            currentX,currentY, currentX, currentY + 1) {
-	                    @Override
-	                    protected void onModifierStarted(IEntity pItem) {
-	                        super.onModifierStarted(pItem);
-	                    }
-	    
-	                    @Override
-	                    protected void onModifierFinished(IEntity pItem) {
-	                        currentX=sprImage.getX();
-	                        currentY=sprImage.getY();
-	                        super.onModifierFinished(pItem);
-	                    }
-	                    
-	                });
-	                } else {
-	                    mHandler.post(finishGame);
-	                }
-	                //pointsLabel.setText("Points: " + points);
-	            }
+                    
+                    if (!finished && gameStarted) {
+                        if (currentY <= CAMERA_HEIGHT+32f) {
+                            sprImage.registerEntityModifier(new MoveModifier(0.05f,
+                                    currentX,currentY, currentX, currentY + 1) {
+                            @Override
+                            protected void onModifierStarted(IEntity pItem) {
+                                super.onModifierStarted(pItem);
+                            }
+            
+                            @Override
+                            protected void onModifierFinished(IEntity pItem) {
+                                currentX=sprImage.getX();
+                                currentY=sprImage.getY();
+                                super.onModifierFinished(pItem);
+                            }
+                            
+                        });
+                        } else {
+                            mHandler.post(finishGame);
+                        }
+                        //pointsLabel.setText("Points: " + points);
+                    }
             }
         });
+        
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getString(R.string.whack_aflyer_instructions, POINTS_REQUIRED));
+        builder.setCancelable(false);
+        builder.setPositiveButton("Start", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int arg1) {
+				dialog.dismiss();
+				gameStarted = true;
+				
+			}
+        	
+        });
+        
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
     
     private Sprite createSprite(float pX, float pY, ITextureRegion spriteTexture) {
         final Sprite sprite = new Sprite(pX, pY, spriteTexture,
                 this.getVertexBufferObjectManager()) {
+        	private boolean touched = false;
             @Override
             public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
-                if (touchEvent.isActionUp()) {
+                if (touchEvent.isActionUp() && !this.touched) {
+                	this.touched = true;
                     flyerWhacked(this);
                 }
                 return false;
@@ -270,6 +288,7 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
 
     private void createFlyerSpawnTimeHandler() {
         float xPos, yPos = MathUtils.random(0, CAMERA_HEIGHT-32.0f);
+        yPos = 32.0f * (int)(yPos / 32);
         final int imgPos = MathUtils.random(MAX_NUMBER_OF_FLYERS);
             
         if (imgPos < MAX_NUMBER_OF_FLYERS / 2) {
@@ -280,7 +299,7 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
             xPos = 20;
         }
                    
-        if (!finished) {
+        if (!finished && gameStarted) {
         	Sprite spriteCreated = createSprite(xPos, yPos, flyers[imgPos]);
         	createFlyerDestroyTimeHandler(spriteCreated);
         }

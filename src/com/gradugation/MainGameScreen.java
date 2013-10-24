@@ -49,6 +49,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.View;
 
 public class MainGameScreen extends SimpleBaseGameActivity implements
 		IOnSceneTouchListener {
@@ -251,14 +252,14 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 			};
 		};
 
-		// Pause screen button
+		// Load the Pause Scene
 		this.mPauseScene = new CameraScene(this.mCamera);
-		final float cX = (CAMERA_WIDTH - this.mPausedTextureRegion.getWidth()) / 2 + (this.mPausedTextureRegion.getWidth() / 4);
-		final float cY = (CAMERA_HEIGHT - this.mPausedTextureRegion.getHeight()) / 4;
+		final float cX = (CAMERA_WIDTH - this.mPausedTextureRegion.getWidth()) / 2 + (this.mPausedTextureRegion.getWidth() / 3);
+		final float cY = (CAMERA_HEIGHT - this.mPausedTextureRegion.getHeight()) / 5;
 
 		// Resume Button
 		
-		final Sprite resumeButton = new Sprite(cX, cY + (CAMERA_HEIGHT/2),
+		final Sprite resumeButton = new Sprite(cX+(CAMERA_WIDTH/10), cY + (CAMERA_HEIGHT/2),
 				this.mResumeTextureRegion, this.getVertexBufferObjectManager()) {
 			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
 				switch (touchEvent.getAction()) {
@@ -279,7 +280,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		
 		// Return to main menu button
 		
-		final Sprite mainMenuButton = new Sprite(cX, cY + (CAMERA_HEIGHT/3),
+		final Sprite mainMenuButton = new Sprite(cX+(CAMERA_WIDTH/10), cY + (CAMERA_HEIGHT/3),
 				this.mMainMenuTextureRegion, this.getVertexBufferObjectManager()) {
 			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
 				switch (touchEvent.getAction()) {
@@ -288,6 +289,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 					scene.clearEntityModifiers();
 					scene.clearTouchAreas();
 					scene.clearUpdateHandlers();
+					mHUD.detachChildren();
+					mPauseScene.detachChildren();
+					this.detachSelf();
+					onClick(mRenderSurfaceView);
 					finish();
 					break;
 				case TouchEvent.ACTION_MOVE:
@@ -304,6 +309,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		/* Makes the paused Game look through. */
 		this.mPauseScene.setBackgroundEnabled(false);
 
+		// Main Menu Button on HUD
 		final Sprite pauseSprite = new Sprite(mCamera.getWidth()
 				- (mCamera.getWidth() / 2), 300, this.mFaceTextureRegion,
 				this.getVertexBufferObjectManager()) {
@@ -595,6 +601,11 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 			return super.onKeyDown(pKeyCode, pEvent);
 		}
 	}
+	public void onClick(View view) {
+		Intent intent = new Intent(this, MainActivity.class);
+		startActivity(intent);
+	}
+	
 
 	// ===========================================================
 	// Methods

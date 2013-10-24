@@ -29,7 +29,8 @@
         </activity>
         <activity
             android:name="com.gradugation.ChooseCharacterActivity"
-            android:label="@string/title_activity_choose_character" >
+            android:label="@string/title_activity_choose_character"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.gradugation.HowToPlayActivity"
@@ -69,6 +70,10 @@
         <activity
             android:name="com.gradugation.BalanceMinigame"
             android:label="@string/title_activity_balance_minigame" >
+        </activity>
+        <activity
+            android:name="com.gradugation.WhackAFlyerGame"
+            android:label="@string/title_activity_whack_aflyer" >
         </activity>
     </application>
 

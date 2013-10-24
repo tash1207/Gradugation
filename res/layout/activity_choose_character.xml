@@ -41,8 +41,7 @@
             android:id="@+id/radio2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/gradugator_name"
-            android:drawableRight="@drawable/ic_launcher" />
+            android:text="@string/engineer_name"/>
     </RadioGroup>
 
     <Button

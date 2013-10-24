@@ -87,6 +87,7 @@ public class BenchPressMinigame extends Activity {
 	}
 	
 	public void benchPress(View view) {
+		Character instance = Character.getInstance();
 		if (!game_finished) {
 			clicks++;
 			reps = clicks / 4;
@@ -94,13 +95,13 @@ public class BenchPressMinigame extends Activity {
 			reps_text.setText("Reps: " + reps);
 			
 			if (clicks % 4 == 0) {
-				image.setImageResource(R.drawable.bench_press3);
+				image.setImageResource(getResources().getIdentifier("bench_press3"+instance.getName().toLowerCase(), "drawable", getPackageName()));
 			}
 			else if (clicks == 2 || clicks % 2 == 1) {
-				image.setImageResource(R.drawable.bench_press2);
+				image.setImageResource(getResources().getIdentifier("bench_press2"+instance.getName().toLowerCase(), "drawable", getPackageName()));
 			}
 			else {
-				image.setImageResource(R.drawable.bench_press1);
+				image.setImageResource(getResources().getIdentifier("bench_press1"+instance.getName().toLowerCase(), "drawable", getPackageName()));
 			}
 		}
 	}

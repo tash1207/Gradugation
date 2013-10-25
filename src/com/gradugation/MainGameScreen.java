@@ -148,7 +148,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 		// Pause Assets
 		this.mFaceTexture = new AssetBitmapTexture(this.getTextureManager(),
-				this.getAssets(), "gfx/face_box_menu.png",
+				this.getAssets(), "gfx/menu.png",
 				TextureOptions.BILINEAR);
 		this.mFaceTextureRegion = TextureRegionFactory
 				.extractFromTexture(this.mFaceTexture);

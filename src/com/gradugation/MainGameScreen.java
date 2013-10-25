@@ -4,6 +4,7 @@ package com.gradugation;
 import java.io.IOException;
 
 import org.andengine.engine.camera.BoundCamera;
+import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
@@ -29,8 +30,10 @@ import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
+import org.andengine.util.Constants;
 import org.andengine.util.debug.Debug;
 
 import android.content.Intent;
@@ -62,7 +65,16 @@ public class MainGameScreen extends SimpleBaseGameActivity implements IOnSceneTo
 
 	    private float currentX;
 	    private float currentY;
-	    
+	    private float currentX2;
+	    private float currentY2;
+	 
+	    private boolean turnDone;
+	    private boolean moving;
+	    public int turnNum;
+	    public int currentCharacter;
+		public int ranNumb;
+		private int numCharacters;
+
 	    private boolean gameDone=false;
 
 	    float initX;
@@ -71,6 +83,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements IOnSceneTo
 		float finalY;
 		
 		boolean swipeDone=false;
+		private BitmapTextureAtlas characterTextureAtlas2;
+		private TextureRegion character2;
 		
 		// ===========================================================
 		// Constructors
@@ -89,7 +103,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements IOnSceneTo
 		public EngineOptions onCreateEngineOptions() {
 			//Toast.makeText(this, "The tile the player is walking on will be highlighted.", Toast.LENGTH_LONG).show();
 
-			this.mCamera = new BoundCamera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
+			final float maxVelocityX = 150;
+			final float maxVelocityY = 150;
+			final float maxZoomFactorChange = 5;
+			this.mCamera = new SmoothCamera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT,maxVelocityX,maxVelocityY,maxZoomFactorChange);
 			this.mCamera.setBoundsEnabled(false);
 
 			return new EngineOptions(true, ScreenOrientation.LANDSCAPE_SENSOR, new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT), this.mCamera);
@@ -105,6 +122,9 @@ public class MainGameScreen extends SimpleBaseGameActivity implements IOnSceneTo
 			this.characterTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 512,512,TextureOptions.BILINEAR);
 			this.character = BitmapTextureAtlasTextureRegionFactory.createFromAsset(characterTextureAtlas, this, "splash2.png", 0, 0);;
 			this.characterTextureAtlas.load();
+			this.characterTextureAtlas2 = new BitmapTextureAtlas(this.getTextureManager(), 512,512,TextureOptions.BILINEAR);
+			this.character2 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(characterTextureAtlas2, this, "Engineer.png", 0, 0);;
+			this.characterTextureAtlas2.load();
 		}
 
 		@Override
@@ -125,14 +145,19 @@ public class MainGameScreen extends SimpleBaseGameActivity implements IOnSceneTo
 //						}
 					}
 				});
-				this.mTMXTiledMap = tmxLoader.loadFromAsset("tmx/Multi_Gator_map.tmx");
+				this.mTMXTiledMap = tmxLoader.loadFromAsset("tmx/New_Multi_Gator_map.tmx");
 				this.mTMXTiledMap.setOffsetCenter(0, 0);
 
 				//this.toastOnUiThread("Cactus count in this TMXTiledMap: " + MainGameScreen.this.mCactusCount, Toast.LENGTH_LONG);
 			} catch (final TMXLoadException e) {
 				Debug.e(e);
 			}
-
+			moving=false;
+			turnDone=false;
+			turnNum=1;
+			ranNumb = 1 + (int)(Math.random() * ((6 - 1) + 1));
+			numCharacters=2;
+			
 			scene.attachChild(this.mTMXTiledMap);
 
 			/* Make the camera not exceed the bounds of the TMXEntity. */
@@ -140,22 +165,34 @@ public class MainGameScreen extends SimpleBaseGameActivity implements IOnSceneTo
 			this.mCamera.setBounds(0, 0, this.mTMXTiledMap.getWidth(), this.mTMXTiledMap.getHeight());
 			this.mCamera.setBoundsEnabled(true);
 
-			final float centerX = 239;
-			final float centerY = 407;
+			final float centerX = 8*(32)-16; //minus 16 for image alignment
+			final float centerY = 13*(32)-10; //minus 10 for image alignment
 			currentX = centerX;
 			currentY = centerY;
+			currentX2 = centerX+32;
+			currentY2 = centerY;
+//			positionX[0] = centerX;
+//			positionY[0] = centerY;
 		
 			final Sprite mySprite = new Sprite(currentX,currentY, character, this.getVertexBufferObjectManager());
 			mySprite.setScale((float) .1);
-			scene.attachChild(mySprite);
+			//final Sprite mySprite2 = new Sprite(currentX,currentY, character, this.getVertexBufferObjectManager());
+			//mySprite2.setScale((float) .1);
+//			scene.attachChild(mySprite);
 			
+			final Sprite mySprite2 = new Sprite(currentX2,currentY2, character2, this.getVertexBufferObjectManager());
+			mySprite2.setScale((float) .1);
+
+			final Sprite[] SpriteList = new Sprite[numCharacters];
+			
+			if (numCharacters>=1) SpriteList[0]=mySprite;
+			if (numCharacters>=2) SpriteList[1]=mySprite2;
 
 			/* Create the sprite and add it to the scene. */
 			//final AnimatedSprite player = new AnimatedSprite(centerX, centerY, this.character, this.getVertexBufferObjectManager());
-			//player.setOffsetCenterY(0);
 			this.mCamera.setChaseEntity(mySprite);
-			
-
+            currentCharacter=0;
+            
 			
 			//final Path path = new Path(5).to(50, 740).to(50, 1000).to(820, 1000).to(820, 740).to(0);
 
@@ -211,97 +248,272 @@ public class MainGameScreen extends SimpleBaseGameActivity implements IOnSceneTo
 				@Override
 				public void onUpdate(final float pSecondsElapsed) {
 //					/* Get the scene-coordinates of the players feet. */
-					//final float[] playerFootCordinates = mySprite.convertLocalCoordinatesToSceneCoordinates(16, 1);
+					float[] localCoord = new float[2];
+					localCoord[0] = SpriteList[currentCharacter].getWidth() * .5f;
+					localCoord[1] = SpriteList[currentCharacter].getHeight() * .5f;
+					final float[] playerFootCordinates = SpriteList[currentCharacter].convertLocalCoordinatesToSceneCoordinates(localCoord);
 //
 					/* Get the tile the feet of the player are currently waking on. */
-//					final TMXTile tmxTile = tmxLayer.getTMXTileAt(playerFootCordinates[Constants.VERTEX_INDEX_X], playerFootCordinates[Constants.VERTEX_INDEX_Y]);
-//					if(tmxTile != null) {
-//						// tmxTile.setTextureRegion(null); <-- Eraser-style removing of tiles =D
-//						currentTileRectangle.setPosition(tmxLayer.getTileX(tmxTile.getTileColumn()), tmxLayer.getTileY(tmxTile.getTileRow()));
-//					}
+					final TMXTile tmxTile = tmxLayer.getTMXTileAt(playerFootCordinates[Constants.VERTEX_INDEX_X], playerFootCordinates[Constants.VERTEX_INDEX_Y]);
+					if(tmxTile != null) {
+						 //tmxTile.setTextureRegion(null); <-- Eraser-style removing of tiles =D
+						currentTileRectangle.setPosition(tmxLayer.getTileX(tmxTile.getTileColumn()), tmxLayer.getTileY(tmxTile.getTileRow()));
+					}
 					
 					
 					if(move){
-						
-						if(swipeDone==true && (finalY-initY)>20){
-							mySprite.registerEntityModifier(new MoveModifier(0.8f,currentX,currentY, currentX, currentY + 64)
-							{
-								@Override
-						        protected void onModifierStarted(IEntity pItem)
-						        {
-						                super.onModifierStarted(pItem);
-										move=false;		
-								    	gameDone=false;
-
-								}
-
-						        @Override
-						        protected void onModifierFinished(IEntity pItem)
-						        {
-						        		currentX=mySprite.getX();
-						        		currentY=mySprite.getY();
-						                super.onModifierFinished(pItem);
-						                //currentY= currentY + 64;
-						                if(currentY >= 471 && currentX == 239 && move==false && gameDone==false){
-											Intent intent = new Intent(MainGameScreen.this, WiresMiniGame.class);
-									    	startActivity(intent);
-									    	gameDone=true;
-									    	
-
-										}
-								        swipeDone=false;
-
-						        }
-							});
-						}
-						
-						if(swipeDone==true && (finalY-initY)<-20){
-							mySprite.registerEntityModifier(new MoveModifier(0.8f,currentX,currentY, currentX, currentY - 64)
-							{
-								@Override
-						        protected void onModifierStarted(IEntity pItem)
-						        {
-						                super.onModifierStarted(pItem);
-										move=false;	
-								    	gameDone=false;
-
-								}
-
-						        @Override
-						        protected void onModifierFinished(IEntity pItem)
-						        {
-						        	currentX=mySprite.getX();
-									currentY=mySprite.getY();    
-						        	super.onModifierFinished(pItem);
-						                //currentY= currentY - 64;
-
-						                if(currentY <= 375 && currentX == 239 && move==false && gameDone==false){
-											Intent intent = new Intent(MainGameScreen.this, BenchPressMinigame.class);
-									    	startActivity(intent);
-									    	gameDone=true;
-									    	
-
-										}		
-								        swipeDone=false;
-						         }
-							});
-						}
-						
-						
-						
+						movementFunction(SpriteList[currentCharacter]);
+						moving=true;
+						MainGameScreen.this.mCamera.updateChaseEntity(); 
 
 					}
+						
+						if(moving==true && turnDone==true && swipeDone == false){
+							moving=false;
+							turnDone =false;
+							currentCharacter = (currentCharacter+1) % (numCharacters);
+							MainGameScreen.this.mCamera.setChaseEntity(SpriteList[currentCharacter]);
+//							if(currentCharacter==0){
+//								SpriteList[currentCharacter].registerEntityModifier(new MoveModifier(0.5f,currentX,currentY, currentX, currentY+1));	
+//								SpriteList[currentCharacter].registerEntityModifier(new MoveModifier(0.5f,currentX,currentY, currentX, currentY-1));									
+//							}else if(currentCharacter ==1){
+//								SpriteList[currentCharacter].registerEntityModifier(new MoveModifier(0.5f,currentX2,currentY2, currentX2, currentY2+1 ));
+//								SpriteList[currentCharacter].registerEntityModifier(new MoveModifier(0.5f,currentX2,currentY2, currentX2, currentY2-1 ));
+//							}
+						}
+						
+						 
+					if(swipeDone==false){
+						ranNumb = (1 + (int)(Math.random() * ((3 - 1) + 1)))*32;
+					}
 					
-
+						
 				}
 			});
-			//scene.attachChild(player);
+			scene.attachChild(SpriteList[0]);
+			scene.attachChild(SpriteList[1]);
 
 			return scene;
 		}
 		boolean move = false;
 		
+		protected void movementFunction(final Sprite mySprite){
+			//Swipe up
+			if(swipeDone==true && (finalY-initY)>40){
+				if(currentCharacter==0){
+				mySprite.registerEntityModifier(new MoveModifier(0.5f,currentX,currentY, currentX, currentY + (ranNumb))
+				{
+					@Override
+			        protected void onModifierStarted(IEntity pItem)
+			        {
+			                super.onModifierStarted(pItem);
+							move=false;		
+					    	gameDone=false;
+					}
+
+			        @Override
+			        protected void onModifierFinished(IEntity pItem)
+			        {
+			        	currentX = mySprite.getX();
+			        	currentY = mySprite.getY();
+			        	super.onModifierFinished(pItem);
+			        	checkMiniGameHotSpots();
+			        	swipeDone = false;
+					    turnDone = true;
+
+			        }
+				});} else if(currentCharacter==1){
+					mySprite.registerEntityModifier(new MoveModifier(0.5f,currentX2,currentY2, currentX2, currentY2 + (ranNumb))
+					{
+						@Override
+				        protected void onModifierStarted(IEntity pItem)
+				        {
+				                super.onModifierStarted(pItem);
+								move=false;		
+						    	gameDone=false;
+						}
+
+				        @Override
+				        protected void onModifierFinished(IEntity pItem)
+				        {
+				        	currentX2 = mySprite.getX();
+				        	currentY2 = mySprite.getY();
+				        	super.onModifierFinished(pItem);
+				        	checkMiniGameHotSpots();
+				        	swipeDone = false;
+						    turnDone = true;
+
+				        }
+					});
+				}
+			}
+			//Swipe down
+			if(swipeDone==true && (finalY-initY)<-40){
+				if(currentCharacter==0){
+				mySprite.registerEntityModifier(new MoveModifier(0.8f,currentX,currentY, currentX, currentY - (ranNumb))
+				{
+					@Override
+			        protected void onModifierStarted(IEntity pItem)
+			        {
+			                super.onModifierStarted(pItem);
+							move=false;	
+					    	gameDone=false;
+					}
+
+			        @Override
+			        protected void onModifierFinished(IEntity pItem)
+			        {
+			        	currentX=mySprite.getX();
+						currentY=mySprite.getY();    
+			        	super.onModifierFinished(pItem);
+			        	checkMiniGameHotSpots();
+					    swipeDone=false;
+					    turnDone = true;
+
+			         }
+				});} else if(currentCharacter==1){
+					mySprite.registerEntityModifier(new MoveModifier(0.5f,currentX2,currentY2, currentX2, currentY2 - (ranNumb))
+					{
+						@Override
+				        protected void onModifierStarted(IEntity pItem)
+				        {
+				                super.onModifierStarted(pItem);
+								move=false;		
+						    	gameDone=false;
+						}
+
+				        @Override
+				        protected void onModifierFinished(IEntity pItem)
+				        {
+				        	currentX2 = mySprite.getX();
+				        	currentY2 = mySprite.getY();
+				        	super.onModifierFinished(pItem);
+				        	checkMiniGameHotSpots();
+				        	swipeDone = false;
+						    turnDone = true;
+
+				        }
+					});
+				}
+			}
+			
+			//Swipe left
+			if(swipeDone==true && (finalX-initX)>40){
+				if(currentCharacter==0){
+				mySprite.registerEntityModifier(new MoveModifier(0.8f,currentX,currentY, currentX+ (ranNumb), currentY )
+				{
+					@Override
+			        protected void onModifierStarted(IEntity pItem)
+			        {
+			                super.onModifierStarted(pItem);
+							move=false;	
+					    	gameDone=false;
+					}
+
+			        @Override
+			        protected void onModifierFinished(IEntity pItem)
+			        {
+			        	currentX=mySprite.getX();
+						currentY=mySprite.getY();    
+			        	super.onModifierFinished(pItem);
+			        	checkMiniGameHotSpots();
+					    swipeDone=false;
+					    turnDone = true;
+
+			         }
+				});} else if(currentCharacter==1){
+					mySprite.registerEntityModifier(new MoveModifier(0.5f,currentX2,currentY2, currentX2+ (ranNumb), currentY2)
+					{
+						@Override
+				        protected void onModifierStarted(IEntity pItem)
+				        {
+				                super.onModifierStarted(pItem);
+								move=false;		
+						    	gameDone=false;
+						}
+
+				        @Override
+				        protected void onModifierFinished(IEntity pItem)
+				        {
+				        	currentX2 = mySprite.getX();
+				        	currentY2 = mySprite.getY();
+				        	super.onModifierFinished(pItem);
+				        	checkMiniGameHotSpots();
+				        	swipeDone = false;
+						    turnDone = true;
+
+				        }
+					});
+				}
+			}
+			
+			//Swipe right
+			if(swipeDone==true && (finalX-initX)<-40){
+				if(currentCharacter==0){
+				mySprite.registerEntityModifier(new MoveModifier(0.8f,currentX,currentY, currentX- (ranNumb), currentY )
+				{
+					@Override
+			        protected void onModifierStarted(IEntity pItem)
+			        {
+			                super.onModifierStarted(pItem);
+							move=false;	
+					    	gameDone=false;
+					}
+
+			        @Override
+			        protected void onModifierFinished(IEntity pItem)
+			        {
+			        	currentX=mySprite.getX();
+						currentY=mySprite.getY();    
+			        	super.onModifierFinished(pItem);
+			        	checkMiniGameHotSpots();
+					    swipeDone=false;
+					    turnDone = true;
+			         }
+				});} else if(currentCharacter==1){
+					mySprite.registerEntityModifier(new MoveModifier(0.5f,currentX2,currentY2, currentX2-(ranNumb), currentY2)
+					{
+						@Override
+				        protected void onModifierStarted(IEntity pItem)
+				        {
+				                super.onModifierStarted(pItem);
+								move=false;		
+						    	gameDone=false;
+						}
+
+				        @Override
+				        protected void onModifierFinished(IEntity pItem)
+				        {
+				        	currentX2 = mySprite.getX();
+				        	currentY2 = mySprite.getY();
+				        	super.onModifierFinished(pItem);
+				        	checkMiniGameHotSpots();
+				        	swipeDone = false;
+						    turnDone = true;
+
+				        }
+					});
+				}
+			}
+		}
 		
+		
+		
+		//Checks the hot spots for the minigames
+		protected void  checkMiniGameHotSpots()
+		{
+
+			if (currentY >= 470 && currentY < 502 && currentX >= 224 && currentX < 256 && move == false && gameDone == false) {
+				Intent intent = new Intent(MainGameScreen.this, WiresMiniGame.class);
+				startActivity(intent);
+				gameDone = true;
+			} else if (currentY >= 342 && currentY < 374 && currentX >= 224 && currentX < 256 && move == false && gameDone == false) {
+				Intent intent = new Intent(MainGameScreen.this,BenchPressMinigame.class);
+				startActivity(intent);
+				gameDone = true;
+		}
+
+		}
 		
 		@Override
 		public boolean onSceneTouchEvent(Scene pScene,

@@ -24,7 +24,7 @@ public class BenchPressMinigame extends Activity {
 	int clicks = 0;
 	int reps = 0;
 	ImageView image;
-	
+	public static int whoseTurn = 0;
 	boolean game_finished = false;
 	
 	
@@ -32,6 +32,8 @@ public class BenchPressMinigame extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.minigame_bench_press);
+		Intent intent = getIntent();
+		final ArrayList<Character> thePlayers = (ArrayList<Character>) intent.getSerializableExtra(ChooseCharacterActivity.THE_PLAYERS);
 		
 		seconds_text = (TextView) findViewById(R.id.bench_press_time);
 		reps_text = (TextView) findViewById(R.id.bench_press_reps);
@@ -45,6 +47,8 @@ public class BenchPressMinigame extends Activity {
 			public void onFinish() {
 				seconds_text.setText("Time Left: 0 secs");
 				game_finished = true;
+				whoseTurn++;
+				whoseTurn%=thePlayers.size();
 				
 				if (reps >= REPS_REQUIRED) {
 					Toast.makeText(BenchPressMinigame.this, getString(R.string.bench_press_success, reps, 
@@ -56,12 +60,18 @@ public class BenchPressMinigame extends Activity {
 							Toast.LENGTH_LONG).show();
 				}
 				// Code to make continue button no longer disabled
+				
 			}
 			
 		};
 		
+		
+		
+		Toast.makeText(this, "It's " + thePlayers.get(whoseTurn).getName() + "'s turn!", Toast.LENGTH_LONG).show();
+		
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getString(R.string.bench_press_instructions1));
+		
+		builder.setMessage(getString(R.string.bench_press_instructions1));
         builder.setCancelable(false);
         builder.setPositiveButton("Next", new DialogInterface.OnClickListener() {
                 
@@ -94,7 +104,7 @@ public class BenchPressMinigame extends Activity {
 		Intent intent = getIntent();
 		
 		ArrayList<Character> thePlayers = (ArrayList<Character>) intent.getSerializableExtra(ChooseCharacterActivity.THE_PLAYERS);
-		Character instance = thePlayers.get(0);
+		Character instance = thePlayers.get(whoseTurn);
 		//Character instance = Character.getInstance();
 		if (!game_finished) {
 			clicks++;

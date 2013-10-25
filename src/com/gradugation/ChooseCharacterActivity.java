@@ -28,7 +28,7 @@ public class ChooseCharacterActivity extends Activity {
 	private RadioButton radioGroup1Button;
 	private Button btnDisplay;
 	ArrayList<Character> thePlayers = new ArrayList<Character>();
-	
+	int playersChosen = 0;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -40,27 +40,43 @@ public class ChooseCharacterActivity extends Activity {
 	public void addListenerOnButton(){
 		radioGroup1 = (RadioGroup) findViewById(R.id.radioGroup1);
 		btnDisplay = (Button) findViewById(R.id.btn_continue_game);
-		Intent intent = getIntent();
+		
 		
 		btnDisplay.setOnClickListener(new OnClickListener(){
 			public void onClick(View v){
 				Intent intent = getIntent();
 			    int	numPlayers = intent.getIntExtra(NewGameActivity.NUMBER_OF_PLAYERS, 1);
-				//get selected radio button from radioGroup
-				int selectedId = radioGroup1.getCheckedRadioButtonId();
-				
-				//find the radiobutton by returned id
-				radioGroup1Button = (RadioButton) findViewById(selectedId);
-				
-				Toast.makeText(ChooseCharacterActivity.this, radioGroup1Button.getText(), Toast.LENGTH_SHORT).show();
-				
-				Character thePlayer = new Character();
-				thePlayer.setName((String)radioGroup1Button.getText());
-				thePlayers.add(thePlayer);
-				
-				//choose another player here
-				startGame(v);
-				
+				if (playersChosen > numPlayers-1){					
+					startGame(v);
+				}
+				else if (playersChosen == numPlayers-1){
+					int selectedId = radioGroup1.getCheckedRadioButtonId();
+					
+					//find the radiobutton by returned id
+					radioGroup1Button = (RadioButton) findViewById(selectedId);
+					
+					Character thePlayer = new Character();
+					thePlayer.setName((String)radioGroup1Button.getText());
+					thePlayers.add(thePlayer);
+					
+					
+					Toast.makeText(ChooseCharacterActivity.this,  "Player " + Integer.toString(playersChosen+1) + " is " + thePlayers.get(playersChosen).getName(), Toast.LENGTH_SHORT).show();
+					playersChosen++;
+					startGame(v);
+				}
+				else{
+					int selectedId = radioGroup1.getCheckedRadioButtonId();
+					
+					//find the radiobutton by returned id
+					radioGroup1Button = (RadioButton) findViewById(selectedId);
+					
+					Character thePlayer = new Character();
+					thePlayer.setName((String)radioGroup1Button.getText());
+					thePlayers.add(thePlayer);
+					
+					Toast.makeText(ChooseCharacterActivity.this,  "Player " + Integer.toString(playersChosen+1) + " is " + thePlayers.get(playersChosen).getName(), Toast.LENGTH_SHORT).show();
+					playersChosen++;
+				}
 			}
 		});
 	}

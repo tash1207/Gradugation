@@ -1,9 +1,10 @@
 package com.gradugation;
 
+import java.io.Serializable;
 
-public class Character {
-	private static Character instance = null;
-	
+
+public class Character implements Serializable{
+	//private static Character instance = null;
 	
 	//CharacterType  type; //need to enumerate this data type
 	private String name;
@@ -24,13 +25,12 @@ public class Character {
 	//Tile previousTile;  //(cleared  at  end  of  turn) //tiles not created yet
 	//CompassDirection  direction;  /*the  direction  the  player  is  travelling  in*/ //need to enumerate this data type
 	
-	
-	public static Character getInstance() {
-		if(instance == null) {
-			instance = new Character();
-		}
-		return instance;
-	}
+//	public static Character getInstance() {
+//		if(instance == null) {
+//			instance = new Character();
+//		}
+//		return instance;
+//	}
 	
 	public void setName(String s)
 	{

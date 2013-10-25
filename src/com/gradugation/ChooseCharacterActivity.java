@@ -1,5 +1,8 @@
 package com.gradugation;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,10 +23,11 @@ import android.widget.Toast;
 
 public class ChooseCharacterActivity extends Activity {
 
+	public static final String THE_PLAYERS = "com.gradugation.the_players";
 	private RadioGroup radioGroup1;
 	private RadioButton radioGroup1Button;
 	private Button btnDisplay;
-	
+	ArrayList<Character> thePlayers = new ArrayList<Character>();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +40,12 @@ public class ChooseCharacterActivity extends Activity {
 	public void addListenerOnButton(){
 		radioGroup1 = (RadioGroup) findViewById(R.id.radioGroup1);
 		btnDisplay = (Button) findViewById(R.id.btn_continue_game);
+		Intent intent = getIntent();
 		
 		btnDisplay.setOnClickListener(new OnClickListener(){
 			public void onClick(View v){
+				Intent intent = getIntent();
+			    int	numPlayers = intent.getIntExtra(NewGameActivity.NUMBER_OF_PLAYERS, 1);
 				//get selected radio button from radioGroup
 				int selectedId = radioGroup1.getCheckedRadioButtonId();
 				
@@ -47,8 +54,9 @@ public class ChooseCharacterActivity extends Activity {
 				
 				Toast.makeText(ChooseCharacterActivity.this, radioGroup1Button.getText(), Toast.LENGTH_SHORT).show();
 				
-				Character instance = Character.getInstance();
-				instance.setName((String) radioGroup1Button.getText());
+				Character thePlayer = new Character();
+				thePlayer.setName((String)radioGroup1Button.getText());
+				thePlayers.add(thePlayer);
 				
 				//choose another player here
 				startGame(v);
@@ -74,6 +82,7 @@ public class ChooseCharacterActivity extends Activity {
 	
 	public void startGame(View view) {
     	Intent intent = new Intent(this, BenchPressMinigame.class);
+    	intent.putExtra(THE_PLAYERS, (Serializable)thePlayers);
     	startActivity(intent);
 	}
 

@@ -1,8 +1,11 @@
 package com.gradugation;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -23,6 +26,7 @@ public class BenchPressMinigame extends Activity {
 	ImageView image;
 	
 	boolean game_finished = false;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +91,11 @@ public class BenchPressMinigame extends Activity {
 	}
 	
 	public void benchPress(View view) {
-		Character instance = Character.getInstance();
+		Intent intent = getIntent();
+		
+		ArrayList<Character> thePlayers = (ArrayList<Character>) intent.getSerializableExtra(ChooseCharacterActivity.THE_PLAYERS);
+		Character instance = thePlayers.get(0);
+		//Character instance = Character.getInstance();
 		if (!game_finished) {
 			clicks++;
 			reps = clicks / 4;

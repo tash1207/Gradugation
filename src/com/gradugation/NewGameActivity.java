@@ -7,11 +7,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class NewGameActivity extends Activity {
 
 	public static final String NUMBER_OF_PLAYERS = "com.gradugation.number_of_players";
-	public static final int MAX_NUMBER_PLAYERS = 1;
+	public static final int MAX_NUMBER_PLAYERS = 4;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -30,6 +31,11 @@ public class NewGameActivity extends Activity {
     	EditText editText = (EditText) findViewById(R.id.number_of_players);
     	int numberOfPlayers = Integer.parseInt(editText.getText().toString());
     	
+    	//this part needs to be fixed. it's supposed to not let the user click okay while the field is empty. as a temporary fix, I've let the default value of 1 remain (still, not foolproof but works)
+    	if (editText.getText().toString().trim().length()==0){
+    		editText.setError("Invalid number of players.");
+    		//Toast.makeText(this,  "Please enter how many players you would like to have", Toast.LENGTH_SHORT).show();
+    	}
     	if (numberOfPlayers > MAX_NUMBER_PLAYERS || numberOfPlayers <= 0) {
     		editText.setError("Invalid number of players.");
     		return;

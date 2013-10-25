@@ -72,6 +72,10 @@
             android:name="com.gradugation.WhackAFlyerGame"
             android:label="@string/title_activity_whack_aflyer" >
         </activity>
+        <activity
+            android:name="com.gradugation.ColorMiniGame"
+            android:label="@string/title_activity_color_mini_game" >
+        </activity>
     </application>
 
 </manifest>

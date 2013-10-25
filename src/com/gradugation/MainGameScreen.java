@@ -122,8 +122,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements IOnSceneTo
 			this.characterTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 512,512,TextureOptions.BILINEAR);
 			this.character = BitmapTextureAtlasTextureRegionFactory.createFromAsset(characterTextureAtlas, this, "splash2.png", 0, 0);;
 			this.characterTextureAtlas.load();
-			this.characterTextureAtlas2 = new BitmapTextureAtlas(this.getTextureManager(), 512,512,TextureOptions.BILINEAR);
-			this.character2 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(characterTextureAtlas2, this, "Engineer.png", 0, 0);;
+			this.characterTextureAtlas2 = new BitmapTextureAtlas(this.getTextureManager(), 1000,1000,TextureOptions.BILINEAR);
+			this.character2 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(characterTextureAtlas2, this, "engineer.png", 0, 0);;
 			this.characterTextureAtlas2.load();
 		}
 

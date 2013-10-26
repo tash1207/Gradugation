@@ -18,4 +18,9 @@ public class MapCoordinate extends Coordinate {
 		return new SpriteCoordinate(x,y);
 	}
 
+	@Override
+	public Coordinate add(Coordinate toAdd) {
+		return new MapCoordinate (this.x + toAdd.getX(), this.y + toAdd.getY());
+	}
+
 }

@@ -15,6 +15,7 @@ import org.andengine.engine.Engine;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
+import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
@@ -70,7 +71,7 @@ public class FoodMiniGame extends BaseGameActivity {
 	public EngineOptions onCreateEngineOptions() {
 		Toast.makeText(
 				this,
-				"Get a score of 5 in 10 seconds! Gain points with apples, lose points with fries!",
+				"Get a score of 5 in 15 seconds! Gain points with apples, lose points with fries!",
 				Toast.LENGTH_LONG).show();
 
 		camera = new Camera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
@@ -106,7 +107,7 @@ public class FoodMiniGame extends BaseGameActivity {
 		this.applesTexture.load();
 		
 		this.continueTextureRegion = TextureRegionFactory
-				.extractFromTexture(this.applesTexture);
+				.extractFromTexture(this.continueTexture);
 		this.continueTexture.load();
 
 
@@ -171,8 +172,6 @@ public class FoodMiniGame extends BaseGameActivity {
 				SensorManager.GRAVITY_EARTH), false);
 		final FixtureDef spriteDef = PhysicsFactory.createFixtureDef(1f, 0.5f,
 				0.5f);
-		PhysicsFactory.createBoxBody(this.mPhysicsWorld, sprite,
-				BodyType.KinematicBody, spriteDef);
 		final Body body = FoodMiniGame.createBody(this.mPhysicsWorld, sprite,
 				BodyType.KinematicBody, spriteDef);
 		body.setLinearVelocity(0, -6);
@@ -214,7 +213,7 @@ public class FoodMiniGame extends BaseGameActivity {
 		scene.getBackground().setColor(1f, 1f, 1f);
 
 		mHUD = new HUD();
-		mHUD.attachChild(scene);
+		mHUD.attachChild(new Entity());
 		camera.setHUD(mHUD);
 
 		final Text scoreText = new Text(CAMERA_WIDTH / 2, CAMERA_HEIGHT / 2,
@@ -255,12 +254,37 @@ public class FoodMiniGame extends BaseGameActivity {
 								gameOver.setText("Game Over! You lost!");
 							}
 							scene.setIgnoreUpdate(true);
+							scene.clearTouchAreas();
+							createContinueButton();
 						}
 					}
 				});
 
 		scene.registerUpdateHandler(gameTimerHandler);
 		pOnCreateScreenCallback.onCreateSceneFinished(scene);
+	}
+	
+	private void createContinueButton() {
+		final Sprite continueButton = new Sprite(CAMERA_WIDTH/2, CAMERA_HEIGHT/2-(CAMERA_HEIGHT/5), continueTextureRegion,
+				this.getVertexBufferObjectManager()) {
+			@Override
+			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
+					final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+				switch (pSceneTouchEvent.getAction()) {
+				case TouchEvent.ACTION_DOWN:
+					finish();
+					break;
+				case TouchEvent.ACTION_UP:
+					break;
+				case TouchEvent.ACTION_MOVE:
+					break;
+				}
+				return true;
+			}
+
+		};
+		mHUD.attachChild(continueButton);
+		mHUD.registerTouchArea(continueButton);
 	}
 
 	public void onPopulateScene(Scene pScene,

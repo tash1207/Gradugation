@@ -78,7 +78,8 @@
 
         <activity
             android:name="com.gradugation.MainGameScreen"
-            android:label="@string/title_activity_main_game_screen" >
+            android:label="@string/title_activity_main_game_screen"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
         </activity>
         <activity
             android:name="com.gradugation.WhackAFlyerGame"

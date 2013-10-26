@@ -6,11 +6,11 @@ A UF-themed Android board game where players go through college with the ultimat
 
 How to run game
 ---------------
-1. Go to the following two links and download the zip files:
+1. Go to the following links and download the zip files:
 
 https://github.com/nicolasgramlich/AndEngine/tree/GLES2-AnchorCenter
-
 https://github.com/nicolasgramlich/AndEngineTMXTiledMapExtension/tree/GLES2-AnchorCenter
+https://github.com/nicolasgramlich/AndEnginePhysicsBox2DExtension/tree/GLES2-AnchorCenter
 
 2. Extract the zip files.
 

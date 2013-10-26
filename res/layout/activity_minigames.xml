@@ -140,7 +140,7 @@
                 android:layout_centerVertical="true"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/food_mini_game"
-                android:src="@drawable/bricks" />
+                android:src="@drawable/fries" />
             
             <TextView
                 android:id="@+id/minigame_food_text"

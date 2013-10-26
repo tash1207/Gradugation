@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gator_blue" >
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:minWidth="80dp"
+        android:src="@drawable/button_rectangle_orange" />
+
+    <ImageView
+        android:id="@+id/item_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/imageView1"
+        android:src="@drawable/ic_launcher" />
+
+    <TextView
+        android:id="@+id/item_txtSaveData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/item_txtSavedGame"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/imageView1"
+        android:layout_toRightOf="@+id/item_icon"
+        android:gravity="center"
+        android:text="SavedGame" />
+
+    <TextView
+        android:id="@+id/item_txtSavedGame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/item_icon"
+        android:layout_alignLeft="@+id/item_txtSaveData"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:text="SaveData" />
+
+</RelativeLayout>

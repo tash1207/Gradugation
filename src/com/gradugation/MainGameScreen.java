@@ -1,6 +1,7 @@
 package com.gradugation;
 
 import java.io.IOException;
+import java.util.Random;
 
 import org.andengine.engine.camera.BoundCamera;
 import org.andengine.engine.camera.SmoothCamera;
@@ -71,14 +72,16 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	private TMXTiledMap mTMXTiledMap;
 	protected int mCactusCount;
 
-	private BitmapTextureAtlas characterTextureAtlas;
+	private BitmapTextureAtlas characterTextureAtlas, diceTextureAtlas;
 	public ITextureRegion character;
 
 	private ITexture mFaceTexture;
 	private ITextureRegion mFaceTextureRegion;
-	private ITexture mPausedTexture, mResumeTexture, mMainMenuTexture;
+	private ITexture mPausedTexture, mResumeTexture, mMainMenuTexture, mSaveGameTexture;
 	private ITextureRegion mPausedTextureRegion, mResumeTextureRegion,
-			mMainMenuTextureRegion;
+			mMainMenuTextureRegion, mSaveGameTextureRegion;
+	
+	private TextureRegion diceTextureRegion;
 
 	private CameraScene mPauseScene;
 	private Scene scene;
@@ -110,6 +113,9 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	boolean swipeDone = false;
 	private BitmapTextureAtlas characterTextureAtlas2;
 	private TextureRegion character2;
+
+	private Random random;
+	private int diceRoll = 0;
 
 	// ===========================================================
 	// Constructors
@@ -166,7 +172,15 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 						0, 0);
 		;
 		this.characterTextureAtlas2.load();
-
+		
+		this.diceTextureAtlas = new BitmapTextureAtlas(
+				this.getTextureManager(), 170, 90, TextureOptions.BILINEAR);
+		this.diceTextureRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(diceTextureAtlas, this, "dice.png",
+						0, 0);
+		;
+		this.diceTextureAtlas.load();
+		
 		// Pause Assets
 		this.mFaceTexture = new AssetBitmapTexture(this.getTextureManager(),
 				this.getAssets(), "gfx/menu.png", TextureOptions.BILINEAR);
@@ -192,6 +206,12 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		this.mMainMenuTextureRegion = TextureRegionFactory
 				.extractFromTexture(this.mMainMenuTexture);
 		this.mMainMenuTexture.load();
+
+		this.mSaveGameTexture = new AssetBitmapTexture(this.getTextureManager(),
+				this.getAssets(), "gfx/savegame.png", TextureOptions.BILINEAR);
+		this.mSaveGameTextureRegion = TextureRegionFactory
+				.extractFromTexture(this.mSaveGameTexture);
+		this.mSaveGameTexture.load();
 
 		// UI Fonts
 		final ITexture fontTexture = new EmptyTexture(this.getTextureManager(),
@@ -238,6 +258,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				"[Player 3 Name]\nCredits: ", vertexBufferObjectManager);
 		final Text textStroke4 = new Text(400, 50, this.mStrokeFont,
 				"[Player 4 Name]\nCredits: ", vertexBufferObjectManager);
+		final Text textStroke5 = new Text(400, 100, this.mStrokeFont,
+				"You rolled " + diceRoll, vertexBufferObjectManager);
 
 		/*
 		 * To update text, use [text].setText("blah blah"); In which "blah blah"
@@ -252,8 +274,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		 * test the randomizer, I believe this should suffice.
 		 */
 
-		final Rectangle button = new Rectangle(250, 0, 100, 100,
-				vertexBufferObjectManager) {
+		final Sprite diceButton = new Sprite(250, CAMERA_HEIGHT/10, this.diceTextureRegion,
+				this.getVertexBufferObjectManager()) {
 
 			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
 				/*
@@ -261,8 +283,13 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				 * button. Disregard the effect, just lets me know that the
 				 * button is being pressed.
 				 */
+				//generate random number [1,6]
+				random = new Random();
+				diceRoll = random.nextInt(6) + 1;
+				
 				if (touchEvent.isActionUp()) {
-					this.setColor(Color.BLACK);
+					this.setColor(Color.GRAY);
+					textStroke5.setText("You rolled: " + diceRoll);
 				}
 				if (touchEvent.isActionDown()) {
 					this.setColor(Color.WHITE);
@@ -270,7 +297,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				return true;
 			};
 		};
-
+		diceButton.setScale((float) .7);
+		
 		// Load the Pause Scene
 		this.mPauseScene = new CameraScene(this.mCamera);
 		final float cX = (CAMERA_WIDTH - this.mPausedTextureRegion.getWidth())
@@ -325,6 +353,22 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				return true;
 			};
 		};
+		
+		//save game button
+		final Sprite saveGameButton = new Sprite(cX+(CAMERA_WIDTH/10), cY + (CAMERA_HEIGHT/4),
+				this.mSaveGameTextureRegion, this.getVertexBufferObjectManager()) {
+			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
+				switch (touchEvent.getAction()) {
+				case TouchEvent.ACTION_DOWN:
+					break;
+				case TouchEvent.ACTION_MOVE:
+					break;
+				case TouchEvent.ACTION_UP:
+					break;
+				}
+				return true;
+			};
+		};
 		this.mPauseScene.registerTouchArea(mainMenuButton);
 		this.mPauseScene.attachChild(mainMenuButton);
 
@@ -356,9 +400,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		mHUD.attachChild(textStroke2);
 		mHUD.attachChild(textStroke3);
 		mHUD.attachChild(textStroke4);
+		mHUD.attachChild(textStroke5);
 
-		mHUD.registerTouchArea(button);
-		mHUD.attachChild(button);
+		mHUD.registerTouchArea(diceButton);
+		mHUD.attachChild(diceButton);
 
 		mHUD.registerTouchArea(pauseSprite);
 		mHUD.attachChild(pauseSprite);

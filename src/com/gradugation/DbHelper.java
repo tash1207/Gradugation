@@ -249,8 +249,93 @@ public class DbHelper extends SQLiteOpenHelper {
 		}
 	}
 	
-	public void updateRow(){
-		//ContentValues values = new ContentValues();
+	public void updateRow(int tableNum, String[] key, String[] newValues){
+		ContentValues values = new ContentValues();		
+		String tableName = null;
+		switch(tableNum){
+			case 1: 
+				tableName = GAMES;
+				values.put(G_ID, newValues[0]);
+				values.put(NUM_OF_PLAYERS, newValues[1]);
+				values.put(CURRENT_PLAYER, newValues[2]);
+				db.update(tableName, values, G_ID + " = " + key[0], null);
+				break;
+			case 2: 
+				tableName = CHARACTER;
+				values.put(CHARACTER_ID, newValues[0]);
+				values.put(CHARACTER_TYPE, newValues[1]);
+				values.put(CHARACTER_NAME, newValues[2]);
+				values.put(PICTURE, newValues[3]);
+				db.update(tableName, values, CHARACTER_ID + " = " + key[0], null);
+				break;
+			case 3: 
+				tableName = GAME_CHARACTER;
+				values.put(GAME_ID, newValues[0]);
+				values.put(CHAR_ID, newValues[1]);
+				values.put(PLAYER_ORDER, newValues[2]);
+				values.put(CREDITS, newValues[3]);
+				values.put(COINS, newValues[4]);
+				values.put(CURRENT_TILE, newValues[5]);
+				db.update(tableName, values, GAME_ID + " = " + key[0] + 
+						" AND " + CHAR_ID + " = " + key[1], null);
+				break;
+			case 4: 
+				tableName = TILES;
+				values.put(TILE_ID, newValues[0]);
+				values.put(TILE_TYPE, newValues[1]);
+				values.put(TILE_NAME, newValues[2]);
+				values.put(X_COORD, newValues[3]);
+				values.put(Y_COORD, newValues[4]);
+				db.update(tableName, values, TILE_ID + " = " + key[0], null);
+				break;
+			case 5: 
+				tableName = TILE_TILE;
+				values.put(TILE_ID1, newValues[0]);
+				values.put(TILE_ID2, newValues[1]);
+				values.put(DIRECTION, newValues[2]);
+				db.update(tableName, values, TILE_ID1 + " = " + key[0] + 
+						" AND " + TILE_ID2 + " = " + key[1], null);
+				break;
+			case 6: 
+				tableName = EVENTS;
+				values.put(EVENT_ID, newValues[0]);
+				values.put(EVENT_TYPE, newValues[1]);
+				values.put(EVENT_AFFECTS, newValues[2]);
+				values.put(EVENT_AMOUNT, newValues[3]);
+				values.put(EVENT_TXT, newValues[4]);
+				db.update(tableName, values, EVENT_ID + " = " + key[0], null);
+				break;
+			case 7: 
+				tableName = ITEMS;
+				values.put(ITEM_ID, newValues[0]);
+				values.put(ITEM_NAME, newValues[1]);
+				values.put(COST, newValues[2]);
+				values.put(ITEM_TYPE, newValues[3]);
+				values.put(ITEM_AFFECTS, newValues[4]);
+				values.put(ITEM_AMOUNT, newValues[5]);
+				values.put(ITEM_TXT, newValues[6]);
+				db.update(tableName, values, ITEM_ID + " = " + key[0], null);
+				break;
+			case 8: 
+				tableName = MINIGAMES;
+				values.put(MINIGAME_ID, newValues[0]);
+				values.put(MINIGAME_CREDITS, newValues[1]);
+				db.update(tableName, values, MINIGAME_ID + " = " + key[0], null);
+				break;
+			case 9: 
+				tableName = MINIGAME_CHARACTER;
+				values.put(MINIGAME_GAME_ID, newValues[0]);
+				values.put(MINIGAME_GID, newValues[1]);
+				values.put(MINIGAME_CHAR_ID, newValues[2]);
+				values.put(TIMES_PLAYED, newValues[3]);
+				db.update(tableName, values, MINIGAME_GAME_ID + " = " + key[0] + 
+						" AND " + MINIGAME_GID + " = " + key[1] + 
+						" AND " + MINIGAME_CHAR_ID + " = " + key[2], null);
+				break;
+			default: 
+				Log.e("updateRow Error", "Not valid table number");
+				break;	
+		}
 		
 	}
 	
@@ -268,7 +353,8 @@ public class DbHelper extends SQLiteOpenHelper {
 				break;
 			case 3: 
 				tableName = GAME_CHARACTER;
-				db.delete(tableName, GAME_ID + " = " + key[0] + " AND " + CHAR_ID + " = " + key[1], null);
+				db.delete(tableName, GAME_ID + " = " + key[0] + 
+						" AND " + CHAR_ID + " = " + key[1], null);
 				break;
 			case 4: 
 				tableName = TILES;
@@ -276,7 +362,8 @@ public class DbHelper extends SQLiteOpenHelper {
 				break;
 			case 5: 
 				tableName = TILE_TILE;
-				db.delete(tableName, TILE_ID1 + " = " + key[0] + " AND " + TILE_ID2 + " = " + key[1], null);
+				db.delete(tableName, TILE_ID1 + " = " + key[0] + 
+						" AND " + TILE_ID2 + " = " + key[1], null);
 				break;
 			case 6: 
 				tableName = EVENTS;
@@ -292,11 +379,12 @@ public class DbHelper extends SQLiteOpenHelper {
 				break;
 			case 9: 
 				tableName = MINIGAME_CHARACTER;
-				db.delete(tableName, MINIGAME_GAME_ID + " = " + key[0] + " AND " + MINIGAME_GID + " = " + key[1] +
+				db.delete(tableName, MINIGAME_GAME_ID + " = " + key[0] + 
+						" AND " + MINIGAME_GID + " = " + key[1] +
 						" AND " + MINIGAME_CHAR_ID + " = " + key[2], null);
 				break;
 			default: 
-				Log.e("insertRow Error", "Not valid table number");
+				Log.e("deleteRow Error", "Not valid table number");
 				break;
 		}
 		

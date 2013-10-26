@@ -140,7 +140,7 @@
                 android:layout_centerVertical="true"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/color_game"
-                android:src="@drawable/bricks" />
+                android:src="@drawable/color_numbers" />
             
             <TextView
                 android:id="@+id/minigame_color_game_text"

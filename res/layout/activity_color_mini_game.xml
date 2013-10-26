@@ -16,10 +16,21 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:textSize="100sp"
-        android:paddingBottom="75dp"
+        android:paddingBottom="60dp"
         android:textStyle="bold" />
 
+    <Button
+        android:id="@+id/color_mini_game_continue_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="Continue"
+        android:visibility="gone"
+        android:onClick="continueButtonClick" />
+
     <RelativeLayout
+        android:layout_above="@id/color_mini_game_continue_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/color_mini_game_text"
@@ -111,5 +122,23 @@
             android:textColor="@android:color/black" />
 
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/color_mini_game_time_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="Time Left: " />
+
+    <TextView
+        android:id="@+id/color_mini_game_points"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/color_mini_game_text"
+        android:text="Points: " />
+
+    
 
 </RelativeLayout>

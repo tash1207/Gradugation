@@ -1,4 +1,6 @@
-import java.util.*;
+package com.gradugation;
+
+/**import java.util.*;
 import java.util.Random;
 
 /*main class extends event class, when player steps onto a tile, randomly generate a number b/w 0 and 3 then call 
@@ -6,7 +8,7 @@ create event object in maingame class, every time player steps on tile, do [even
 replace checkMiniGameHotspot() in mainGameScreen
 */
 
-public class Event {
+/*public class Event {
 
 	private int eventID;
 	
@@ -60,4 +62,8 @@ public class Event {
 	}
 	public void setEventID() {
 		this.eventID = eventID;
-	}
+	}*/
+
+public class Event {
+	
+}

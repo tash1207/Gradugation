@@ -37,7 +37,6 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.bitmap.AssetBitmapTexture;
 import org.andengine.opengl.texture.region.ITextureRegion;
-import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TextureRegionFactory;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -51,6 +50,9 @@ import android.graphics.Typeface;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.coordinates.MapCoordinate;
+import com.coordinates.SpriteCoordinate;
+
 public class MainGameScreen extends SimpleBaseGameActivity implements
 		IOnSceneTouchListener {
 	// ===========================================================
@@ -59,6 +61,9 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 	private static final int CAMERA_WIDTH = 480;
 	private static final int CAMERA_HEIGHT = 320;
+	
+	private static final int MAX_CHARACTER_MOVEMENT = 3;
+	private static final int CHARACTER_WIDTH = 32;
 
 	// ===========================================================
 	// Fields
@@ -72,9 +77,12 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	private TMXTiledMap mTMXTiledMap;
 	protected int mCactusCount;
 
-	private BitmapTextureAtlas characterTextureAtlas,characterTextureAtlas2,characterTextureAtlas3,characterTextureAtlas4;
-	public ITextureRegion character,character2,character3,character4;
+	//private BitmapTextureAtlas characterTextureAtlas,characterTextureAtlas2,characterTextureAtlas3,characterTextureAtlas4;
+	//public ITextureRegion character,character2,character3,character4;
 
+	private BitmapTextureAtlas[] characterTextureAtlas;
+	private ITextureRegion[] character;
+	
 	private ITexture mFaceTexture;
 	private ITextureRegion mFaceTextureRegion;
 	private ITexture mPausedTexture, mResumeTexture, mMainMenuTexture;
@@ -88,11 +96,17 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 	private Font mFont;
 	private StrokeFont mStrokeFont, mStrokeFontLarge;
+	
+	private final MapCoordinate centerMap = new MapCoordinate(7,7);
+	private final SpriteCoordinate centerSprite = centerMap.mapToSprite();
 
-	private float currentX;
-	private float currentY;
-	private float currentX2;
-	private float currentY2;
+	private SpriteCoordinate[] characterCoordinates; 
+	private String[] characterNames;
+	ArrayList<Character> thePlayers;
+	
+	final private SpriteCoordinate[] textStrokeCoordinates = {
+	        new SpriteCoordinate(80,300), new SpriteCoordinate(400,300), 
+	        new SpriteCoordinate(80,20), new SpriteCoordinate(400,20) };
 
 	private boolean turnDone;
 	private boolean moving;
@@ -109,19 +123,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	float finalY;
 
 	boolean swipeDone = false;
-
-
-	// ===========================================================
-	// Constructors
-	// ===========================================================
-
-	// ===========================================================
-	// Getter & Setter
-	// ===========================================================
-
-	// ===========================================================
-	// Methods for/from SuperClass/Interfaces
-	// ===========================================================
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {
@@ -143,57 +144,32 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 	@Override
 	public void onCreateResources() throws IOException {
-		// this.mPlayerTexture = new
-		// AssetBitmapTexture(this.getTextureManager(), this.getAssets(),
-		// "gfx/player.png", TextureOptions.DEFAULT);
-		// this.mPlayerTextureRegion =
-		// TextureRegionFactory.extractTiledFromTexture(this.mPlayerTexture, 3,
-		// 4);
-		// this.mPlayerTexture.load();
 		
         Intent intent = getIntent();
-		final ArrayList<Character> thePlayers = (ArrayList<Character>) intent.getSerializableExtra(ChooseCharacterActivity.THE_PLAYERS);
+		thePlayers = (ArrayList<Character>) intent.getSerializableExtra(ChooseCharacterActivity.THE_PLAYERS);
 		numCharacters = thePlayers.size();
-
-		String Player1Name= thePlayers.get(0).getName();
-		String Player2Name= "splash2.png";
-		String Player3Name= "splash2.png";
-		String Player4Name= "splash2.png";
 		
-		if(numCharacters >=2) Player2Name=thePlayers.get(1).getName();
-		if(numCharacters >=3) Player3Name=thePlayers.get(2).getName();
-		if(numCharacters >=4) Player4Name=thePlayers.get(3).getName();
+		characterCoordinates = new SpriteCoordinate[numCharacters];
+		characterNames = new String[numCharacters];
+
+		
+		for (int i = 0; i < numCharacters; i++) {
+			characterNames[i] = thePlayers.get(i).getName();
+		}
 		
 		//Create all four character sprites
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-		this.characterTextureAtlas = new BitmapTextureAtlas(
-				this.getTextureManager(), 1000, 1000, TextureOptions.BILINEAR);
-		this.character = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(characterTextureAtlas, this, NameToImageName(Player1Name), 0,
-						0);
-		;
-		this.characterTextureAtlas.load();
-		this.characterTextureAtlas2 = new BitmapTextureAtlas(
-				this.getTextureManager(), 1000, 1000, TextureOptions.BILINEAR);
-		this.character2 = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(characterTextureAtlas2, this, NameToImageName(Player2Name),
-						0, 0);
-		;
-		this.characterTextureAtlas2.load();
-//		this.characterTextureAtlas3 = new BitmapTextureAtlas(
-//				this.getTextureManager(), 1000, 1000, TextureOptions.BILINEAR);
-//		this.character3 = BitmapTextureAtlasTextureRegionFactory
-//				.createFromAsset(characterTextureAtlas3, this, NameToImageName(Player3Name),
-//						0, 0);
-//		;
-//		this.characterTextureAtlas3.load();
-//		this.characterTextureAtlas4 = new BitmapTextureAtlas(
-//				this.getTextureManager(), 1000, 1000, TextureOptions.BILINEAR);
-//		this.character4 = BitmapTextureAtlasTextureRegionFactory
-//				.createFromAsset(characterTextureAtlas4, this, NameToImageName(Player4Name),
-//						0, 0);
-//		;
-//		this.characterTextureAtlas4.load();
+		
+		characterTextureAtlas = new BitmapTextureAtlas[numCharacters];
+		character = new ITextureRegion[numCharacters];
+		
+		for (int i = 0; i < numCharacters; i++) {
+			characterTextureAtlas[i] = new BitmapTextureAtlas(
+					this.getTextureManager(), 1000, 1000, TextureOptions.BILINEAR);
+			character[i] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(characterTextureAtlas[i],
+					this, NameToImageName(characterNames[i]), 0, 0);
+			characterTextureAtlas[i].load();
+		}
 
 		// Pause Assets
 		this.mFaceTexture = new AssetBitmapTexture(this.getTextureManager(),
@@ -244,22 +220,21 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 	}
 	
-	public String NameToImageName(String name){
-		String finalString="";
-		if (name.compareTo("Athlete")==0){
-			finalString="athlete.png";
-		}else if(name.compareTo("Engineer")==0){
-			finalString="engineer.png";
-		}else if(name.compareTo("Gradugator")==0){
-			finalString="splash2.png";
+	public String NameToImageName(String name) {
+		
+		if (name.compareTo("Athlete") == 0) {
+			return "athlete.png";
+		} else if (name.compareTo("Engineer") == 0) {
+			return "engineer.png";
+		} else if (name.compareTo("Gradugator") == 0) {
+			return "splash2.png";
+		} else {
+			return "";
 		}
-		return finalString;
 	}
 
 	@Override
 	public Scene onCreateScene() {
-		Intent intent = getIntent();
-		final ArrayList<Character> thePlayers = (ArrayList<Character>) intent.getSerializableExtra(ChooseCharacterActivity.THE_PLAYERS);
 		
 		this.mEngine.registerUpdateHandler(new FPSLogger());
 
@@ -272,29 +247,19 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		 */
 		final VertexBufferObjectManager vertexBufferObjectManager = this
 				.getVertexBufferObjectManager();
-		
-		String Player1Name= thePlayers.get(0).getName();
-		String Player2Name= "";
-		String Player3Name= "";
-		String Player4Name= "";
-		
-		if(numCharacters >=2) Player2Name=thePlayers.get(1).getName();
-		if(numCharacters >=3) Player3Name=thePlayers.get(2).getName();
-		if(numCharacters >=4) Player4Name=thePlayers.get(3).getName();
 
-		final Text textStroke1 = new Text(80, 300, this.mStrokeFont,
-				Player1Name   +"\nCredits: ", vertexBufferObjectManager);
-		final Text textStroke2 = new Text(400, 300, this.mStrokeFont,
-				Player2Name   +"\nCredits: ", vertexBufferObjectManager);
-		final Text textStroke3 = new Text(80, 20, this.mStrokeFont,
-				Player3Name   +"\nCredits: ", vertexBufferObjectManager);
-		final Text textStroke4 = new Text(400, 20, this.mStrokeFont,
-				Player4Name   +"\nCredits: ", vertexBufferObjectManager);
+		final Text[] textStrokes = new Text[numCharacters];
 
 		/*
 		 * To update text, use [text].setText("blah blah"); In which "blah blah"
 		 * is whatever you want to change the text to. You can use variables.
 		 */
+		for (int i = 0; i < numCharacters; i++) {
+			SpriteCoordinate coord = textStrokeCoordinates[i];
+			textStrokes[i] = new Text(coord.getX(), coord.getY(), this.mStrokeFont,
+					characterNames[i]   +"\nCredits: ", vertexBufferObjectManager); 
+		}
+		
 
 		mHUD = new HUD();
 		mHUD.attachChild(scene);
@@ -404,11 +369,9 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 			};
 		};
 
-		
-		mHUD.attachChild(textStroke1);
-		if(numCharacters >=2) mHUD.attachChild(textStroke2);
-		if(numCharacters >=3) mHUD.attachChild(textStroke3);
-		if(numCharacters >=4) mHUD.attachChild(textStroke4);
+		for (int i = 0; i < numCharacters; i++) {
+			mHUD.attachChild(textStrokes[i]);
+		}
 
 		mHUD.registerTouchArea(button);
 		mHUD.attachChild(button);
@@ -468,37 +431,33 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 		final float centerX = (7+1) * (32) - 16; // minus 16 for image alignment
 		final float centerY = (7+1) * (32) - 10; // minus 10 for image alignment
-		currentX = centerX;
-		currentY = centerY;
-		currentX2 = centerX + 32;
-		currentY2 = centerY;
-		// positionX[0] = centerX;
-		// positionY[0] = centerY;
+		
+		for (int i = 0; i < numCharacters; i++) {
+			SpriteCoordinate offset = new SpriteCoordinate();
+			if (i == 2 || i == 3) {
+				offset.setY(32f);
+			}
+			if (i % 2 == 1) {
+				offset.setX(32f);
+			}
 
-		final Sprite mySprite = new Sprite(currentX, currentY, character,
-				this.getVertexBufferObjectManager());
-		mySprite.setScale((float) .1);
-		// final Sprite mySprite2 = new Sprite(currentX,currentY, character,
-		// this.getVertexBufferObjectManager());
-		// mySprite2.setScale((float) .1);
-		// scene.attachChild(mySprite);
-
-		final Sprite mySprite2 = new Sprite(currentX2, currentY2, character2,
-				this.getVertexBufferObjectManager());
-		mySprite2.setScale((float) .1);
-
-		final Sprite[] SpriteList = new Sprite[numCharacters];
-
-		if (numCharacters >= 1)
-			SpriteList[0] = mySprite;
-		if (numCharacters >= 2)
-			SpriteList[1] = mySprite2;
+			characterCoordinates[i] = offset.add(centerSprite);
+		}
+		
+		final Sprite[] spriteList = new Sprite[numCharacters];
+		
+		for (int i = 0; i < numCharacters; i++) {
+			SpriteCoordinate loc = characterCoordinates[i];
+			spriteList[i] = new Sprite(loc.getX(), loc.getY(), character[i], 
+					this.getVertexBufferObjectManager());
+		}
 
 		/* Create the sprite and add it to the scene. */
 		// final AnimatedSprite player = new AnimatedSprite(centerX, centerY,
 		// this.character, this.getVertexBufferObjectManager());
-		this.mCamera.setChaseEntity(mySprite);
+		
 		currentCharacter = 0;
+		this.mCamera.setChaseEntity(spriteList[currentCharacter]);
 
 		// final Path path = new Path(5).to(50, 740).to(50, 1000).to(820,
 		// 1000).to(820, 740).to(0);
@@ -568,9 +527,9 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 			public void onUpdate(final float pSecondsElapsed) {
 				// /* Get the scene-coordinates of the players feet. */
 				float[] localCoord = new float[2];
-				localCoord[0] = SpriteList[currentCharacter].getWidth() * .5f;
-				localCoord[1] = SpriteList[currentCharacter].getHeight() * .5f;
-				final float[] playerFootCordinates = SpriteList[currentCharacter]
+				localCoord[0] = spriteList[currentCharacter].getWidth() * .5f;
+				localCoord[1] = spriteList[currentCharacter].getHeight() * .5f;
+				final float[] playerFootCordinates = spriteList[currentCharacter]
 						.convertLocalCoordinatesToSceneCoordinates(localCoord);
 				//
 				/* Get the tile the feet of the player are currently waking on. */
@@ -586,7 +545,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				}
 
 				if (move) {
-					movementFunction(SpriteList[currentCharacter]);
+					movementFunction(spriteList[currentCharacter]);
 					moving = true;
 					MainGameScreen.this.mCamera.updateChaseEntity();
 
@@ -597,7 +556,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 					turnDone = false;
 					currentCharacter = (currentCharacter + 1) % (numCharacters);
 					MainGameScreen.this.mCamera
-							.setChaseEntity(SpriteList[currentCharacter]);
+							.setChaseEntity(spriteList[currentCharacter]);
 					// if(currentCharacter==0){
 					// SpriteList[currentCharacter].registerEntityModifier(new
 					// MoveModifier(0.5f,currentX,currentY, currentX,
@@ -616,13 +575,16 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				}
 
 				if (swipeDone == false) {
-					ranNumb = (1 + (int) (Math.random() * ((3 - 1) + 1))) * 32;
+					ranNumb = (1 + (int) (Math.random() * ((MAX_CHARACTER_MOVEMENT - 1) + 1))) * CHARACTER_WIDTH;
 				}
 
 			}
 		});
-		scene.attachChild(SpriteList[0]);
-		scene.attachChild(SpriteList[1]);
+		
+		for (int i = 0; i < numCharacters; i++) {
+			spriteList[i].setScale(.1f);
+			scene.attachChild(spriteList[i]);
+		}
 
 		return scene;
 	}
@@ -633,8 +595,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		// Swipe up
 		if (swipeDone == true && (finalY - initY) > 40) {
 			if (currentCharacter == 0) {
+				//TODO: make more general
 				mySprite.registerEntityModifier(new MoveModifier(0.5f,
-						currentX, currentY, currentX, currentY + (ranNumb)) {
+						characterCoordinates[0].getX(), characterCoordinates[0].getY(),
+						characterCoordinates[0].getX(), characterCoordinates[0].getY() + (ranNumb)) {
 					@Override
 					protected void onModifierStarted(IEntity pItem) {
 						super.onModifierStarted(pItem);
@@ -644,10 +608,11 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 					@Override
 					protected void onModifierFinished(IEntity pItem) {
-						currentX = mySprite.getX();
-						currentY = mySprite.getY();
+						characterCoordinates[0].setX(mySprite.getX());
+						characterCoordinates[0].setY(mySprite.getY());
+
 						super.onModifierFinished(pItem);
-						checkMiniGameHotSpots();
+						checkMiniGameHotSpots(characterCoordinates[0]);
 						swipeDone = false;
 						turnDone = true;
 
@@ -655,7 +620,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				});
 			} else if (currentCharacter == 1) {
 				mySprite.registerEntityModifier(new MoveModifier(0.5f,
-						currentX2, currentY2, currentX2, currentY2 + (ranNumb)) {
+						characterCoordinates[1].getX(), characterCoordinates[1].getY(),
+						characterCoordinates[1].getX(), characterCoordinates[1].getY() + (ranNumb)) {
 					@Override
 					protected void onModifierStarted(IEntity pItem) {
 						super.onModifierStarted(pItem);
@@ -665,10 +631,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 					@Override
 					protected void onModifierFinished(IEntity pItem) {
-						currentX2 = mySprite.getX();
-						currentY2 = mySprite.getY();
+						characterCoordinates[1].setX(mySprite.getX());
+						characterCoordinates[1].setY(mySprite.getY());
 						super.onModifierFinished(pItem);
-						checkMiniGameHotSpots();
+						checkMiniGameHotSpots(characterCoordinates[1]);
 						swipeDone = false;
 						turnDone = true;
 
@@ -680,7 +646,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		if (swipeDone == true && (finalY - initY) < -40) {
 			if (currentCharacter == 0) {
 				mySprite.registerEntityModifier(new MoveModifier(0.8f,
-						currentX, currentY, currentX, currentY - (ranNumb)) {
+						characterCoordinates[0].getX(), characterCoordinates[0].getY(),
+						characterCoordinates[0].getX(), characterCoordinates[0].getY() - (ranNumb)) {
 					@Override
 					protected void onModifierStarted(IEntity pItem) {
 						super.onModifierStarted(pItem);
@@ -690,10 +657,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 					@Override
 					protected void onModifierFinished(IEntity pItem) {
-						currentX = mySprite.getX();
-						currentY = mySprite.getY();
+						characterCoordinates[0].setX(mySprite.getX());
+						characterCoordinates[0].setY(mySprite.getY());
 						super.onModifierFinished(pItem);
-						checkMiniGameHotSpots();
+						checkMiniGameHotSpots(characterCoordinates[0]);
 						swipeDone = false;
 						turnDone = true;
 
@@ -701,7 +668,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				});
 			} else if (currentCharacter == 1) {
 				mySprite.registerEntityModifier(new MoveModifier(0.5f,
-						currentX2, currentY2, currentX2, currentY2 - (ranNumb)) {
+						characterCoordinates[1].getX(), characterCoordinates[1].getY(),
+						characterCoordinates[1].getX(), characterCoordinates[1].getY() - (ranNumb)) {
 					@Override
 					protected void onModifierStarted(IEntity pItem) {
 						super.onModifierStarted(pItem);
@@ -711,10 +679,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 					@Override
 					protected void onModifierFinished(IEntity pItem) {
-						currentX2 = mySprite.getX();
-						currentY2 = mySprite.getY();
+						characterCoordinates[1].setX(mySprite.getX());
+						characterCoordinates[1].setY(mySprite.getY());
 						super.onModifierFinished(pItem);
-						checkMiniGameHotSpots();
+						checkMiniGameHotSpots(characterCoordinates[1]);
 						swipeDone = false;
 						turnDone = true;
 
@@ -727,7 +695,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		if (swipeDone == true && (finalX - initX) > 40) {
 			if (currentCharacter == 0) {
 				mySprite.registerEntityModifier(new MoveModifier(0.8f,
-						currentX, currentY, currentX + (ranNumb), currentY) {
+						characterCoordinates[0].getX(), characterCoordinates[0].getY(),
+						characterCoordinates[0].getX() + ranNumb, characterCoordinates[0].getY()) {
 					@Override
 					protected void onModifierStarted(IEntity pItem) {
 						super.onModifierStarted(pItem);
@@ -737,10 +706,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 					@Override
 					protected void onModifierFinished(IEntity pItem) {
-						currentX = mySprite.getX();
-						currentY = mySprite.getY();
+						characterCoordinates[0].setX(mySprite.getX());
+						characterCoordinates[0].setY(mySprite.getY());
 						super.onModifierFinished(pItem);
-						checkMiniGameHotSpots();
+						checkMiniGameHotSpots(characterCoordinates[0]);
 						swipeDone = false;
 						turnDone = true;
 
@@ -748,7 +717,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				});
 			} else if (currentCharacter == 1) {
 				mySprite.registerEntityModifier(new MoveModifier(0.5f,
-						currentX2, currentY2, currentX2 + (ranNumb), currentY2) {
+						characterCoordinates[1].getX(), characterCoordinates[1].getY(),
+						characterCoordinates[1].getX() + ranNumb, characterCoordinates[1].getY()) {
 					@Override
 					protected void onModifierStarted(IEntity pItem) {
 						super.onModifierStarted(pItem);
@@ -758,10 +728,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 					@Override
 					protected void onModifierFinished(IEntity pItem) {
-						currentX2 = mySprite.getX();
-						currentY2 = mySprite.getY();
+						characterCoordinates[1].setX(mySprite.getX());
+						characterCoordinates[1].setY(mySprite.getY());
 						super.onModifierFinished(pItem);
-						checkMiniGameHotSpots();
+						checkMiniGameHotSpots(characterCoordinates[1]);
 						swipeDone = false;
 						turnDone = true;
 
@@ -774,7 +744,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		if (swipeDone == true && (finalX - initX) < -40) {
 			if (currentCharacter == 0) {
 				mySprite.registerEntityModifier(new MoveModifier(0.8f,
-						currentX, currentY, currentX - (ranNumb), currentY) {
+						characterCoordinates[0].getX(), characterCoordinates[0].getY(),
+						characterCoordinates[0].getX() - ranNumb, characterCoordinates[0].getY()) {
 					@Override
 					protected void onModifierStarted(IEntity pItem) {
 						super.onModifierStarted(pItem);
@@ -784,17 +755,18 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 					@Override
 					protected void onModifierFinished(IEntity pItem) {
-						currentX = mySprite.getX();
-						currentY = mySprite.getY();
+						characterCoordinates[0].setX(mySprite.getX());
+						characterCoordinates[0].setY(mySprite.getY());
 						super.onModifierFinished(pItem);
-						checkMiniGameHotSpots();
+						checkMiniGameHotSpots(characterCoordinates[0]);
 						swipeDone = false;
 						turnDone = true;
 					}
 				});
 			} else if (currentCharacter == 1) {
 				mySprite.registerEntityModifier(new MoveModifier(0.5f,
-						currentX2, currentY2, currentX2 - (ranNumb), currentY2) {
+						characterCoordinates[1].getX(), characterCoordinates[1].getY(),
+						characterCoordinates[1].getX() - ranNumb, characterCoordinates[1].getY()) {
 					@Override
 					protected void onModifierStarted(IEntity pItem) {
 						super.onModifierStarted(pItem);
@@ -804,10 +776,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 					@Override
 					protected void onModifierFinished(IEntity pItem) {
-						currentX2 = mySprite.getX();
-						currentY2 = mySprite.getY();
+						characterCoordinates[1].setX(mySprite.getX());
+						characterCoordinates[1].setY(mySprite.getY());
 						super.onModifierFinished(pItem);
-						checkMiniGameHotSpots();
+						checkMiniGameHotSpots(characterCoordinates[1]);
 						swipeDone = false;
 						turnDone = true;
 
@@ -818,8 +790,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	}
 
 	// Checks the hot spots for the minigames
-	protected void checkMiniGameHotSpots() {
+	protected void checkMiniGameHotSpots(SpriteCoordinate spriteCoord) {
 
+		float currentX = spriteCoord.getX();
+		float currentY = spriteCoord.getY();
 		if (currentY >= 470 && currentY < 502 && currentX >= 224
 				&& currentX < 256 && move == false && gameDone == false) {
 			Intent intent = new Intent(MainGameScreen.this, WiresMiniGame.class);

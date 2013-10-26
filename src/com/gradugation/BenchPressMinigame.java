@@ -104,6 +104,7 @@ public class BenchPressMinigame extends Activity {
 		Intent intent = getIntent();
 		
 		ArrayList<Character> thePlayers = (ArrayList<Character>) intent.getSerializableExtra(ChooseCharacterActivity.THE_PLAYERS);
+		
 		Character instance = thePlayers.get(whoseTurn);
 		//Character instance = Character.getInstance();
 		if (!game_finished) {

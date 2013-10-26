@@ -22,27 +22,34 @@ public class MainActivity extends BaseActivity {
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         
         //Open Database
-        //DbHelper dbhelper = new DbHelper(this); 
-        
         dbhelper = new DbHelper(this);
         SQLiteDatabase db = dbhelper.openDB();
-        dbhelper.onCreate(db);
-        
+        //dbhelper.onCreate(db);
         Log.d("TEST", "Database has been created");
         
         //Insert Some Data into Database
         String[] tableValues = {"128","1","2"};
+        
+        //Update method 
+        
+        String[] key = {"7965"};
+        String[] newValues = {"11","16","2009"};
+        Log.d("TEST", "Update method stopped here");
+        dbhelper.updateRow(1, key, newValues);
+        
+        Log.d("Update Method", "Method has worked");
         //dbhelper.insertRow(1, tableValues);
         Cursor c = db.rawQuery("SELECT * FROM games;", null);
         while (c.moveToNext()){
-	        //c.moveToFirst();
+	        Log.d("TEST", "Data has been put into database");
 	        Log.d("RESULTS", c.getString(c.getColumnIndex("id")));
 	        Log.d("RESULTS", c.getString(c.getColumnIndex("num_of_players")));
 	        Log.d("RESULTS", c.getString(c.getColumnIndex("current_player")));
-	        Log.d("TEST", "Data has been put into database");
-        }
-        String[] key = {"65"};
+	        
+        }   
         /*
+        String[] key = {"65"};
+     
         dbhelper.deleteRow(1, key);
         while (c.moveToNext()){
 	        //c.moveToFirst();

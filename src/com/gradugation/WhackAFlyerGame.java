@@ -171,7 +171,6 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
     private void flyerWhacked(Sprite spriteWhacked) {
         this.mEngine.getScene().detachChild(spriteWhacked);
         this.points += 1;
-        Log.d(DISPLAY_SERVICE, "IN HERE" + this.points);
     }
 
     @Override

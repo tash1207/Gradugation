@@ -639,18 +639,9 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	// Checks the hot spots for the minigames
 	protected void checkMiniGameHotSpots(SpriteCoordinate spriteCoord) {
 
-		float currentX = spriteCoord.getX();
-		float currentY = spriteCoord.getY();
-		if (currentY >= 470 && currentY < 502 && currentX >= 224
-				&& currentX < 256 && move == false && gameDone == false) {
-			Intent intent = new Intent(MainGameScreen.this, WiresMiniGame.class);
-			startActivity(intent);
-			gameDone = true;
-		} else if (currentY >= 342 && currentY < 374 && currentX >= 224
-				&& currentX < 256 && move == false && gameDone == false) {
-			Intent intent = new Intent(MainGameScreen.this,
-					BenchPressMinigame.class);
-			startActivity(intent);
+		Event.getEvent(spriteCoord, true, gameDone, move, this);
+		
+		if (!(move || gameDone)) {
 			gameDone = true;
 		}
 

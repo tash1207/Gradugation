@@ -22,4 +22,6 @@ public abstract class Coordinate {
 	}
 	
 	abstract Coordinate add(Coordinate toAdd);
+	
+	abstract int compareTo(Coordinate toCompare);
 }

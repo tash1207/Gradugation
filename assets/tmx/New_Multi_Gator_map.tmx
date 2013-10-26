@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="25" height="15" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="grass-tiles-2-small" tilewidth="32" tileheight="32">
+  <image source="gfx/grass-tiles-2-small.png" width="384" height="192"/>
+ </tileset>
+ <tileset firstgid="73" name="qubodup-bush_berries_0" tilewidth="32" tileheight="32">
+  <image source="gfx/qubodup-bush_berries_0.png" width="32" height="32"/>
+ </tileset>
+ <tileset firstgid="139" name="tileset-shinygold" tilewidth="32" tileheight="32">
+  <image source="gfx/tileset-shinygold.png" width="128" height="4300"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="25" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC4WUwQoDMQhE1bt+TA/tsbD9/3/qFhIYXpQeJLuJjjpOkmbmt8VtuVZf3y57tb4TvrXM8a/7tc7UXPC2vQU3GnziuuwzbuPvM82nPgWcgq/mzCZvIU/aWW+HHQ3+1GvaWU+XX3ne/srDNDe3s5YOX+MTuagPB7bWovvEohYT+Mo9Z9/x/69WngVif+tlvV60L2qWvU0ch+T6NH25nZxQ0wFfRxzvZncvqsGf5jndHeXxAZ6oU609gB3IzXfiedsLMRM+34qwc17dXC70pZzwfSB+p0fWN72bvCdlJzdat2qF2v8C8Fg1cNwFAAA=
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 1" width="25" height="15" opacity="0.72">
+  <properties>
+   <property name="minigame" value="1"/>
+  </properties>
+ </objectgroup>
+ <layer name="path" width="25" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC2NgGP7gKhZMjB5KzLyKRy0pdpDiBnxuw+VGct1ArDg2dfjcR0w84fIHNr247CfGLFyAWD+Sop4adpCTxkkJK3xipNpFCzuw6SXVXlLsIDf8KAGk5BMAdkX619wFAAA=
+  </data>
+ </layer>
+ <layer name="Tile Layer 2" width="25" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC2NgGDjgCcXU1IMuT6p6cvXgA8Sop0VYDIQdlAJc9pHrV1LMoqYd9ARDMe3QI9xoZcdgc7snA/a0CABSFwAG3AUAAA==
+  </data>
+ </layer>
+</map>

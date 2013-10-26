@@ -21,4 +21,19 @@ public class MinigamesActivity extends BaseActivity {
 		Intent intent = new Intent(this, BenchPressMinigame.class);
     	startActivity(intent);
 	}
+	
+	public void minigameWhackAFlyerButtonClick(View v) {
+		Intent intent = new Intent(this, WhackAFlyerMiniGame.class);
+		startActivity(intent);
+	}
+	
+	public void minigameColorButtonClick(View v) {
+		Intent intent = new Intent(this, ColorMiniGame.class);
+		startActivity(intent);
+	}
+	
+	public void minigameFoodButtonClick(View v) {
+		Intent intent = new Intent(this, FoodMiniGame.class);
+		startActivity(intent);
+	}
 }

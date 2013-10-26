@@ -3,4 +3,7 @@
     <color name="gator_blue">#2040B8</color>
     <color name="gator_orange">#E67022</color>
     <color name="gator_orange_selected">#D45810</color>
+    <color name="purple">#9900CC</color>
+    <color name="pink">#FF0099</color>
+    <color name="orange">#FF9900</color>
 </resources>

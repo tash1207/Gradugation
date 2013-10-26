@@ -1,7 +1,7 @@
 package com.gradugation;
 
-import android.os.Bundle;
 import android.app.Activity;
+import android.os.Bundle;
 import android.view.Menu;
 
 public class ContinueActivity extends Activity {

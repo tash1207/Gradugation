@@ -1,6 +1,7 @@
 package com.gradugation;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.andengine.engine.camera.BoundCamera;
 import org.andengine.engine.camera.SmoothCamera;
@@ -71,8 +72,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	private TMXTiledMap mTMXTiledMap;
 	protected int mCactusCount;
 
-	private BitmapTextureAtlas characterTextureAtlas;
-	public ITextureRegion character;
+	private BitmapTextureAtlas characterTextureAtlas,characterTextureAtlas2,characterTextureAtlas3,characterTextureAtlas4;
+	public ITextureRegion character,character2,character3,character4;
 
 	private ITexture mFaceTexture;
 	private ITextureRegion mFaceTextureRegion;
@@ -108,8 +109,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	float finalY;
 
 	boolean swipeDone = false;
-	private BitmapTextureAtlas characterTextureAtlas2;
-	private TextureRegion character2;
+
 
 	// ===========================================================
 	// Constructors
@@ -150,22 +150,50 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		// TextureRegionFactory.extractTiledFromTexture(this.mPlayerTexture, 3,
 		// 4);
 		// this.mPlayerTexture.load();
+		
+        Intent intent = getIntent();
+		final ArrayList<Character> thePlayers = (ArrayList<Character>) intent.getSerializableExtra(ChooseCharacterActivity.THE_PLAYERS);
+		numCharacters = thePlayers.size();
 
+		String Player1Name= thePlayers.get(0).getName();
+		String Player2Name= "splash2.png";
+		String Player3Name= "splash2.png";
+		String Player4Name= "splash2.png";
+		
+		if(numCharacters >=2) Player2Name=thePlayers.get(1).getName();
+		if(numCharacters >=3) Player3Name=thePlayers.get(2).getName();
+		if(numCharacters >=4) Player4Name=thePlayers.get(3).getName();
+		
+		//Create all four character sprites
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		this.characterTextureAtlas = new BitmapTextureAtlas(
-				this.getTextureManager(), 512, 512, TextureOptions.BILINEAR);
+				this.getTextureManager(), 1000, 1000, TextureOptions.BILINEAR);
 		this.character = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(characterTextureAtlas, this, "splash2.png", 0,
+				.createFromAsset(characterTextureAtlas, this, NameToImageName(Player1Name), 0,
 						0);
 		;
 		this.characterTextureAtlas.load();
 		this.characterTextureAtlas2 = new BitmapTextureAtlas(
 				this.getTextureManager(), 1000, 1000, TextureOptions.BILINEAR);
 		this.character2 = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(characterTextureAtlas2, this, "engineer.png",
+				.createFromAsset(characterTextureAtlas2, this, NameToImageName(Player2Name),
 						0, 0);
 		;
 		this.characterTextureAtlas2.load();
+//		this.characterTextureAtlas3 = new BitmapTextureAtlas(
+//				this.getTextureManager(), 1000, 1000, TextureOptions.BILINEAR);
+//		this.character3 = BitmapTextureAtlasTextureRegionFactory
+//				.createFromAsset(characterTextureAtlas3, this, NameToImageName(Player3Name),
+//						0, 0);
+//		;
+//		this.characterTextureAtlas3.load();
+//		this.characterTextureAtlas4 = new BitmapTextureAtlas(
+//				this.getTextureManager(), 1000, 1000, TextureOptions.BILINEAR);
+//		this.character4 = BitmapTextureAtlasTextureRegionFactory
+//				.createFromAsset(characterTextureAtlas4, this, NameToImageName(Player4Name),
+//						0, 0);
+//		;
+//		this.characterTextureAtlas4.load();
 
 		// Pause Assets
 		this.mFaceTexture = new AssetBitmapTexture(this.getTextureManager(),
@@ -215,9 +243,24 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		this.mStrokeFontLarge.load();
 
 	}
+	
+	public String NameToImageName(String name){
+		String finalString="";
+		if (name.compareTo("Athlete")==0){
+			finalString="athlete.png";
+		}else if(name.compareTo("Engineer")==0){
+			finalString="engineer.png";
+		}else if(name.compareTo("Gradugator")==0){
+			finalString="splash2.png";
+		}
+		return finalString;
+	}
 
 	@Override
 	public Scene onCreateScene() {
+		Intent intent = getIntent();
+		final ArrayList<Character> thePlayers = (ArrayList<Character>) intent.getSerializableExtra(ChooseCharacterActivity.THE_PLAYERS);
+		
 		this.mEngine.registerUpdateHandler(new FPSLogger());
 
 		final Scene scene = new Scene();
@@ -229,15 +272,24 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		 */
 		final VertexBufferObjectManager vertexBufferObjectManager = this
 				.getVertexBufferObjectManager();
+		
+		String Player1Name= thePlayers.get(0).getName();
+		String Player2Name= "";
+		String Player3Name= "";
+		String Player4Name= "";
+		
+		if(numCharacters >=2) Player2Name=thePlayers.get(1).getName();
+		if(numCharacters >=3) Player3Name=thePlayers.get(2).getName();
+		if(numCharacters >=4) Player4Name=thePlayers.get(3).getName();
 
-		final Text textStroke1 = new Text(100, 300, this.mStrokeFont,
-				"[Player 1 Name]\nCredits: ", vertexBufferObjectManager);
+		final Text textStroke1 = new Text(80, 300, this.mStrokeFont,
+				Player1Name   +"\nCredits: ", vertexBufferObjectManager);
 		final Text textStroke2 = new Text(400, 300, this.mStrokeFont,
-				"[Player 2 Name]\nCredits: ", vertexBufferObjectManager);
-		final Text textStroke3 = new Text(100, 50, this.mStrokeFont,
-				"[Player 3 Name]\nCredits: ", vertexBufferObjectManager);
-		final Text textStroke4 = new Text(400, 50, this.mStrokeFont,
-				"[Player 4 Name]\nCredits: ", vertexBufferObjectManager);
+				Player2Name   +"\nCredits: ", vertexBufferObjectManager);
+		final Text textStroke3 = new Text(80, 20, this.mStrokeFont,
+				Player3Name   +"\nCredits: ", vertexBufferObjectManager);
+		final Text textStroke4 = new Text(400, 20, this.mStrokeFont,
+				Player4Name   +"\nCredits: ", vertexBufferObjectManager);
 
 		/*
 		 * To update text, use [text].setText("blah blah"); In which "blah blah"
@@ -352,10 +404,11 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 			};
 		};
 
+		
 		mHUD.attachChild(textStroke1);
-		mHUD.attachChild(textStroke2);
-		mHUD.attachChild(textStroke3);
-		mHUD.attachChild(textStroke4);
+		if(numCharacters >=2) mHUD.attachChild(textStroke2);
+		if(numCharacters >=3) mHUD.attachChild(textStroke3);
+		if(numCharacters >=4) mHUD.attachChild(textStroke4);
 
 		mHUD.registerTouchArea(button);
 		mHUD.attachChild(button);
@@ -404,7 +457,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		turnDone = false;
 		turnNum = 1;
 		ranNumb = 1 + (int) (Math.random() * ((6 - 1) + 1));
-		numCharacters = 2;
 
 		scene.attachChild(this.mTMXTiledMap);
 
@@ -414,8 +466,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				this.mTMXTiledMap.getHeight());
 		this.mCamera.setBoundsEnabled(true);
 
-		final float centerX = 8 * (32) - 16; // minus 16 for image alignment
-		final float centerY = 13 * (32) - 10; // minus 10 for image alignment
+		final float centerX = (7+1) * (32) - 16; // minus 16 for image alignment
+		final float centerY = (7+1) * (32) - 10; // minus 10 for image alignment
 		currentX = centerX;
 		currentY = centerY;
 		currentX2 = centerX + 32;

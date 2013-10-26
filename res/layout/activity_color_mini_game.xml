@@ -8,72 +8,99 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".ColorMiniGame" >
-        <TextView
-            android:id="@+id/color_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignRight="@+id/blue_radio"
-            android:layout_marginTop="45dp"
-            android:paddingBottom="200dp"
-            android:text="" />
-    
-        <RadioButton
-            android:id="@+id/black_radio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/purple_radio"
-            android:layout_toLeftOf="@+id/yellow_radio"
-            android:layout_below="@id/color_text"
-            android:minWidth="50dp"
-            android:text="@string/color_game_black"
-            android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/color_mini_game_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="100sp"
+        android:paddingBottom="100dp"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/color_mini_game_text"
+        android:layout_centerHorizontal="true" >
 
         <RadioButton
-            android:id="@+id/blue_radio"
+            android:id="@+id/color_mini_game_yellow_radio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/orange_radio"
-            android:layout_toRightOf="@id/black_radio"
-            android:layout_below="@id/color_text"
-            android:text="@string/color_game_blue"
-            android:textColor="@android:color/black" />
-
-        <RadioButton
-            android:id="@+id/green_radio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/color_game_green"
-            android:layout_below="@id/color_text"
-            android:textColor="@android:color/black" 
-            android:layout_toRightOf=@id/blue_radio/>
-
-        <RadioButton
-            android:id="@+id/purple_radio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/color_game_purple"
-            android:textColor="@android:color/black" 
-            android:layout_below="@id/black_radio"/>
-
-        <RadioButton
-            android:id="@+id/yellow_radio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/blue_radio"
-            android:layout_toRightOf="@+id/purple_radio"
+            android:layout_alignBaseline="@+id/color_mini_game_red_radio"
+            android:layout_alignBottom="@+id/color_mini_game_red_radio"
+            android:layout_marginLeft="56dp"
+            android:layout_toRightOf="@+id/color_mini_game_black_radio"
             android:text="@string/color_game_yellow"
             android:textColor="@android:color/black" />
 
         <RadioButton
-            android:id="@+id/orange_radio"
+            android:id="@+id/color_mini_game_blue_radio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/green_radio"
-            android:layout_toRightOf="@+id/yellow_radio"
+            android:layout_above="@+id/color_mini_game_yellow_radio"
+            android:layout_alignLeft="@+id/color_mini_game_yellow_radio"
+            android:text="@string/color_game_blue"
+            android:textColor="@android:color/black" />
+
+        <RadioButton
+            android:id="@+id/color_mini_game_purple_radio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/color_mini_game_blue_radio"
+            android:layout_alignBottom="@+id/color_mini_game_blue_radio"
+            android:layout_marginLeft="44dp"
+            android:layout_toRightOf="@+id/color_mini_game_yellow_radio"
+            android:text="@string/color_game_purple"
+            android:textColor="@android:color/black" />
+
+        <RadioButton
+            android:id="@+id/color_mini_game_orange_radio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/color_mini_game_yellow_radio"
+            android:layout_alignBottom="@+id/color_mini_game_yellow_radio"
+            android:layout_alignLeft="@+id/color_mini_game_purple_radio"
             android:text="@string/color_game_orange"
             android:textColor="@android:color/black" />
 
-        
+        <RadioButton
+            android:id="@+id/color_mini_game_green_radio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/color_mini_game_orange_radio"
+            android:layout_marginLeft="40dp"
+            android:layout_toRightOf="@+id/color_mini_game_orange_radio"
+            android:text="@string/color_game_green"
+            android:textColor="@android:color/black" />
+
+        <RadioButton
+            android:id="@+id/color_mini_game_black_radio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/color_mini_game_red_radio"
+            android:minWidth="0dp"
+            android:text="@string/color_game_black"
+            android:textColor="@android:color/black" />
+
+        <RadioButton
+            android:id="@+id/color_mini_game_red_radio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/color_mini_game_black_radio"
+            android:text="@string/color_game_red"
+            android:textColor="@android:color/black" />
+
+        <RadioButton
+            android:id="@+id/color_mini_game_pink_radio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/color_mini_game_green_radio"
+            android:layout_below="@+id/color_mini_game_green_radio"
+            android:text="@string/color_game_pink"
+            android:textColor="@android:color/black" />
+    </RelativeLayout>
 
 </RelativeLayout>

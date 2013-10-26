@@ -85,7 +85,10 @@
     <string name="color_game_orange">Orange</string>
     <string name="color_game_yellow">Yellow</string>
     <string name="color_game_green">Green</string>
-    <string name="color_game_purple">Purple</string>
+    <string name="color_game_red">Red</string>
     <string name="color_game_black">Black</string>
+    <string name="color_game">Color Game</string>
+    <string name="color_game_purple">Purple</string>
+    <string name="color_game_pink">Pink</string>
 
 </resources>

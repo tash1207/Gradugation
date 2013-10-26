@@ -81,12 +81,14 @@
             android:label="@string/title_activity_main_game_screen" >
         </activity>
         <activity
-            android:name="com.gradugation.WhackAFlyerGame"
-            android:label="@string/title_activity_whack_aflyer" >
+            android:name="com.gradugation.WhackAFlyerMiniGame"
+            android:label="@string/title_activity_whack_aflyer" 
+            android:screenOrientation="landscape" >
         </activity>
         <activity
             android:name="com.gradugation.ColorMiniGame"
-            android:label="@string/title_activity_color_mini_game" >
+            android:label="@string/title_activity_color_mini_game"
+            android:screenOrientation="landscape" >
         </activity>
     </application>
 

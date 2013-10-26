@@ -8,22 +8,24 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".ColorMiniGame" >
-
-    <RadioGroup
-        android:id="@+id/radioGroup1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="124dp"
-        android:layout_marginLeft="32dp" >
-
+        <TextView
+            android:id="@+id/color_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignRight="@+id/blue_radio"
+            android:layout_marginTop="45dp"
+            android:paddingBottom="200dp"
+            android:text="" />
+    
         <RadioButton
             android:id="@+id/black_radio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:l
-            android:checked="false"
+            android:layout_alignLeft="@+id/purple_radio"
+            android:layout_toLeftOf="@+id/yellow_radio"
+            android:layout_below="@id/color_text"
+            android:minWidth="50dp"
             android:text="@string/color_game_black"
             android:textColor="@android:color/black" />
 
@@ -31,6 +33,9 @@
             android:id="@+id/blue_radio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/orange_radio"
+            android:layout_toRightOf="@id/black_radio"
+            android:layout_below="@id/color_text"
             android:text="@string/color_game_blue"
             android:textColor="@android:color/black" />
 
@@ -39,29 +44,36 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/color_game_green"
-            android:textColor="@android:color/black" />
+            android:layout_below="@id/color_text"
+            android:textColor="@android:color/black" 
+            android:layout_toRightOf=@id/blue_radio/>
 
         <RadioButton
-            android:id="@+id/radioButton2"
+            android:id="@+id/purple_radio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/color_game_purple"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black" 
+            android:layout_below="@id/black_radio"/>
 
         <RadioButton
-            android:id="@+id/radioButton3"
+            android:id="@+id/yellow_radio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/blue_radio"
+            android:layout_toRightOf="@+id/purple_radio"
             android:text="@string/color_game_yellow"
             android:textColor="@android:color/black" />
 
         <RadioButton
-            android:id="@+id/radioButton1"
+            android:id="@+id/orange_radio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/green_radio"
+            android:layout_toRightOf="@+id/yellow_radio"
             android:text="@string/color_game_orange"
             android:textColor="@android:color/black" />
 
-    </RadioGroup>
+        
 
 </RelativeLayout>

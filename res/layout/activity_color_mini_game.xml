@@ -16,7 +16,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:textSize="100sp"
-        android:paddingBottom="100dp"
+        android:paddingBottom="75dp"
         android:textStyle="bold" />
 
     <RelativeLayout
@@ -34,7 +34,8 @@
             android:layout_marginLeft="56dp"
             android:layout_toRightOf="@+id/color_mini_game_black_radio"
             android:text="@string/color_game_yellow"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black" 
+            android:onClick="yellowRadioClick" />
 
         <RadioButton
             android:id="@+id/color_mini_game_blue_radio"
@@ -43,7 +44,8 @@
             android:layout_above="@+id/color_mini_game_yellow_radio"
             android:layout_alignLeft="@+id/color_mini_game_yellow_radio"
             android:text="@string/color_game_blue"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:onClick="blueRadioClick" />
 
         <RadioButton
             android:id="@+id/color_mini_game_purple_radio"
@@ -54,7 +56,8 @@
             android:layout_marginLeft="44dp"
             android:layout_toRightOf="@+id/color_mini_game_yellow_radio"
             android:text="@string/color_game_purple"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:onClick="purpleRadioClick" />
 
         <RadioButton
             android:id="@+id/color_mini_game_orange_radio"
@@ -64,7 +67,8 @@
             android:layout_alignBottom="@+id/color_mini_game_yellow_radio"
             android:layout_alignLeft="@+id/color_mini_game_purple_radio"
             android:text="@string/color_game_orange"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:onClick="orangeRadioClick" />
 
         <RadioButton
             android:id="@+id/color_mini_game_green_radio"
@@ -74,7 +78,8 @@
             android:layout_marginLeft="40dp"
             android:layout_toRightOf="@+id/color_mini_game_orange_radio"
             android:text="@string/color_game_green"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:onClick="greenRadioClick" />
 
         <RadioButton
             android:id="@+id/color_mini_game_black_radio"
@@ -83,7 +88,8 @@
             android:layout_alignLeft="@+id/color_mini_game_red_radio"
             android:minWidth="0dp"
             android:text="@string/color_game_black"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:onClick="blackRadioClick" />
 
         <RadioButton
             android:id="@+id/color_mini_game_red_radio"
@@ -91,7 +97,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/color_mini_game_black_radio"
             android:text="@string/color_game_red"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:onClick="redRadioClick" />
 
         <RadioButton
             android:id="@+id/color_mini_game_pink_radio"
@@ -99,8 +106,10 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/color_mini_game_green_radio"
             android:layout_below="@+id/color_mini_game_green_radio"
+            android:onClick="pinkRadioClick"
             android:text="@string/color_game_pink"
             android:textColor="@android:color/black" />
+
     </RelativeLayout>
 
 </RelativeLayout>

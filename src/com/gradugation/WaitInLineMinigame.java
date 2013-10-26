@@ -22,8 +22,11 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 import org.andengine.util.adt.color.Color;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 
 public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSceneTouchListener {
@@ -33,6 +36,9 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
 	
 	private static int DEVICE_WIDTH;
 	private static int DEVICE_HEIGHT;
+	
+	// The number of credits earned by completing this minigame
+	static int CREDITS_EARNED = 3;
 	
     private BitmapTextureAtlas bgTextureAtlas;
     private ITextureRegion bgRegion;
@@ -70,7 +76,9 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
     
     final Scene scene = new Scene();
     
+    private boolean gameStarted = false;
     private boolean motionDown = false;
+    private boolean finalDialogShown = false;
     
     // Need handler for callbacks to the UI thread
     final Handler mHandler = new Handler();
@@ -79,6 +87,12 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
     final Runnable mUpdateResults = new Runnable() {
         public void run() {
             updateResultsInUi();
+        }
+    };
+    
+    final Runnable finishGame = new Runnable() {
+        public void run() {
+            finishGame();
         }
     };
 
@@ -152,6 +166,7 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
 		
 		spr2 = new Sprite(spr2X, spr2Y, engineerTextureRegion, this.getVertexBufferObjectManager());
 		spr2.setScale(0.8f);
+		spr2.setVisible(false);
 		
 		sprBus = new Sprite(sprBusX, sprBusY, busTextureRegion, this.getVertexBufferObjectManager());
 		sprBus.setScale(0.8f);
@@ -177,16 +192,81 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
 	}
 	
 	public void updateResultsInUi() {
+		// Show instructions before game begins
+		if (!gameStarted) {
+	        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+	        builder.setMessage(getString(R.string.wait_in_line_instructions));
+	        builder.setCancelable(false);
+	        builder.setPositiveButton("Start", new DialogInterface.OnClickListener() {
+	
+	                @Override
+	                public void onClick(DialogInterface dialog, int arg1) {
+	                        dialog.dismiss();
+	                        gameStarted = true;
+	                }
+	        });
+	        AlertDialog dialog = builder.create();
+	        dialog.show();
+		}
+        
 		scene.registerUpdateHandler(new IUpdateHandler() {
 			@Override
 			public void reset() { }
 
 			@Override
 			public void onUpdate(final float pSecondsElapsed) {
-				if (sprBusY < 180) {
-					// Motion for bus
-					sprBus.registerEntityModifier(new MoveModifier(0.03f,
-							sprBusX, sprBusY, sprBusX, sprBusY + 3) {
+				if (gameStarted) {
+					if (sprBusY < 180) {
+						// Motion for bus
+						sprBus.registerEntityModifier(new MoveModifier(0.03f,
+								sprBusX, sprBusY, sprBusX, sprBusY + 3) {
+							@Override
+					    	protected void onModifierStarted(IEntity pItem) {
+					        	super.onModifierStarted(pItem);
+							}
+		
+					        @Override
+					        protected void onModifierFinished(IEntity pItem) {
+					        	sprBusX = sprBus.getX();
+					        	sprBusY = sprBus.getY();
+					            super.onModifierFinished(pItem);
+					        }
+						});
+					}
+					else {
+						spr1.setVisible(true);
+						// When sprite 1 is done exiting the bus off the screen, have another "sprite 1"
+						// exit the bus
+						if (spr1X > CAMERA_WIDTH && currentY < CAMERA_HEIGHT)  {
+							spr1X = 65;
+							spr1Y = 220;
+						}
+						// Motion for sprite 1
+						spr1.registerEntityModifier(new MoveModifier(0.04f,
+								spr1X, spr1Y, spr1X + 2, spr1Y) {
+							@Override
+					    	protected void onModifierStarted(IEntity pItem) {
+					        	super.onModifierStarted(pItem);
+							}
+		
+					        @Override
+					        protected void onModifierFinished(IEntity pItem) {
+					        	spr1X = spr1.getX();
+					        	spr1Y = spr1.getY();
+					            super.onModifierFinished(pItem);
+					        }
+						});
+					}
+					spr2.setVisible(true);
+					// When sprite 2 is done walking to the bus, have another "sprite 2"
+					// walk from the top right of the screen
+					if (spr2X < 88 && currentY < CAMERA_HEIGHT)  {
+						spr2X = CAMERA_WIDTH + 100;
+						spr2Y = 285;
+					}
+					// Motion for sprite 2
+					spr2.registerEntityModifier(new MoveModifier(0.03f,
+							spr2X, spr2Y, spr2X - 2, spr2Y) {
 						@Override
 				    	protected void onModifierStarted(IEntity pItem) {
 				        	super.onModifierStarted(pItem);
@@ -194,75 +274,51 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
 	
 				        @Override
 				        protected void onModifierFinished(IEntity pItem) {
-				        	sprBusX = sprBus.getX();
-				        	sprBusY = sprBus.getY();
+				        	spr2X = spr2.getX();
+				        	spr2Y = spr2.getY();
 				            super.onModifierFinished(pItem);
 				        }
 					});
-				}
-				else {
-					spr1.setVisible(true);
-					// When sprite 1 is done exiting the bus off the screen, have another "sprite 1"
-					// exit the bus
-					if (spr1X > CAMERA_WIDTH && currentY < CAMERA_HEIGHT)  {
-						spr1X = 65;
-						spr1Y = 220;
-					}
-					// Motion for sprite 1
-					spr1.registerEntityModifier(new MoveModifier(0.04f,
-							spr1X, spr1Y, spr1X + 2, spr1Y) {
-						@Override
-				    	protected void onModifierStarted(IEntity pItem) {
-				        	super.onModifierStarted(pItem);
-						}
+					// Motion for current character
+					if (currentY <= CAMERA_HEIGHT + 32 && !motionDown) {
+						sprChar.registerEntityModifier(new MoveModifier(0.03f,
+								currentX, currentY, currentX, currentY + 1) {
+							@Override
+					    	protected void onModifierStarted(IEntity pItem) {
+					        	super.onModifierStarted(pItem);
+							}
 	
-				        @Override
-				        protected void onModifierFinished(IEntity pItem) {
-				        	spr1X = spr1.getX();
-				        	spr1Y = spr1.getY();
-				            super.onModifierFinished(pItem);
-				        }
-					});
-				}
-				// When sprite 2 is done walking to the bus, have another "sprite 2"
-				// walk from the top right of the screen
-				if (spr2X < 88 && currentY < CAMERA_HEIGHT)  {
-					spr2X = CAMERA_WIDTH + 100;
-					spr2Y = 285;
-				}
-				// Motion for sprite 2
-				spr2.registerEntityModifier(new MoveModifier(0.03f,
-						spr2X, spr2Y, spr2X - 2, spr2Y) {
-					@Override
-			    	protected void onModifierStarted(IEntity pItem) {
-			        	super.onModifierStarted(pItem);
+					        @Override
+					        protected void onModifierFinished(IEntity pItem) {
+					        	currentX = sprChar.getX();
+					        	currentY = sprChar.getY();
+					            super.onModifierFinished(pItem);
+					        }
+						});
 					}
-
-			        @Override
-			        protected void onModifierFinished(IEntity pItem) {
-			        	spr2X = spr2.getX();
-			        	spr2Y = spr2.getY();
-			            super.onModifierFinished(pItem);
-			        }
-				});
-				// Motion for current character
-				if (currentY <= CAMERA_HEIGHT + 32 && !motionDown) {
-					sprChar.registerEntityModifier(new MoveModifier(0.03f,
-							currentX, currentY, currentX, currentY + 1) {
-						@Override
-				    	protected void onModifierStarted(IEntity pItem) {
-				        	super.onModifierStarted(pItem);
-						}
-
-				        @Override
-				        protected void onModifierFinished(IEntity pItem) {
-				        	currentX = sprChar.getX();
-				        	currentY = sprChar.getY();
-				            super.onModifierFinished(pItem);
-				        }
-					});
+					if (currentY > CAMERA_HEIGHT + 30 && !finalDialogShown) {
+						Log.d("finished", "game");
+						mHandler.post(finishGame);
+						finalDialogShown = true;
+					}
 				}
 			}
 		});
+	}
+	
+	public void finishGame() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getString(R.string.wait_in_line_success, CREDITS_EARNED));
+        builder.setCancelable(false);
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int arg1) {
+                        dialog.dismiss();
+                        finish();
+                }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
 	}
 }

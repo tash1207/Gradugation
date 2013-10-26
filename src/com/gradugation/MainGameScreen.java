@@ -47,6 +47,7 @@ import org.andengine.util.debug.Debug;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -429,8 +430,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				this.mTMXTiledMap.getHeight());
 		this.mCamera.setBoundsEnabled(true);
 
-		final float centerX = (7+1) * (32) - 16; // minus 16 for image alignment
-		final float centerY = (7+1) * (32) - 10; // minus 10 for image alignment
 		
 		for (int i = 0; i < numCharacters; i++) {
 			SpriteCoordinate offset = new SpriteCoordinate();
@@ -592,200 +591,48 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	boolean move = false;
 
 	protected void movementFunction(final Sprite mySprite) {
-		// Swipe up
-		if (swipeDone == true && (finalY - initY) > 40) {
-			if (currentCharacter == 0) {
-				//TODO: make more general
-				mySprite.registerEntityModifier(new MoveModifier(0.5f,
-						characterCoordinates[0].getX(), characterCoordinates[0].getY(),
-						characterCoordinates[0].getX(), characterCoordinates[0].getY() + (ranNumb)) {
-					@Override
-					protected void onModifierStarted(IEntity pItem) {
-						super.onModifierStarted(pItem);
-						move = false;
-						gameDone = false;
-					}
-
-					@Override
-					protected void onModifierFinished(IEntity pItem) {
-						characterCoordinates[0].setX(mySprite.getX());
-						characterCoordinates[0].setY(mySprite.getY());
-
-						super.onModifierFinished(pItem);
-						checkMiniGameHotSpots(characterCoordinates[0]);
-						swipeDone = false;
-						turnDone = true;
-
-					}
-				});
-			} else if (currentCharacter == 1) {
-				mySprite.registerEntityModifier(new MoveModifier(0.5f,
-						characterCoordinates[1].getX(), characterCoordinates[1].getY(),
-						characterCoordinates[1].getX(), characterCoordinates[1].getY() + (ranNumb)) {
-					@Override
-					protected void onModifierStarted(IEntity pItem) {
-						super.onModifierStarted(pItem);
-						move = false;
-						gameDone = false;
-					}
-
-					@Override
-					protected void onModifierFinished(IEntity pItem) {
-						characterCoordinates[1].setX(mySprite.getX());
-						characterCoordinates[1].setY(mySprite.getY());
-						super.onModifierFinished(pItem);
-						checkMiniGameHotSpots(characterCoordinates[1]);
-						swipeDone = false;
-						turnDone = true;
-
-					}
-				});
+		if (swipeDone) {
+			int thisCurrent = currentCharacter;
+			SpriteCoordinate offset = new SpriteCoordinate();
+			if (finalY - initY > 40) {
+				offset.setY(ranNumb);
+			} else if (finalY - initY < -40) {
+				offset.setY(-ranNumb);
+			} else if (finalX - initX > 40) {
+				offset.setX(ranNumb);
+			} else if (finalX - initX < -40) {
+				offset.setX(-ranNumb);
 			}
-		}
-		// Swipe down
-		if (swipeDone == true && (finalY - initY) < -40) {
-			if (currentCharacter == 0) {
-				mySprite.registerEntityModifier(new MoveModifier(0.8f,
-						characterCoordinates[0].getX(), characterCoordinates[0].getY(),
-						characterCoordinates[0].getX(), characterCoordinates[0].getY() - (ranNumb)) {
-					@Override
-					protected void onModifierStarted(IEntity pItem) {
-						super.onModifierStarted(pItem);
-						move = false;
-						gameDone = false;
-					}
-
-					@Override
-					protected void onModifierFinished(IEntity pItem) {
-						characterCoordinates[0].setX(mySprite.getX());
-						characterCoordinates[0].setY(mySprite.getY());
-						super.onModifierFinished(pItem);
-						checkMiniGameHotSpots(characterCoordinates[0]);
-						swipeDone = false;
-						turnDone = true;
-
-					}
-				});
-			} else if (currentCharacter == 1) {
-				mySprite.registerEntityModifier(new MoveModifier(0.5f,
-						characterCoordinates[1].getX(), characterCoordinates[1].getY(),
-						characterCoordinates[1].getX(), characterCoordinates[1].getY() - (ranNumb)) {
-					@Override
-					protected void onModifierStarted(IEntity pItem) {
-						super.onModifierStarted(pItem);
-						move = false;
-						gameDone = false;
-					}
-
-					@Override
-					protected void onModifierFinished(IEntity pItem) {
-						characterCoordinates[1].setX(mySprite.getX());
-						characterCoordinates[1].setY(mySprite.getY());
-						super.onModifierFinished(pItem);
-						checkMiniGameHotSpots(characterCoordinates[1]);
-						swipeDone = false;
-						turnDone = true;
-
-					}
-				});
-			}
-		}
-
-		// Swipe left
-		if (swipeDone == true && (finalX - initX) > 40) {
-			if (currentCharacter == 0) {
-				mySprite.registerEntityModifier(new MoveModifier(0.8f,
-						characterCoordinates[0].getX(), characterCoordinates[0].getY(),
-						characterCoordinates[0].getX() + ranNumb, characterCoordinates[0].getY()) {
-					@Override
-					protected void onModifierStarted(IEntity pItem) {
-						super.onModifierStarted(pItem);
-						move = false;
-						gameDone = false;
-					}
-
-					@Override
-					protected void onModifierFinished(IEntity pItem) {
-						characterCoordinates[0].setX(mySprite.getX());
-						characterCoordinates[0].setY(mySprite.getY());
-						super.onModifierFinished(pItem);
-						checkMiniGameHotSpots(characterCoordinates[0]);
-						swipeDone = false;
-						turnDone = true;
-
-					}
-				});
-			} else if (currentCharacter == 1) {
-				mySprite.registerEntityModifier(new MoveModifier(0.5f,
-						characterCoordinates[1].getX(), characterCoordinates[1].getY(),
-						characterCoordinates[1].getX() + ranNumb, characterCoordinates[1].getY()) {
-					@Override
-					protected void onModifierStarted(IEntity pItem) {
-						super.onModifierStarted(pItem);
-						move = false;
-						gameDone = false;
-					}
-
-					@Override
-					protected void onModifierFinished(IEntity pItem) {
-						characterCoordinates[1].setX(mySprite.getX());
-						characterCoordinates[1].setY(mySprite.getY());
-						super.onModifierFinished(pItem);
-						checkMiniGameHotSpots(characterCoordinates[1]);
-						swipeDone = false;
-						turnDone = true;
-
-					}
-				});
-			}
-		}
-
-		// Swipe right
-		if (swipeDone == true && (finalX - initX) < -40) {
-			if (currentCharacter == 0) {
-				mySprite.registerEntityModifier(new MoveModifier(0.8f,
-						characterCoordinates[0].getX(), characterCoordinates[0].getY(),
-						characterCoordinates[0].getX() - ranNumb, characterCoordinates[0].getY()) {
-					@Override
-					protected void onModifierStarted(IEntity pItem) {
-						super.onModifierStarted(pItem);
-						move = false;
-						gameDone = false;
-					}
-
-					@Override
-					protected void onModifierFinished(IEntity pItem) {
-						characterCoordinates[0].setX(mySprite.getX());
-						characterCoordinates[0].setY(mySprite.getY());
-						super.onModifierFinished(pItem);
-						checkMiniGameHotSpots(characterCoordinates[0]);
-						swipeDone = false;
-						turnDone = true;
-					}
-				});
-			} else if (currentCharacter == 1) {
-				mySprite.registerEntityModifier(new MoveModifier(0.5f,
-						characterCoordinates[1].getX(), characterCoordinates[1].getY(),
-						characterCoordinates[1].getX() - ranNumb, characterCoordinates[1].getY()) {
-					@Override
-					protected void onModifierStarted(IEntity pItem) {
-						super.onModifierStarted(pItem);
-						move = false;
-						gameDone = false;
-					}
-
-					@Override
-					protected void onModifierFinished(IEntity pItem) {
-						characterCoordinates[1].setX(mySprite.getX());
-						characterCoordinates[1].setY(mySprite.getY());
-						super.onModifierFinished(pItem);
-						checkMiniGameHotSpots(characterCoordinates[1]);
-						swipeDone = false;
-						turnDone = true;
-
-					}
-				});
-			}
+			
+			offset = offset.add(characterCoordinates[thisCurrent]);
+			
+			mySprite.registerEntityModifier(new MoveModifier(0.5f,
+					characterCoordinates[thisCurrent].getX(), characterCoordinates[thisCurrent].getY(),
+					offset.getX(), offset.getY()) {
+				
+				int thisCurrent = currentCharacter;
+				
+				@Override
+				protected void onModifierStarted(IEntity pItem) {
+					super.onModifierStarted(pItem);
+					move = false;
+					gameDone = false;
+				}
+				
+				@Override
+				protected void onModifierFinished(IEntity pItem) {
+					characterCoordinates[thisCurrent].setX(mySprite.getX());
+					characterCoordinates[thisCurrent].setY(mySprite.getY());
+	
+					super.onModifierFinished(pItem);
+					checkMiniGameHotSpots(characterCoordinates[thisCurrent]);
+					swipeDone = false;
+					turnDone = true;
+					
+					//currentCharacter = (currentCharacter + 1) % (numCharacters);
+	
+				}
+			});
 		}
 	}
 

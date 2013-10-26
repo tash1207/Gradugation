@@ -24,7 +24,7 @@
     <string name="music_on">Music</string>
     <string name="okay">Okay</string>
     <string name="menu_settings">Settings</string>
-    
+
     <!-- Choose Character -->
     <string name="choose_character">Choose a character</string>
     <string name="character_engineer">Engineer</string>
@@ -34,12 +34,11 @@
     <!-- Minigames Screen -->
     <string name="wires">Wires</string>
     <string name="bench_press">Bench Press</string>
-
+    <string name="whack_aflyer">Whack-A-Flyer</string>
     <string name="title_activity_continue">MainActivity</string>
     <string name="saved_game">Load Saved Game</string>
     <string name="saved_game1">saved game1</string>
     <string name="saved_game2">saved game2</string>
-
 
     <!-- Bench Press Minigame -->
     <string name="bench_press_instructions1">Tap the screen as fast as possible to make your character do reps.</string>
@@ -69,5 +68,41 @@
     <string name="bench_press_title">2. Bench Press</string>
     <string name="bench_press_body">Quickly tap the screen, right onto the dapper, weight-lifting engineer on the screen
 	    to perform as many reps as possible in the allotted time.</string>
+
+	    
+    <!-- Whack A Flyer Minigame -->
+    <string name="title_activity_whack_aflyer">WhackAFlyerGame</string>
+    <string name="whack_aflyer_success">Congradugations! You whacked %1$d flyers.
+        You have earned %2$d credits!</string>
+    <string name="whack_aflyer_failure">Sorry! You only whacked %1$d flyers.
+        You did not earn any credits!</string>
+    <string name="whack_aflyer_instructions">Oh no! It\'s noon in turlington plaza, and people are handing out flyers!
+        In order to get through turlington plaza, you need to whack %1$d flyers!
+        Whack them by tapping on them. Good luck!</string>
+
+    
+    <!-- Color MiniGame -->
+    <string name="title_activity_color_mini_game">ColorMiniGame</string>
+    <string name="color_game_blue">Blue</string>
+    <string name="color_game_orange">Orange</string>
+    <string name="color_game_yellow">Yellow</string>
+    <string name="color_game_green">Green</string>
+    <string name="color_game_red">Red</string>
+    <string name="color_game_black">Black</string>
+    <string name="color_game">Color Game</string>
+    <string name="color_game_purple">Purple</string>
+    <string name="color_game_pink">Pink</string>
+    <string name="color_mini_game_success">Congradugations! You answered %1$d out of %2$d correctly.
+        You have earned %3$d credits!</string>
+    <string name="color_mini_game_failure">Sorry! You only answered %1$d out of %2$d correctly.
+        You did not earn any credits!</string>
+    <string name="color_mini_game_instructions">You\'re part of a psychological experiment to see
+        if you\'re smarter than the average chimpanzee. For every word on the screen, select
+        the color that matches the color of the text. You need to get more than %1$d%% correct. 
+        Good luck!</string>
+        
+    <!-- Food Minigame -->
+    <string name="title_activity_food_mini_game">FoodMiniGame</string>
+    <string name="food_mini_game">Junk Food Ninja</string>
 
 </resources>

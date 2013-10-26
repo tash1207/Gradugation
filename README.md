@@ -6,11 +6,11 @@ A UF-themed Android board game where players go through college with the ultimat
 
 How to run game
 ---------------
-1. Go to the following two links and download the zip files:
+1. Go to the following links and download the zip files:
 
 https://github.com/nicolasgramlich/AndEngine/tree/GLES2-AnchorCenter
-
 https://github.com/nicolasgramlich/AndEngineTMXTiledMapExtension/tree/GLES2-AnchorCenter
+https://github.com/nicolasgramlich/AndEnginePhysicsBox2DExtension/tree/GLES2-AnchorCenter
 
 2. Extract the zip files.
 
@@ -18,7 +18,9 @@ https://github.com/nicolasgramlich/AndEngineTMXTiledMapExtension/tree/GLES2-Anch
 
 4. Right click AndEngineTMXTiledMapExtension and open properties. Under Android-> libraries remove the current AndEngine project and add in the correct AndEngine
 
-5. Right click on the MainActivity project and open properties. Under Android -> libraries add in AndEngine and AndEngineTMXTiledMapExtensions
+5. Right click AndEnginePhysicsBox2DExtension and open properties. Under Android-> libraries remove the current AndEngine project and add in the correct AndEngine.
+
+5. Right click on the MainActivity project and open properties. Under Android -> libraries add in AndEngine, AndEngineTMXTiledMapExtension, and AndEnginePhysicsBox2DExtension.
 
 6. Refresh and clean the project.
 

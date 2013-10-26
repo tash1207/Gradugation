@@ -68,8 +68,9 @@
     <string name="bench_press_title">2. Bench Press</string>
     <string name="bench_press_body">Quickly tap the screen, right onto the dapper, weight-lifting engineer on the screen
 	    to perform as many reps as possible in the allotted time.</string>
-    
-    <!-- Whack-a-Flyer MiniGame -->
+
+	    
+    <!-- Whack A Flyer Minigame -->
     <string name="title_activity_whack_aflyer">WhackAFlyerGame</string>
     <string name="whack_aflyer_success">Congradugations! You whacked %1$d flyers.
         You have earned %2$d credits!</string>
@@ -78,6 +79,7 @@
     <string name="whack_aflyer_instructions">Oh no! It\'s noon in turlington plaza, and people are handing out flyers!
         In order to get through turlington plaza, you need to whack %1$d flyers!
         Whack them by tapping on them. Good luck!</string>
+
     
     <!-- Color MiniGame -->
     <string name="title_activity_color_mini_game">ColorMiniGame</string>
@@ -98,5 +100,9 @@
         if you\'re smarter than the average chimpanzee. For every word on the screen, select
         the color that matches the color of the text. You need to get more than %1$d%% correct. 
         Good luck!</string>
+        
+    <!-- Food Minigame -->
+    <string name="title_activity_food_mini_game">FoodMiniGame</string>
+    <string name="food_mini_game">Junk Food Ninja</string>
 
 </resources>

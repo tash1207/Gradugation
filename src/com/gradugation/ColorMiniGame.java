@@ -52,7 +52,7 @@ public class ColorMiniGame extends Activity {
 				seconds_text.setText("Time Left: 0 secs");
 				gameFinished = true;
 				
-				if (points/total >= PERCENTAGE_REQUIRED) {
+				if (points/total >= PERCENTAGE_REQUIRED && points != 0) {
 					Toast.makeText(ColorMiniGame.this, getString(R.string.color_mini_game_success, (int)points, 
 							(int)total, CREDITS_EARNED), Toast.LENGTH_LONG).show();
 					// Code to add CREDITS_EARNED number of credits to the character

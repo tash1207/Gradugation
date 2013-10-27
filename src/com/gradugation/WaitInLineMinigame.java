@@ -134,14 +134,14 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
 		this.characterTextureAtlas.load();
 		
 		// Athletes
-		this.athleteTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 72, 71, 
+		this.athleteTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 530, 530, 
 				TextureOptions.BILINEAR);
 		this.athleteTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(athleteTextureAtlas, this, 
 				"athlete.png", 0, 0);
 		this.athleteTextureAtlas.load();
 		
 		// Engineers
-		this.engineerTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 69, 72, 
+		this.engineerTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 530, 530, 
 				TextureOptions.BILINEAR);
 		this.engineerTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(engineerTextureAtlas, this, 
 				"engineer.png", 0, 0);
@@ -168,11 +168,11 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
 		sprChar.setScale(0.125f);
 		
 		spr1 = new Sprite(spr1X, spr1Y, athleteTextureRegion, this.getVertexBufferObjectManager());
-		spr1.setScale(0.8f);
+		spr1.setScale(0.1f);
 		spr1.setVisible(false);
 		
 		spr2 = new Sprite(spr2X, spr2Y, engineerTextureRegion, this.getVertexBufferObjectManager());
-		spr2.setScale(0.8f);
+		spr2.setScale(0.1f);
 		spr2.setVisible(false);
 		
 		sprBus = new Sprite(sprBusX, sprBusY, busTextureRegion, this.getVertexBufferObjectManager());

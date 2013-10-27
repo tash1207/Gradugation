@@ -13,6 +13,7 @@
     <string name="title_activity_minigames">MinigamesActivity</string>
     <string name="title_activity_bench_press_minigame">BenchPressMinigame</string>
     <string name="title_activity_wires_mini_game">WiresMiniGame</string>
+    <string name="title_activity_waitinline_minigame">WaitInLineMinigame</string>
 
     <!-- Main Activity -->
     <string name="new_game">New Game</string>
@@ -35,6 +36,7 @@
     <string name="wires">Wires</string>
     <string name="bench_press">Bench Press</string>
     <string name="whack_aflyer">Whack-A-Flyer</string>
+    <string name="wait_in_line">Wait In Line</string>
     <string name="title_activity_continue">MainActivity</string>
     <string name="saved_game">Load Saved Game</string>
     <string name="saved_game1">saved game1</string>
@@ -68,6 +70,14 @@
     <string name="bench_press_title">2. Bench Press</string>
     <string name="bench_press_body">Quickly tap the screen, right onto the dapper, weight-lifting engineer on the screen
 	    to perform as many reps as possible in the allotted time.</string>
+	    
+    <!-- Wait in Line Minigame -->
+    <string name="wait_in_line_instructions">You have 15 seconds to make it through the Hub to get to class! 
+        Touch the screen to stop your character from moving. Watch out for other students! 
+        If you hit them, you won\'t make it to class!</string>
+    <string name="wait_in_line_success">Congradugation! You made it through the Hub in time to earn %1$d credits!</string>
+    <string name="wait_in_line_failure_time">Oh no! You didn\'t make it through the Hub in time to earn credits!</string>
+    <string name="wait_in_line_failure_hit">Oh no! You hit someone and didn\'t make it to class in time!</string>
 
 	    
     <!-- Whack A Flyer Minigame -->

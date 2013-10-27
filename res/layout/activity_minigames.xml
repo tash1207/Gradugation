@@ -91,7 +91,7 @@
                 android:textColor="@color/gator_blue"
                 android:textSize="16sp" />
         </RelativeLayout>
-        
+
         <RelativeLayout
             android:id="@+id/minigame_whack_aflyer_press_button"
             android:layout_width="match_parent"
@@ -101,7 +101,7 @@
             android:clickable="true"
             android:onClick="minigameWhackAFlyerButtonClick"
             android:padding="8dp" >
-            
+
             <ImageView
                 android:id="@+id/minigame_whack_aflyer_image"
                 android:layout_width="80dp"
@@ -110,9 +110,8 @@
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/whack_aflyer"
                 android:src="@drawable/bricks" />
-            
-            <TextView
-                android:id="@+id/minigame_whack_aflyer_text"
+
+            <TextView android:id="@+id/minigame_whack_aflyer_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -122,7 +121,7 @@
                 android:textColor="@color/gator_blue"
                 android:textSize="16sp" />
         </RelativeLayout>
-        
+
         <RelativeLayout
             android:id="@+id/minigame_food_press_button"
             android:layout_width="match_parent"
@@ -132,7 +131,7 @@
             android:clickable="true"
             android:onClick="minigameFoodButtonClick"
             android:padding="8dp" >
-            
+
             <ImageView
                 android:id="@+id/minigame_food_image"
                 android:layout_width="80dp"
@@ -141,7 +140,7 @@
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/food_mini_game"
                 android:src="@drawable/fries" />
-            
+
             <TextView
                 android:id="@+id/minigame_food_text"
                 android:layout_width="wrap_content"
@@ -153,8 +152,8 @@
                 android:textColor="@color/gator_blue"
                 android:textSize="16sp" />
         </RelativeLayout>
-       
-         <RelativeLayout
+
+        <RelativeLayout
             android:id="@+id/minigame_color_game_button"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -163,7 +162,7 @@
             android:clickable="true"
             android:onClick="minigameColorButtonClick"
             android:padding="8dp" >
-            
+
             <ImageView
                 android:id="@+id/minigame_color_game_image"
                 android:layout_width="80dp"
@@ -172,7 +171,7 @@
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/color_game"
                 android:src="@drawable/color_numbers" />
-            
+
             <TextView
                 android:id="@+id/minigame_color_game_text"
                 android:layout_width="wrap_content"
@@ -183,6 +182,37 @@
                 android:text="@string/color_game"
                 android:textColor="@color/gator_blue"
                 android:textSize="16sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/minigame_wait_in_line_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            android:background="@drawable/button_rectangle_orange"
+            android:clickable="true"
+            android:onClick="minigameWaitInLineButtonClick"
+            android:padding="8dp" >
+
+            <ImageView
+                android:id="@+id/minigame_wait_in_line_image"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_centerVertical="true"
+                android:background="@android:color/black"
+                android:contentDescription="@string/wait_in_line"
+                android:src="@drawable/hub" />
+
+            <TextView android:id="@+id/minigame_wait_in_line_text" 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_margin="8dp"
+                android:layout_toRightOf="@id/minigame_wait_in_line_image"
+                android:text="@string/wait_in_line"
+                android:textColor="@color/gator_blue"
+                android:textSize="16sp" >
+            </TextView>
         </RelativeLayout>
     </LinearLayout>
 

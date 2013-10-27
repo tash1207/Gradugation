@@ -36,4 +36,9 @@ public class MinigamesActivity extends BaseActivity {
 		Intent intent = new Intent(this, FoodMiniGame.class);
 		startActivity(intent);
 	}
+	
+	public void minigameWaitInLineButtonClick(View v) {
+		Intent intent = new Intent(this, WaitInLineMinigame.class);
+    	startActivity(intent);
+	}
 }

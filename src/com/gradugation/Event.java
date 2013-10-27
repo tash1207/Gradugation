@@ -1,5 +1,7 @@
 package com.gradugation;
 
+import java.io.Serializable;
+
 import android.app.Activity;
 import android.content.Intent;
 
@@ -46,7 +48,7 @@ public class Event {
 	
 	
 	public static void getEvent(SpriteCoordinate coordinate, boolean doneSwiping, 
-			boolean gameDone, boolean move, Activity context) {
+			boolean gameDone, boolean move, Activity context, String characterName) {
 		if (!doneSwiping) {
 			//only checking for boundaries here
 			return;
@@ -69,6 +71,7 @@ public class Event {
 		} else if (WHACK_AFLYER_MINI_GAME.inRange(coordinate) && !gameDone && !move) {
 			// call whack a flyer
 			Intent intent = new Intent(context, WhackAFlyerMiniGame.class);
+			intent.putExtra(ChooseCharacterActivity.THE_PLAYERS, (Serializable)characterName);
 			context.startActivity(intent);
 		} else if (COLOR_MINI_GAME.inRange(coordinate) && !gameDone && !move) {
 			// call colors

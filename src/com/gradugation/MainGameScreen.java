@@ -182,6 +182,13 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 			characterTextureAtlas[i].load();
 		}
 
+		this.diceTextureAtlas = new BitmapTextureAtlas(
+                this.getTextureManager(), 170, 90, TextureOptions.BILINEAR);
+		this.diceTextureRegion = BitmapTextureAtlasTextureRegionFactory
+                .createFromAsset(diceTextureAtlas, this, "dice.png",
+                                0, 0);
+		;
+		this.diceTextureAtlas.load();
 		// Pause Assets
 		this.mFaceTexture = new AssetBitmapTexture(this.getTextureManager(),
 				this.getAssets(), "gfx/menu.png", TextureOptions.BILINEAR);

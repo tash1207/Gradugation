@@ -104,6 +104,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 	private SpriteCoordinate[] characterCoordinates; 
 	private String[] characterNames;
+	private int[] characterCoins;
 	ArrayList<Character> thePlayers;
 	
 	final private SpriteCoordinate[] textStrokeCoordinates = {
@@ -153,10 +154,11 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		
 		characterCoordinates = new SpriteCoordinate[numCharacters];
 		characterNames = new String[numCharacters];
-
+		characterCoins = new int[numCharacters];
 		
 		for (int i = 0; i < numCharacters; i++) {
 			characterNames[i] = thePlayers.get(i).getName();
+			characterCoins[i] = thePlayers.get(i).getCoins();
 		}
 		
 		//Create all four character sprites
@@ -259,7 +261,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		for (int i = 0; i < numCharacters; i++) {
 			SpriteCoordinate coord = textStrokeCoordinates[i];
 			textStrokes[i] = new Text(coord.getX(), coord.getY(), this.mStrokeFont,
-					characterNames[i]   +"\nCredits: ", vertexBufferObjectManager); 
+					characterNames[i]   +"\nCredits: " + characterCoins[0], vertexBufferObjectManager); 
 		}
 		
 

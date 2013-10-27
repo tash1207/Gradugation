@@ -2,6 +2,7 @@ package com.gradugation;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.andengine.engine.camera.BoundCamera;
 import org.andengine.engine.camera.SmoothCamera;
@@ -37,13 +38,13 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.bitmap.AssetBitmapTexture;
 import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TextureRegionFactory;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 import org.andengine.util.Constants;
 import org.andengine.util.debug.Debug;
-import org.andengine.util.math.MathUtils;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -64,7 +65,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	private static final int CAMERA_WIDTH = 480;
 	private static final int CAMERA_HEIGHT = 320;
 	
-	private static final int MAX_CHARACTER_MOVEMENT = 3;
+	//private static final int MAX_CHARACTER_MOVEMENT = 3;
 	private static final int CHARACTER_WIDTH = 32;
 
 	// ===========================================================
@@ -84,6 +85,9 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 	private BitmapTextureAtlas[] characterTextureAtlas;
 	private ITextureRegion[] character;
+
+	private BitmapTextureAtlas diceTextureAtlas;
+	private TextureRegion diceTextureRegion;
 	
 	private ITexture mFaceTexture;
 	private ITextureRegion mFaceTextureRegion;
@@ -118,6 +122,9 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	public int ranNumb;
 	private int numCharacters;
 
+	private Random random;
+    private int diceRoll = 0;
+    
 	private boolean gameDone = false;
 
 	float initX;
@@ -263,7 +270,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 			textStrokes[i] = new Text(coord.getX(), coord.getY(), this.mStrokeFont,
 					characterNames[i]   +"\nCredits: " + characterCoins[0], vertexBufferObjectManager); 
 		}
-		
+		final Text textStroke5 = new Text(400, 100, this.mStrokeFont,
+                "You rolled " + diceRoll, vertexBufferObjectManager);
 
 		mHUD = new HUD();
 		mHUD.attachChild(scene);
@@ -273,24 +281,30 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		 * test the randomizer, I believe this should suffice.
 		 */
 
-		final Rectangle button = new Rectangle(250, 0, 100, 100,
-				vertexBufferObjectManager) {
+		final Sprite diceButton = new Sprite(250, CAMERA_HEIGHT/10, this.diceTextureRegion,
+                this.getVertexBufferObjectManager()) {
 
-			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
-				/*
-				 * Here, you can update the randomizer when the user presses the
-				 * button. Disregard the effect, just lets me know that the
-				 * button is being pressed.
-				 */
-				if (touchEvent.isActionUp()) {
-					this.setColor(Color.BLACK);
-				}
-				if (touchEvent.isActionDown()) {
-					this.setColor(Color.WHITE);
-				}
-				return true;
-			};
+	        public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
+	                /*
+	                 * Here, you can update the randomizer when the user presses the
+	                 * button. Disregard the effect, just lets me know that the
+	                 * button is being pressed.
+	                 */
+	                //generate random number [1,3]
+	                random = new Random();
+	                diceRoll = random.nextInt(3) + 1;
+	                
+	                if (touchEvent.isActionUp()) {
+	                        this.setColor(Color.GRAY);
+	                        textStroke5.setText("You rolled: " + diceRoll);
+	                }
+	                if (touchEvent.isActionDown()) {
+	                        this.setColor(Color.WHITE);
+	                }
+	                return true;
+	        };
 		};
+		diceButton.setScale((float) .7);
 
 		// Load the Pause Scene
 		this.mPauseScene = new CameraScene(this.mCamera);
@@ -377,8 +391,9 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 			mHUD.attachChild(textStrokes[i]);
 		}
 
-		mHUD.registerTouchArea(button);
-		mHUD.attachChild(button);
+		mHUD.attachChild(textStroke5);
+		mHUD.registerTouchArea(diceButton);
+		mHUD.attachChild(diceButton);
 
 		mHUD.registerTouchArea(pauseSprite);
 		mHUD.attachChild(pauseSprite);
@@ -423,7 +438,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		moving = false;
 		turnDone = false;
 		turnNum = 1;
-		ranNumb = 1 + (int) (Math.random() * ((6 - 1) + 1));
+		//ranNumb = 1 + (int) (Math.random() * ((6 - 1) + 1));
 
 		scene.attachChild(this.mTMXTiledMap);
 
@@ -579,7 +594,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 				if (swipeDone == false) {
 					//ranNumb = (1 + (int) (Math.random() * ((MAX_CHARACTER_MOVEMENT - 1) + 1))) * CHARACTER_WIDTH;
-					ranNumb = MathUtils.random(1,MAX_CHARACTER_MOVEMENT+1) * CHARACTER_WIDTH;
+					ranNumb = diceRoll * CHARACTER_WIDTH;
 				}
 
 			}
@@ -693,3 +708,5 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	// Inner and Anonymous Classes
 	// ===========================================================
 }
+
+

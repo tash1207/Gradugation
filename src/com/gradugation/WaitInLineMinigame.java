@@ -24,6 +24,7 @@ import org.andengine.util.adt.color.Color;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -76,9 +77,14 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
     
     final Scene scene = new Scene();
     
+    CountDownTimer timer;
+    
     private boolean gameStarted = false;
     private boolean motionDown = false;
-    private boolean finalDialogShown = false;
+    boolean collisionOccurred = false;
+    boolean timeUp = false;
+    boolean finalDialogShown = false;
+    boolean gameOver = false;
     
     // Need handler for callbacks to the UI thread
     final Handler mHandler = new Handler();
@@ -93,6 +99,7 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
     final Runnable finishGame = new Runnable() {
         public void run() {
             finishGame();
+            gameOver = true;
         }
     };
 
@@ -203,6 +210,18 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
 	                public void onClick(DialogInterface dialog, int arg1) {
 	                        dialog.dismiss();
 	                        gameStarted = true;
+	                		timer = new CountDownTimer(15800, 1000) {
+	                			public void onTick(long millisUntilFinished) {
+	                			}
+	                			
+	                			public void onFinish() {
+	                				if (!gameOver) {
+	                					timeUp = true;
+	                					mHandler.post(finishGame);
+	                				}
+	                			}
+	                		};
+	                		timer.start();
 	                }
 	        });
 	        AlertDialog dialog = builder.create();
@@ -215,7 +234,15 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
 
 			@Override
 			public void onUpdate(final float pSecondsElapsed) {
-				if (gameStarted) {
+				if (gameStarted && !gameOver) {
+					// Check for collisions
+					if ((Math.abs(spr1.getX() - sprChar.getX()) < 35 && Math.abs(spr1.getY() - sprChar.getY()) < 51) ||
+						(Math.abs(spr2.getX() - sprChar.getX()) < 35 && Math.abs(spr2.getY() - sprChar.getY()) < 51)) {
+						collisionOccurred = true;
+						mHandler.post(finishGame);
+						finalDialogShown = true;
+					}
+					
 					if (sprBusY < 180) {
 						// Motion for bus
 						sprBus.registerEntityModifier(new MoveModifier(0.03f,
@@ -281,7 +308,7 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
 					});
 					// Motion for current character
 					if (currentY <= CAMERA_HEIGHT + 32 && !motionDown) {
-						sprChar.registerEntityModifier(new MoveModifier(0.03f,
+						sprChar.registerEntityModifier(new MoveModifier(0.028f,
 								currentX, currentY, currentX, currentY + 1) {
 							@Override
 					    	protected void onModifierStarted(IEntity pItem) {
@@ -308,7 +335,16 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
 	
 	public void finishGame() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getString(R.string.wait_in_line_success, CREDITS_EARNED));
+        if (collisionOccurred) {
+        	builder.setMessage(getString(R.string.wait_in_line_failure_hit));
+        }
+        else if (timeUp) {
+        	builder.setMessage(getString(R.string.wait_in_line_failure_time));
+        }
+        else {
+        	builder.setMessage(getString(R.string.wait_in_line_success, CREDITS_EARNED));
+        	// Code to give character CREDITS_EARNED credits
+        }
         builder.setCancelable(false);
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 

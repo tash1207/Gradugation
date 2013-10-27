@@ -25,6 +25,13 @@
     <string name="okay">Okay</string>
     <string name="menu_settings">Settings</string>
 
+    <!-- New Game -->
+    <string-array name="number_array">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item> 
+    </string-array>
     <!-- Choose Character -->
     <string name="choose_character">Choose a character</string>
     <string name="character_engineer">Engineer</string>

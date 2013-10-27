@@ -21,5 +21,13 @@ public class SpriteCoordinate extends Coordinate {
 	public SpriteCoordinate add(Coordinate toAdd) {
 		return new SpriteCoordinate (this.x + toAdd.getX(), this.y + toAdd.getY());
 	}
+	
+	public int compareTo(Coordinate toCompare) {
+		if (this.x == toCompare.getX() && this.y == toCompare.getY()) {
+			return 0;
+		} else {
+			return 1;
+		}
+	}
 
 }

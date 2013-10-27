@@ -43,6 +43,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 import org.andengine.util.Constants;
 import org.andengine.util.debug.Debug;
+import org.andengine.util.math.MathUtils;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -554,6 +555,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 					moving = false;
 					turnDone = false;
 					currentCharacter = (currentCharacter + 1) % (numCharacters);
+					// consider a delay here so the camera doesn't switch back and forth so fast
 					MainGameScreen.this.mCamera
 							.setChaseEntity(spriteList[currentCharacter]);
 					// if(currentCharacter==0){
@@ -574,7 +576,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				}
 
 				if (swipeDone == false) {
-					ranNumb = (1 + (int) (Math.random() * ((MAX_CHARACTER_MOVEMENT - 1) + 1))) * CHARACTER_WIDTH;
+					//ranNumb = (1 + (int) (Math.random() * ((MAX_CHARACTER_MOVEMENT - 1) + 1))) * CHARACTER_WIDTH;
+					ranNumb = MathUtils.random(1,MAX_CHARACTER_MOVEMENT+1) * CHARACTER_WIDTH;
 				}
 
 			}
@@ -639,18 +642,9 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	// Checks the hot spots for the minigames
 	protected void checkMiniGameHotSpots(SpriteCoordinate spriteCoord) {
 
-		float currentX = spriteCoord.getX();
-		float currentY = spriteCoord.getY();
-		if (currentY >= 470 && currentY < 502 && currentX >= 224
-				&& currentX < 256 && move == false && gameDone == false) {
-			Intent intent = new Intent(MainGameScreen.this, WiresMiniGame.class);
-			startActivity(intent);
-			gameDone = true;
-		} else if (currentY >= 342 && currentY < 374 && currentX >= 224
-				&& currentX < 256 && move == false && gameDone == false) {
-			Intent intent = new Intent(MainGameScreen.this,
-					BenchPressMinigame.class);
-			startActivity(intent);
+		Event.getEvent(spriteCoord, true, gameDone, move, this);
+		
+		if (!(move || gameDone)) {
 			gameDone = true;
 		}
 

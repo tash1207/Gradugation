@@ -549,9 +549,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 				}
 				
-				if (moving) {
-					Event.checkBoundaries(characterCoordinates[currentCharacter], ranNumb);
-				}
+				
 
 				if (moving == true && turnDone == true && swipeDone == false) {
 					moving = false;
@@ -611,6 +609,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 			
 			offset = offset.add(characterCoordinates[thisCurrent]);
 			
+			offset = Event.checkBoundaries(characterCoordinates[currentCharacter], offset);
+
 			mySprite.registerEntityModifier(new MoveModifier(0.5f,
 					characterCoordinates[thisCurrent].getX(), characterCoordinates[thisCurrent].getY(),
 					offset.getX(), offset.getY()) {

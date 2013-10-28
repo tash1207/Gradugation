@@ -2,6 +2,7 @@ package com.gradugation;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 
 import com.coordinates.MapCoordinate;
 import com.coordinates.MiniGameCoordinate;
@@ -45,13 +46,68 @@ public class Event {
 	}
 	
 	
-	public static SpriteCoordinate checkBoundaries(SpriteCoordinate coordinate, float offset) {
-		SpriteCoordinate startLocation = new SpriteCoordinate();
-		startLocation.setX((int)(coordinate.getX()/32)*32);
-		startLocation.setY((int)(coordinate.getY()/32*32));
-		MapCoordinate spriteLocation = startLocation.spriteToMap();
+	public static SpriteCoordinate checkBoundaries(SpriteCoordinate coordinate, SpriteCoordinate offset) {
+		MapCoordinate mapEndLocation = offset.spriteToMap();
+		MapCoordinate mapStartLocation = coordinate.spriteToMap();
 		
-		return spriteLocation.mapToSprite();
+		float yDifference = offset.getY() - coordinate.getY();
+		float xDifference = offset.getX() - coordinate.getX();
+		Log.d("xdiff, ydiff", xDifference + ", " + yDifference);
+		if (yDifference >= 32) {
+			// swiping up
+			if (mapStartLocation.getX() == 2.0) {
+				if (mapEndLocation.getY() > 9) {
+					// move right instead
+					mapEndLocation.setY(9);
+					mapEndLocation.setX(3);
+				}
+			} else if (mapStartLocation.getX() == 3.0) {
+				if (mapStartLocation.getY() >= 9.0 && mapEndLocation.getY() > 11 ) {
+					// move right instead
+					mapEndLocation.setY(11);
+					mapEndLocation.setX(4);
+				} else if (mapStartLocation.getY() == 7) {
+					mapEndLocation = mapStartLocation;
+				}
+			} else if (mapStartLocation.getX() == 4.0) {
+				mapEndLocation = mapStartLocation;
+			} else if (mapStartLocation.getX() == 5.0) {
+				if (mapStartLocation.getY() >= 4 && mapEndLocation.getY() > 7) {
+					// move left instead
+					mapEndLocation.setY(7);
+					mapEndLocation.setX(3);
+				} else  {
+					mapEndLocation = mapStartLocation;
+				}
+					
+			} else if (mapStartLocation.getX() == 6.0) {
+			} else if (mapStartLocation.getX() == 7.0) {
+			} else if (mapStartLocation.getX() == 8.0) {
+			} else if (mapStartLocation.getX() == 9.0) {
+			} else if (mapStartLocation.getX() == 10.0) {
+			} else if (mapStartLocation.getX() == 11.0) {
+			} else if (mapStartLocation.getX() == 12.0) {
+			} else if (mapStartLocation.getX() == 13.0) {
+			} else if (mapStartLocation.getX() == 14.0) {
+			} else if (mapStartLocation.getX() == 15.0) {
+			} else if (mapStartLocation.getX() == 16.0) {
+			} else if (mapStartLocation.getX() == 17.0) {
+			} else if (mapStartLocation.getX() == 18.0) {
+			} else if (mapStartLocation.getX() == 19.0) {
+			} else if (mapStartLocation.getX() == 20.0) {
+			} else if (mapStartLocation.getX() == 21.0) {
+			} else if (mapStartLocation.getX() == 22.0) {
+			} else if (mapStartLocation.getX() == 23.0) {
+			}
+		} else if (yDifference <= -32) {
+			// swiping down
+		} else if (xDifference >= 32) {
+			// swiping right
+		} else if (xDifference <= -32) {
+			// swiping left
+		}
+		
+		return mapEndLocation.mapToSprite();
 	}
 	
 	public static void getEvent(SpriteCoordinate coordinate, 

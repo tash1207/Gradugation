@@ -111,6 +111,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	        new SpriteCoordinate(80,20), new SpriteCoordinate(400,20) };
 
 	private boolean turnDone;
+	private boolean eventCompleted;
 	private boolean moving;
 	public int turnNum;
 	public int currentCharacter;
@@ -336,9 +337,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 					onClick(mRenderSurfaceView);
 					finish();
 					break;
-				case TouchEvent.ACTION_MOVE:
-					break;
-				case TouchEvent.ACTION_UP:
+				default:
 					break;
 				}
 				return true;
@@ -360,11 +359,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 					scene.setIgnoreUpdate(true);
 					mHUD.setChildScene(mPauseScene, false, true, true);
 					break;
-				case TouchEvent.ACTION_MOVE:
-
-					break;
-				case TouchEvent.ACTION_UP:
-
+				default:
 					break;
 				}
 				return true;
@@ -545,10 +540,19 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				}
 
 				if (move) {
-					movementFunction(spriteList[currentCharacter]);
-					moving = true;
-					MainGameScreen.this.mCamera.updateChaseEntity();
+					int iter = ranNumb;
+					for (int i = 0; i < iter; i++) {
+						
+						ranNumb = CHARACTER_WIDTH;
+						movementFunction(spriteList[currentCharacter]);
+						moving = true;
+						MainGameScreen.this.mCamera.updateChaseEntity();
+					}
 
+				}
+				
+				if (moving) {
+					Event.checkBoundaries(characterCoordinates[currentCharacter], ranNumb);
 				}
 
 				if (moving == true && turnDone == true && swipeDone == false) {
@@ -577,7 +581,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 				if (swipeDone == false) {
 					//ranNumb = (1 + (int) (Math.random() * ((MAX_CHARACTER_MOVEMENT - 1) + 1))) * CHARACTER_WIDTH;
-					ranNumb = MathUtils.random(1,MAX_CHARACTER_MOVEMENT+1) * CHARACTER_WIDTH;
+					ranNumb = MathUtils.random(1,MAX_CHARACTER_MOVEMENT+1);// * CHARACTER_WIDTH;
 				}
 
 			}
@@ -620,19 +624,19 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 					super.onModifierStarted(pItem);
 					move = false;
 					gameDone = false;
+					Log.d("IN STARTED", "YEAH");
+					eventCompleted = false;
 				}
 				
 				@Override
 				protected void onModifierFinished(IEntity pItem) {
 					characterCoordinates[thisCurrent].setX(mySprite.getX());
 					characterCoordinates[thisCurrent].setY(mySprite.getY());
-	
+					Log.d("IN FINSIHED", "YEAH");
 					super.onModifierFinished(pItem);
 					checkMiniGameHotSpots(characterCoordinates[thisCurrent]);
 					swipeDone = false;
 					turnDone = true;
-					
-					//currentCharacter = (currentCharacter + 1) % (numCharacters);
 	
 				}
 			});
@@ -642,7 +646,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	// Checks the hot spots for the minigames
 	protected void checkMiniGameHotSpots(SpriteCoordinate spriteCoord) {
 
-		Event.getEvent(spriteCoord, true, gameDone, move, this);
+		if (!eventCompleted) {
+			Event.getEvent(spriteCoord, gameDone, move, this);
+			eventCompleted = true;
+		}
 		
 		if (!(move || gameDone)) {
 			gameDone = true;

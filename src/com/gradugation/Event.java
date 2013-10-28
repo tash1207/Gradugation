@@ -14,8 +14,8 @@ replace checkMiniGameHotspot() in mainGameScreen
 
 public class Event {
 	
-	private final static MapCoordinate OCONNEL_CENTER = new MapCoordinate(3,1);
-	private final static MapCoordinate STADIUM = new MapCoordinate(7,1);
+	private final static MapCoordinate OCONNEL_CENTER = new MapCoordinate(3,11);
+	private final static MapCoordinate STADIUM = new MapCoordinate(7,12);
 	private final static MapCoordinate NEW_PHYSICS_BUILDING = new MapCoordinate(5,4);
 	private final static MapCoordinate NEW_ENGINEERING_BUILDING = new MapCoordinate(9,1);
 	private final static MapCoordinate REITZ = new MapCoordinate(9,6);
@@ -45,36 +45,41 @@ public class Event {
 	}
 	
 	
-	public static void getEvent(SpriteCoordinate coordinate, boolean doneSwiping, 
-			boolean gameDone, boolean move, Activity context) {
-		if (!doneSwiping) {
-			//only checking for boundaries here
-			return;
-		}
+	public static SpriteCoordinate checkBoundaries(SpriteCoordinate coordinate, float offset) {
+		SpriteCoordinate startLocation = new SpriteCoordinate();
+		startLocation.setX((int)(coordinate.getX()/32)*32);
+		startLocation.setY((int)(coordinate.getY()/32*32));
+		MapCoordinate spriteLocation = startLocation.spriteToMap();
 		
-		if (GRADUATION.inRange(coordinate) && !gameDone && !move) {
+		return spriteLocation.mapToSprite();
+	}
+	
+	public static void getEvent(SpriteCoordinate coordinate, 
+			boolean gameDone, boolean move, Activity context) {
+		
+		if (GRADUATION.isEqual(coordinate) && !gameDone && !move) {
 			//graduate!
-		} else if (BENCH_PRESS_MINI_GAME.inRange(coordinate) && !gameDone && !move) {
+		} else if (BENCH_PRESS_MINI_GAME.isEqual(coordinate) && !gameDone && !move) {
 			//call bench press game
 			Intent intent = new Intent(context, BenchPressMinigame.class);
 			context.startActivity(intent);
-		} else if (WIRES_MINI_GAME.inRange(coordinate) && !gameDone && !move) {
+		} else if (WIRES_MINI_GAME.isEqual(coordinate) && !gameDone && !move) {
 			//call wires mini game
 			Intent intent = new Intent(context, WiresMiniGame.class);
 			context.startActivity(intent);
-		} else if (WAIT_IN_LINE_MINI_GAME.inRange(coordinate) && !gameDone && !move) {
+		} else if (WAIT_IN_LINE_MINI_GAME.isEqual(coordinate) && !gameDone && !move) {
 			// call wait in line
 			Intent intent = new Intent(context, WaitInLineMinigame.class);
 			context.startActivity(intent);
-		} else if (WHACK_AFLYER_MINI_GAME.inRange(coordinate) && !gameDone && !move) {
+		} else if (WHACK_AFLYER_MINI_GAME.isEqual(coordinate) && !gameDone && !move) {
 			// call whack a flyer
 			Intent intent = new Intent(context, WhackAFlyerMiniGame.class);
 			context.startActivity(intent);
-		} else if (COLOR_MINI_GAME.inRange(coordinate) && !gameDone && !move) {
+		} else if (COLOR_MINI_GAME.isEqual(coordinate) && !gameDone && !move) {
 			// call colors
 			Intent intent = new Intent(context, ColorMiniGame.class);
 			context.startActivity(intent);
-		} else if (FOOD_MINI_GAME.inRange(coordinate) && !gameDone && !move) {
+		} else if (FOOD_MINI_GAME.isEqual(coordinate) && !gameDone && !move) {
 			Intent intent = new Intent(context, FoodMiniGame.class);
 			context.startActivity(intent);
 		} else {

@@ -34,9 +34,9 @@ public class MainActivity extends BaseActivity {
         
         String[] key = {"128"};
         String[] newValues = {"128","16","2009"};
-        dbhelper.insertRow(1, tableValues);
-        Log.d("TEST", "Update method stopped here");
-        dbhelper.updateRow(1, key, newValues);
+//        dbhelper.insertRow(1, tableValues);
+//        Log.d("TEST", "Update method stopped here");
+//        dbhelper.updateRow(1, key, newValues);
         
         Log.d("Update Method", "Method has worked");
         //dbhelper.insertRow(1, tableValues);

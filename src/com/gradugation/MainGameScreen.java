@@ -105,7 +105,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	private int numCharacters;
 
 	int GameId;
-	int numTurns; //total number of turns taken
+	int numTurns = 0; //total number of turns taken
 	int numRounds;
 	private boolean gameDone = false;
 
@@ -818,8 +818,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		}
 		else if(numTurns%numCharacters == 0)
 		{
-			//update database
-			//update rows with gameId
+			addGameSave();
 		}
 	}
 
@@ -891,6 +890,24 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 //        	String[] key = {Integer.toString(keyInt)};
 //        	dbhelper.updateRow(1, key, values);
 //        }
+        Cursor c = db.rawQuery("SELECT * FROM games;", null);
+        if (c.moveToNext())
+        {
+        	//if an entry already exists, update it
+        	 String[] key = {"1"};
+             String[] newValues = {key[0], Integer.toString(numCharacters), Integer.toString(numTurns)};
+             dbhelper.updateRow(1, key, newValues);
+             String[] table3key = {"1", ""};
+           
+             
+             for (int i = 1; i <= numPlayers; i++)
+             {
+             	String[] newCharacter = {"1", Integer.toString(i), Integer.toString(i), "0", "0", "0"};
+             	table3key[1] = Integer.toString(i);
+             	dbhelper.updateRow(3, table3key, newCharacter );
+             }
+             
+        }
         
         //else insert new row(s)
         String key = "1"; //Integer.toString(Integer.parseInt(c.getString(c.getColumnIndex("id"))) + 1);

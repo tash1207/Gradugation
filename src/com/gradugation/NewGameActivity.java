@@ -6,58 +6,93 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
-public class NewGameActivity extends BaseActivity {
+public class NewGameActivity extends BaseActivity implements
+		OnItemSelectedListener {
 
-        public static final String NUMBER_OF_PLAYERS = "com.gradugation.number_of_players";
-        public static final int MAX_NUMBER_PLAYERS = 4;
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-                super.onCreate(savedInstanceState);
-                setContentView(R.layout.activity_new_game);
-        }
+	private Spinner spinner1;
+	private int numCharacters;
 
-        @Override
-        public boolean onCreateOptionsMenu(Menu menu) {
-                // Inflate the menu; this adds items to the action bar if it is present.
-                getMenuInflater().inflate(R.menu.new_game, menu);
-                return true;
-        }
-        
-        public void chooseCharacter(View view) {
-                Intent intent = new Intent(this, ChooseCharacterActivity.class);
-            EditText editText = (EditText) findViewById(R.id.number_of_players);
-            int numberOfPlayers = Integer.parseInt(editText.getText().toString());
-            
-            //this part needs to be fixed. it's supposed to not let the user click okay while the field is empty. as a temporary fix, I've let the default value of 1 remain (still, not foolproof but works)
-            if (editText.getText().toString().trim().length()==0){
-                    editText.setError("Invalid number of players.");
-                    //Toast.makeText(this,  "Please enter how many players you would like to have", Toast.LENGTH_SHORT).show();
-            }
-            if (numberOfPlayers > MAX_NUMBER_PLAYERS || numberOfPlayers <= 0) {
-                    editText.setError("Invalid number of players.");
-                    return;
-            }
-            
-            intent.putExtra(NUMBER_OF_PLAYERS, numberOfPlayers);
-            startActivity(intent);
-        }
-        
-        public void onPause() {
-                super.onPause();
-                SongPlayer.stopSongDelayed();
-        }
-        
-        protected void onResume() {
-            super.onResume();
-            SharedPreferences settings = getSharedPreferences(SettingsActivity.SOUND_PREFERENCE, 0);
-                boolean isSoundOn = settings.getBoolean(SettingsActivity.SOUND_ON, true);
-                
-                if (isSoundOn) {
-                        SongPlayer.playSong();
-                }
-    }
+	public static final String NUMBER_OF_PLAYERS = "com.gradugation.number_of_players";
+
+	// public static final int MAX_NUMBER_PLAYERS = 4;
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_new_game);
+		addItemsOnSpinner1();
+		addListenerOnSpinnerItemSelection();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.new_game, menu);
+		return true;
+	}
+
+	public void addItemsOnSpinner1() {
+
+		spinner1 = (Spinner) findViewById(R.id.spinner1);
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+				this, R.array.number_array,
+				android.R.layout.simple_spinner_item);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinner1.setAdapter(adapter);
+	}
+
+	public void chooseCharacter(View view) {
+		Intent intent = new Intent(this, ChooseCharacterActivity.class);
+
+		intent.putExtra(NUMBER_OF_PLAYERS, numCharacters);
+		startActivity(intent);
+	}
+
+	public void addListenerOnSpinnerItemSelection() {
+		spinner1 = (Spinner) findViewById(R.id.spinner1);
+		spinner1.setOnItemSelectedListener(this);
+	}
+
+	public void onItemSelected(AdapterView<?> parent, View view, int pos,
+			long id) {
+		numCharacters = Integer.parseInt(parent.getItemAtPosition(pos)
+				.toString());
+	}
+
+	public void onPause() {
+		super.onPause();
+		SongPlayer.stopSongDelayed();
+	}
+
+	protected void onResume() {
+		super.onResume();
+		SharedPreferences settings = getSharedPreferences(
+				SettingsActivity.SOUND_PREFERENCE, 0);
+		boolean isSoundOn = settings
+				.getBoolean(SettingsActivity.SOUND_ON, true);
+
+		if (isSoundOn) {
+			SongPlayer.playSong();
+		}
+	}
+
+	// @Override
+	// public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
+	// long arg3) {
+	// // TODO Auto-generated method stub
+	//
+	// }
+
+	@Override
+	public void onNothingSelected(AdapterView<?> parent) {
+		// TODO Auto-generated method stub
+
+	}
 
 }

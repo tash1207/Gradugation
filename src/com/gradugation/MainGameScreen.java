@@ -600,13 +600,13 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 			int thisCurrent = currentCharacter;
 			SpriteCoordinate offset = new SpriteCoordinate();
 			if (finalY - initY > 40) {
-				offset.setY(ranNumb);
+				offset.setY(CHARACTER_WIDTH);
 			} else if (finalY - initY < -40) {
-				offset.setY(-ranNumb);
+				offset.setY(-CHARACTER_WIDTH);
 			} else if (finalX - initX > 40) {
-				offset.setX(ranNumb);
+				offset.setX(CHARACTER_WIDTH);
 			} else if (finalX - initX < -40) {
-				offset.setX(-ranNumb);
+				offset.setX(-CHARACTER_WIDTH);
 			}
 			
 			offset = offset.add(characterCoordinates[thisCurrent]);
@@ -629,9 +629,12 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				protected void onModifierFinished(IEntity pItem) {
 					characterCoordinates[thisCurrent].setX(mySprite.getX());
 					characterCoordinates[thisCurrent].setY(mySprite.getY());
-					movementCount--;
+					super.onModifierFinished(pItem);
+					//if (characterCoordinates[thisCurrent].compareTo(newOffset) == 0) {
+						movementCount--;
+					//}
 					if (movementCount == 0) {
-						super.onModifierFinished(pItem);
+						
 						checkMiniGameHotSpots(characterCoordinates[thisCurrent]);
 						swipeDone = false;
 						turnDone = true;

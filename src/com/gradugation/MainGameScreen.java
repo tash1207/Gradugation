@@ -46,8 +46,11 @@ import org.andengine.util.Constants;
 import org.andengine.util.debug.Debug;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -72,14 +75,14 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	private TMXTiledMap mTMXTiledMap;
 	protected int mCactusCount;
 
-	private BitmapTextureAtlas characterTextureAtlas,characterTextureAtlas2,characterTextureAtlas3,characterTextureAtlas4;
-	public ITextureRegion character,character2,character3,character4;
+	private BitmapTextureAtlas characterTextureAtlas;
+	public ITextureRegion character;
 
 	private ITexture mFaceTexture;
 	private ITextureRegion mFaceTextureRegion;
-	private ITexture mPausedTexture, mResumeTexture, mMainMenuTexture;
+	private ITexture mPausedTexture, mResumeTexture, mMainMenuTexture, mSaveTexture;
 	private ITextureRegion mPausedTextureRegion, mResumeTextureRegion,
-			mMainMenuTextureRegion;
+			mMainMenuTextureRegion, mSaveTextureRegion;
 
 	private CameraScene mPauseScene;
 	private Scene scene;
@@ -101,6 +104,9 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	public int ranNumb;
 	private int numCharacters;
 
+	int GameId;
+	int numTurns; //total number of turns taken
+	int numRounds;
 	private boolean gameDone = false;
 
 	float initX;
@@ -109,6 +115,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	float finalY;
 
 	boolean swipeDone = false;
+	private BitmapTextureAtlas characterTextureAtlas2;
+	private TextureRegion character2;
+	
+	private DbHelper dbhelper;
 
 
 	// ===========================================================
@@ -150,50 +160,22 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		// TextureRegionFactory.extractTiledFromTexture(this.mPlayerTexture, 3,
 		// 4);
 		// this.mPlayerTexture.load();
-		
-        Intent intent = getIntent();
-		final ArrayList<Character> thePlayers = (ArrayList<Character>) intent.getSerializableExtra(ChooseCharacterActivity.THE_PLAYERS);
-		numCharacters = thePlayers.size();
 
-		String Player1Name= thePlayers.get(0).getName();
-		String Player2Name= "splash2.png";
-		String Player3Name= "splash2.png";
-		String Player4Name= "splash2.png";
-		
-		if(numCharacters >=2) Player2Name=thePlayers.get(1).getName();
-		if(numCharacters >=3) Player3Name=thePlayers.get(2).getName();
-		if(numCharacters >=4) Player4Name=thePlayers.get(3).getName();
-		
-		//Create all four character sprites
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		this.characterTextureAtlas = new BitmapTextureAtlas(
-				this.getTextureManager(), 1000, 1000, TextureOptions.BILINEAR);
+				this.getTextureManager(), 512, 512, TextureOptions.BILINEAR);
 		this.character = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(characterTextureAtlas, this, NameToImageName(Player1Name), 0,
+				.createFromAsset(characterTextureAtlas, this, "splash2.png", 0,
 						0);
 		;
 		this.characterTextureAtlas.load();
 		this.characterTextureAtlas2 = new BitmapTextureAtlas(
 				this.getTextureManager(), 1000, 1000, TextureOptions.BILINEAR);
 		this.character2 = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(characterTextureAtlas2, this, NameToImageName(Player2Name),
+				.createFromAsset(characterTextureAtlas2, this, "engineer.png",
 						0, 0);
 		;
 		this.characterTextureAtlas2.load();
-//		this.characterTextureAtlas3 = new BitmapTextureAtlas(
-//				this.getTextureManager(), 1000, 1000, TextureOptions.BILINEAR);
-//		this.character3 = BitmapTextureAtlasTextureRegionFactory
-//				.createFromAsset(characterTextureAtlas3, this, NameToImageName(Player3Name),
-//						0, 0);
-//		;
-//		this.characterTextureAtlas3.load();
-//		this.characterTextureAtlas4 = new BitmapTextureAtlas(
-//				this.getTextureManager(), 1000, 1000, TextureOptions.BILINEAR);
-//		this.character4 = BitmapTextureAtlasTextureRegionFactory
-//				.createFromAsset(characterTextureAtlas4, this, NameToImageName(Player4Name),
-//						0, 0);
-//		;
-//		this.characterTextureAtlas4.load();
 
 		// Pause Assets
 		this.mFaceTexture = new AssetBitmapTexture(this.getTextureManager(),
@@ -220,6 +202,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		this.mMainMenuTextureRegion = TextureRegionFactory
 				.extractFromTexture(this.mMainMenuTexture);
 		this.mMainMenuTexture.load();
+		
+		this.mSaveTexture = new AssetBitmapTexture(this.getTextureManager(), this.getAssets(), "gfx/save.png", TextureOptions.BILINEAR);
+		this.mSaveTextureRegion = TextureRegionFactory.extractFromTexture(this.mSaveTexture);
+		this.mSaveTexture.load();
 
 		// UI Fonts
 		final ITexture fontTexture = new EmptyTexture(this.getTextureManager(),
@@ -243,24 +229,9 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		this.mStrokeFontLarge.load();
 
 	}
-	
-	public String NameToImageName(String name){
-		String finalString="";
-		if (name.compareTo("Athlete")==0){
-			finalString="athlete.png";
-		}else if(name.compareTo("Engineer")==0){
-			finalString="engineer.png";
-		}else if(name.compareTo("Gradugator")==0){
-			finalString="splash2.png";
-		}
-		return finalString;
-	}
 
 	@Override
 	public Scene onCreateScene() {
-		Intent intent = getIntent();
-		final ArrayList<Character> thePlayers = (ArrayList<Character>) intent.getSerializableExtra(ChooseCharacterActivity.THE_PLAYERS);
-		
 		this.mEngine.registerUpdateHandler(new FPSLogger());
 
 		final Scene scene = new Scene();
@@ -272,24 +243,15 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		 */
 		final VertexBufferObjectManager vertexBufferObjectManager = this
 				.getVertexBufferObjectManager();
-		
-		String Player1Name= thePlayers.get(0).getName();
-		String Player2Name= "";
-		String Player3Name= "";
-		String Player4Name= "";
-		
-		if(numCharacters >=2) Player2Name=thePlayers.get(1).getName();
-		if(numCharacters >=3) Player3Name=thePlayers.get(2).getName();
-		if(numCharacters >=4) Player4Name=thePlayers.get(3).getName();
 
-		final Text textStroke1 = new Text(80, 300, this.mStrokeFont,
-				Player1Name   +"\nCredits: ", vertexBufferObjectManager);
+		final Text textStroke1 = new Text(100, 300, this.mStrokeFont,
+				"[Player 1 Name]\nCredits: ", vertexBufferObjectManager);
 		final Text textStroke2 = new Text(400, 300, this.mStrokeFont,
-				Player2Name   +"\nCredits: ", vertexBufferObjectManager);
-		final Text textStroke3 = new Text(80, 20, this.mStrokeFont,
-				Player3Name   +"\nCredits: ", vertexBufferObjectManager);
-		final Text textStroke4 = new Text(400, 20, this.mStrokeFont,
-				Player4Name   +"\nCredits: ", vertexBufferObjectManager);
+				"[Player 2 Name]\nCredits: ", vertexBufferObjectManager);
+		final Text textStroke3 = new Text(100, 50, this.mStrokeFont,
+				"[Player 3 Name]\nCredits: ", vertexBufferObjectManager);
+		final Text textStroke4 = new Text(400, 50, this.mStrokeFont,
+				"[Player 4 Name]\nCredits: ", vertexBufferObjectManager);
 
 		/*
 		 * To update text, use [text].setText("blah blah"); In which "blah blah"
@@ -379,7 +341,39 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		};
 		this.mPauseScene.registerTouchArea(mainMenuButton);
 		this.mPauseScene.attachChild(mainMenuButton);
-
+		
+		
+		//Create "save" button
+		
+		final Sprite saveButton = new Sprite(cX + (CAMERA_WIDTH / 10), cY
+				+ (CAMERA_HEIGHT / 6), this.mSaveTextureRegion,
+				this.getVertexBufferObjectManager()) {
+			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
+				switch (touchEvent.getAction()) {
+				case TouchEvent.ACTION_DOWN:
+					//update database here
+					addGameSave();
+					mHUD.clearChildScene();
+					scene.setIgnoreUpdate(false);
+					//save to database
+					break;
+				case TouchEvent.ACTION_MOVE:
+					break;
+				case TouchEvent.ACTION_UP:
+					break;
+				}
+				return true;
+			};
+		};
+		this.mPauseScene.registerTouchArea(saveButton);
+		this.mPauseScene.attachChild(saveButton);
+		
+		//Save game screen //up to 10 game saves, notify player that least recent will be lost if save is pressed
+		
+		
+		//update the database with the current data here
+		//update row
+		
 		/* Makes the paused Game look through. */
 		this.mPauseScene.setBackgroundEnabled(false);
 
@@ -404,11 +398,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 			};
 		};
 
-		
 		mHUD.attachChild(textStroke1);
-		if(numCharacters >=2) mHUD.attachChild(textStroke2);
-		if(numCharacters >=3) mHUD.attachChild(textStroke3);
-		if(numCharacters >=4) mHUD.attachChild(textStroke4);
+		mHUD.attachChild(textStroke2);
+		mHUD.attachChild(textStroke3);
+		mHUD.attachChild(textStroke4);
 
 		mHUD.registerTouchArea(button);
 		mHUD.attachChild(button);
@@ -457,6 +450,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		turnDone = false;
 		turnNum = 1;
 		ranNumb = 1 + (int) (Math.random() * ((6 - 1) + 1));
+		numCharacters = 2;
 
 		scene.attachChild(this.mTMXTiledMap);
 
@@ -466,8 +460,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				this.mTMXTiledMap.getHeight());
 		this.mCamera.setBoundsEnabled(true);
 
-		final float centerX = (7+1) * (32) - 16; // minus 16 for image alignment
-		final float centerY = (7+1) * (32) - 10; // minus 10 for image alignment
+		final float centerX = 8 * (32) - 16; // minus 16 for image alignment
+		final float centerY = 13 * (32) - 10; // minus 10 for image alignment
 		currentX = centerX;
 		currentY = centerY;
 		currentX2 = centerX + 32;
@@ -815,6 +809,18 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				});
 			}
 		}
+		
+		numTurns++;
+		if((numTurns/numCharacters)==1)
+		{
+			//create database//after any kind of movement is done
+			//create new row 
+		}
+		else if(numTurns%numCharacters == 0)
+		{
+			//update database
+			//update rows with gameId
+		}
 	}
 
 	// Checks the hot spots for the minigames
@@ -860,6 +866,57 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	public void onClick(View view) {
 		Intent intent = new Intent(this, MainActivity.class);
 		startActivity(intent);
+	}
+	
+	public void addGameSave(){
+		Intent intent = getIntent();
+		ArrayList<Character> thePlayers = (ArrayList<Character>) intent.getSerializableExtra(ChooseCharacterActivity.THE_PLAYERS); 
+		
+		int numPlayers = thePlayers.size();
+		
+		int maxSaves=5;
+		//open database
+		
+    	int keyInt;
+    	dbhelper = new DbHelper(this);
+        SQLiteDatabase db = dbhelper.openDB();
+     
+        
+//        String[] values = {Integer.toString(numPlayers), Integer.toString(numTurns%numCharacters)};//number of players, current player
+//        Cursor c = db.rawQuery("SELECT MAX(id) FROM games;", null);
+//        keyInt = Integer.parseInt((c.getString(c.getColumnIndex("id")))) +1 ;//game index starts at 0
+//        if (keyInt >= maxSaves)
+//        {
+//        	keyInt=keyInt%maxSaves;
+//        	String[] key = {Integer.toString(keyInt)};
+//        	dbhelper.updateRow(1, key, values);
+//        }
+        
+        //else insert new row(s)
+        String key = "1"; //Integer.toString(Integer.parseInt(c.getString(c.getColumnIndex("id"))) + 1);
+        String[] values1 = {key, Integer.toString(numCharacters), Integer.toString(numTurns%numCharacters)};
+        
+        //to insert: case 1, 3, 
+        //insert 1 row into table 1
+        dbhelper.insertRow(1, values1);
+        
+        //insert numPlayers rows into table 3
+        for (int i = 1; i <= numPlayers; i++)
+        {
+        	String[] newCharacter = {"1", Integer.toString(i), Integer.toString(i), "0", "0", "0"};
+        	dbhelper.insertRow(3, newCharacter );
+        }
+        
+        //Close Database
+        Log.d("TEST", "stopped before db.close");
+        db.close();
+        Log.d("TEST", "stopped after db.close");
+        dbhelper.close();
+        Log.d("TEST", "Database has been closed");
+	}
+	
+	public void updateGameSave(){
+		
 	}
 
 	@Override

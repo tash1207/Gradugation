@@ -1,5 +1,6 @@
 package com.gradugation;
 
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -9,6 +10,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.content.Intent;
@@ -21,6 +23,8 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
 public class ChooseCharacterActivity extends BaseActivity {
 
@@ -98,11 +102,13 @@ public class ChooseCharacterActivity extends BaseActivity {
     }
         
         public void startGame(View view) {
+        	//createDatabase();
+        	//create database entry for current game here
             Intent intent = new Intent(this, MainGameScreen.class);
             intent.putExtra(THE_PLAYERS, (Serializable)thePlayers);
             startActivity(intent);
         }
-
+        
         @Override
         public boolean onCreateOptionsMenu(Menu menu) {
                 // Inflate the menu; this adds items to the action bar if it is present.

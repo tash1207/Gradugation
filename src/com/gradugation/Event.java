@@ -1,5 +1,7 @@
 package com.gradugation;
 
+import java.io.Serializable;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
@@ -110,8 +112,8 @@ public class Event {
 		return mapEndLocation.mapToSprite();
 	}
 	
-	public static void getEvent(SpriteCoordinate coordinate, 
-			boolean gameDone, boolean move, Activity context) {
+	public static void getEvent(SpriteCoordinate coordinate, boolean doneSwiping, 
+		boolean gameDone, boolean move, Activity context, String characterName) {
 		
 		if (GRADUATION.isEqual(coordinate) && !gameDone && !move) {
 			//graduate!
@@ -130,6 +132,7 @@ public class Event {
 		} else if (WHACK_AFLYER_MINI_GAME.isEqual(coordinate) && !gameDone && !move) {
 			// call whack a flyer
 			Intent intent = new Intent(context, WhackAFlyerMiniGame.class);
+			intent.putExtra(ChooseCharacterActivity.THE_PLAYERS, (Serializable)characterName);
 			context.startActivity(intent);
 		} else if (COLOR_MINI_GAME.isEqual(coordinate) && !gameDone && !move) {
 			// call colors

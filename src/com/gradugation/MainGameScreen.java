@@ -654,28 +654,32 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 					characterCoordinates[thisCurrent].setX(mySprite.getX());
 					characterCoordinates[thisCurrent].setY(mySprite.getY());
 					super.onModifierFinished(pItem);
+					
 					//if (characterCoordinates[thisCurrent].compareTo(newOffset) == 0) {
 						movementCount--;
 					//}
 					if (movementCount == 0) {
 						
-						checkMiniGameHotSpots(characterCoordinates[thisCurrent]);
+						checkMiniGameHotSpots(thisCurrent);
 						swipeDone = false;
 						turnDone = true;
 					}
-	
+
 				}
 			});
 		}
 	}
 
 	// Checks the hot spots for the minigames
-	protected void checkMiniGameHotSpots(SpriteCoordinate spriteCoord) {
+	protected void checkMiniGameHotSpots(int current) {
 
-		if (!eventCompleted) {
+		/*if (!eventCompleted) {
 			Event.getEvent(spriteCoord, gameDone, move, this);
 			eventCompleted = true;
-		}
+		}*/
+		
+		Event.getEvent(characterCoordinates[current], true, gameDone, move,
+				this, NameToImageName(characterNames[current]));
 		
 		if (!(move || gameDone)) {
 			gameDone = true;

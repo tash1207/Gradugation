@@ -69,25 +69,91 @@ public class Event {
 					mapEndLocation.setY(11);
 					mapEndLocation.setX(4);
 				} else if (mapStartLocation.getY() == 7) {
-					mapEndLocation = mapStartLocation;
+					// move left
+					mapEndLocation.setY(7);
+					mapEndLocation.setX(2);
 				}
 			} else if (mapStartLocation.getX() == 4.0) {
-				mapEndLocation = mapStartLocation;
-			} else if (mapStartLocation.getX() == 5.0) {
-				if (mapStartLocation.getY() >= 4 && mapEndLocation.getY() > 7) {
-					// move left instead
+				if (mapStartLocation.getY() == 7) {
+					// move left
 					mapEndLocation.setY(7);
 					mapEndLocation.setX(3);
-				} else  {
-					mapEndLocation = mapStartLocation;
+				} else if (mapStartLocation.getY() == 11) {
+					// move right
+					mapEndLocation.setY(11);
+					mapEndLocation.setX(5);
 				}
-					
+			} else if (mapStartLocation.getX() == 5.0) {
+				if (mapStartLocation.getY() <= 7 && mapEndLocation.getY() > 7) {
+					// move left instead, eventually ask if they want to go L or R
+					mapEndLocation.setY(7);
+					mapEndLocation.setX(3);
+				} else  if (mapStartLocation.getY() == 11){
+					// move right
+					mapEndLocation.setY(11);
+					mapEndLocation.setX(6);
+				}		
 			} else if (mapStartLocation.getX() == 6.0) {
+				if (mapStartLocation.getY() == 4 || mapStartLocation.getY() == 7) {
+					// move left
+					mapEndLocation.setY(mapStartLocation.getY());
+					mapEndLocation.setX(5);
+				} else if (mapStartLocation.getY() == 11) {
+					// move right
+					mapEndLocation.setY(11);
+					mapEndLocation.setX(7);
+				}
 			} else if (mapStartLocation.getX() == 7.0) {
+				if ((mapStartLocation.getY() <= 4 && mapEndLocation.getY() > 4) ||
+						(mapStartLocation.getY() <= 7 && mapEndLocation.getY() > 7)) {
+					// move left
+					mapEndLocation.setY(mapStartLocation.getY());
+					mapEndLocation.setX(6);
+				} else if (mapStartLocation.getY() >= 11 && mapEndLocation.getY() > 12) {
+					// move right
+					mapEndLocation.setY(12);
+					mapEndLocation.setX(8);
+				}
 			} else if (mapStartLocation.getX() == 8.0) {
+				if (mapStartLocation.getY() == 3 || mapStartLocation.getY() == 7) {
+					// move left
+					mapEndLocation.setY(mapStartLocation.getY());
+					mapEndLocation.setX(7);
+				} else if (mapStartLocation.getY() == 11) {
+					// move right
+					mapEndLocation.setY(11);
+					mapEndLocation.setX(9);
+				}
 			} else if (mapStartLocation.getX() == 9.0) {
+				if (mapStartLocation.getY() == 12) {
+					// move right
+					mapEndLocation.setY(12);
+					mapEndLocation.setX(10);
+				} else if (mapEndLocation.getY() > 7) {
+					// move left
+					mapEndLocation.setY(7);
+					mapEndLocation.setX(8);
+				}
 			} else if (mapStartLocation.getX() == 10.0) {
+				if (mapStartLocation.getY() == 1) {
+					// move left
+					mapEndLocation.setY(1);
+					mapEndLocation.setX(9);
+				} else if (mapStartLocation.getY() == 12) {
+					// move right
+					mapEndLocation.setY(12);
+					mapEndLocation.setX(11);
+				}
 			} else if (mapStartLocation.getX() == 11.0) {
+				if (mapStartLocation.getY() == 1) {
+					// move left
+					mapEndLocation.setY(1);
+					mapEndLocation.setX(10);
+				} else if (mapEndLocation.getY() > 12) {
+					// move down
+					mapEndLocation.setY(11);
+					mapEndLocation.setX(11);
+				}
 			} else if (mapStartLocation.getX() == 12.0) {
 			} else if (mapStartLocation.getX() == 13.0) {
 			} else if (mapStartLocation.getX() == 14.0) {

@@ -1,12 +1,20 @@
 package com.gradugation;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.util.Scanner;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
 
 import com.coordinates.MapCoordinate;
+import com.coordinates.MapSet;
 import com.coordinates.MiniGameCoordinate;
 import com.coordinates.SpriteCoordinate;
 
@@ -40,11 +48,37 @@ public class Event {
 	private final static MiniGameCoordinate COLOR_MINI_GAME = new MiniGameCoordinate(PSYCHOLOGY_BUILDING);
 	private final static MiniGameCoordinate FOOD_MINI_GAME = new MiniGameCoordinate(FOOD_SCIENCE);
 	
-	
+	private MapSet mapPath = new MapSet() ;
+
 	//public void method for each event, use switch case for each eventID
 	//eventID 0 - do nothing, 1 - lose a turn? depends on turn mechanics - maybe do something else, 2 - pick up an item
 	
 	public Event() {
+	}
+	
+	public Event(Activity context, int resId) {
+		try {
+			InputStream inputStream = context.getResources().openRawResource(resId);
+		    InputStreamReader inputreader = new InputStreamReader(inputStream);
+		    BufferedReader buffreader = new BufferedReader(inputreader);
+		    
+		    String[] rowCol = buffreader.readLine().split(" ");
+		    int rowDim = Integer.parseInt(rowCol[0]);
+			int colDim = Integer.parseInt(rowCol[1]);
+			
+			for (int i = 0; i < rowDim; i++) {
+				String mapText = buffreader.readLine();//sc.nextLine();
+				for (int j = 0; j < colDim; j++) {
+					if (mapText.charAt(j) == 'X') {
+						mapPath.add(new MapCoordinate(i,j));
+						Log.d("Coordinate", i+","+j);
+					}
+				}
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	
@@ -54,126 +88,7 @@ public class Event {
 		
 		float yDifference = offset.getY() - coordinate.getY();
 		float xDifference = offset.getX() - coordinate.getX();
-		Log.d("xdiff, ydiff", xDifference + ", " + yDifference);
-		if (yDifference >= 32) {
-			// swiping up
-			if (mapStartLocation.getX() == 2.0) {
-				if (mapEndLocation.getY() > 9) {
-					// move right instead
-					mapEndLocation.setY(9);
-					mapEndLocation.setX(3);
-				}
-			} else if (mapStartLocation.getX() == 3.0) {
-				if (mapStartLocation.getY() >= 9.0 && mapEndLocation.getY() > 11 ) {
-					// move right instead
-					mapEndLocation.setY(11);
-					mapEndLocation.setX(4);
-				} else if (mapStartLocation.getY() == 7) {
-					// move left
-					mapEndLocation.setY(7);
-					mapEndLocation.setX(2);
-				}
-			} else if (mapStartLocation.getX() == 4.0) {
-				if (mapStartLocation.getY() == 7) {
-					// move left
-					mapEndLocation.setY(7);
-					mapEndLocation.setX(3);
-				} else if (mapStartLocation.getY() == 11) {
-					// move right
-					mapEndLocation.setY(11);
-					mapEndLocation.setX(5);
-				}
-			} else if (mapStartLocation.getX() == 5.0) {
-				if (mapStartLocation.getY() <= 7 && mapEndLocation.getY() > 7) {
-					// move left instead, eventually ask if they want to go L or R
-					mapEndLocation.setY(7);
-					mapEndLocation.setX(3);
-				} else  if (mapStartLocation.getY() == 11){
-					// move right
-					mapEndLocation.setY(11);
-					mapEndLocation.setX(6);
-				}		
-			} else if (mapStartLocation.getX() == 6.0) {
-				if (mapStartLocation.getY() == 4 || mapStartLocation.getY() == 7) {
-					// move left
-					mapEndLocation.setY(mapStartLocation.getY());
-					mapEndLocation.setX(5);
-				} else if (mapStartLocation.getY() == 11) {
-					// move right
-					mapEndLocation.setY(11);
-					mapEndLocation.setX(7);
-				}
-			} else if (mapStartLocation.getX() == 7.0) {
-				if ((mapStartLocation.getY() <= 4 && mapEndLocation.getY() > 4) ||
-						(mapStartLocation.getY() <= 7 && mapEndLocation.getY() > 7)) {
-					// move left
-					mapEndLocation.setY(mapStartLocation.getY());
-					mapEndLocation.setX(6);
-				} else if (mapStartLocation.getY() >= 11 && mapEndLocation.getY() > 12) {
-					// move right
-					mapEndLocation.setY(12);
-					mapEndLocation.setX(8);
-				}
-			} else if (mapStartLocation.getX() == 8.0) {
-				if (mapStartLocation.getY() == 3 || mapStartLocation.getY() == 7) {
-					// move left
-					mapEndLocation.setY(mapStartLocation.getY());
-					mapEndLocation.setX(7);
-				} else if (mapStartLocation.getY() == 11) {
-					// move right
-					mapEndLocation.setY(11);
-					mapEndLocation.setX(9);
-				}
-			} else if (mapStartLocation.getX() == 9.0) {
-				if (mapStartLocation.getY() == 12) {
-					// move right
-					mapEndLocation.setY(12);
-					mapEndLocation.setX(10);
-				} else if (mapEndLocation.getY() > 7) {
-					// move left
-					mapEndLocation.setY(7);
-					mapEndLocation.setX(8);
-				}
-			} else if (mapStartLocation.getX() == 10.0) {
-				if (mapStartLocation.getY() == 1) {
-					// move left
-					mapEndLocation.setY(1);
-					mapEndLocation.setX(9);
-				} else if (mapStartLocation.getY() == 12) {
-					// move right
-					mapEndLocation.setY(12);
-					mapEndLocation.setX(11);
-				}
-			} else if (mapStartLocation.getX() == 11.0) {
-				if (mapStartLocation.getY() == 1) {
-					// move left
-					mapEndLocation.setY(1);
-					mapEndLocation.setX(10);
-				} else if (mapEndLocation.getY() > 12) {
-					// move down
-					mapEndLocation.setY(11);
-					mapEndLocation.setX(11);
-				}
-			} else if (mapStartLocation.getX() == 12.0) {
-			} else if (mapStartLocation.getX() == 13.0) {
-			} else if (mapStartLocation.getX() == 14.0) {
-			} else if (mapStartLocation.getX() == 15.0) {
-			} else if (mapStartLocation.getX() == 16.0) {
-			} else if (mapStartLocation.getX() == 17.0) {
-			} else if (mapStartLocation.getX() == 18.0) {
-			} else if (mapStartLocation.getX() == 19.0) {
-			} else if (mapStartLocation.getX() == 20.0) {
-			} else if (mapStartLocation.getX() == 21.0) {
-			} else if (mapStartLocation.getX() == 22.0) {
-			} else if (mapStartLocation.getX() == 23.0) {
-			}
-		} else if (yDifference <= -32) {
-			// swiping down
-		} else if (xDifference >= 32) {
-			// swiping right
-		} else if (xDifference <= -32) {
-			// swiping left
-		}
+
 		
 		return mapEndLocation.mapToSprite();
 	}

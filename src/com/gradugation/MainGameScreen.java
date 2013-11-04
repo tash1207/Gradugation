@@ -67,6 +67,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	
 	//private static final int MAX_CHARACTER_MOVEMENT = 3;
 	private static final int CHARACTER_WIDTH = 32;
+	private static final String MAP_NAME = "map_text_file.txt";
 
 	// ===========================================================
 	// Fields
@@ -97,6 +98,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 	private CameraScene mPauseScene;
 	private Scene scene;
+	private Event mainMapEvent;
 
 	private HUD mHUD;
 
@@ -152,11 +154,14 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		return new EngineOptions(true, ScreenOrientation.LANDSCAPE_SENSOR,
 				new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT),
 				this.mCamera);
+		
+		
 	}
 
 	@Override
 	public void onCreateResources() throws IOException {
-		
+		mainMapEvent = new Event(this, R.raw.map_text_file);
+
         Intent intent = getIntent();
 		thePlayers = (ArrayList<Character>) intent.getSerializableExtra(ChooseCharacterActivity.THE_PLAYERS);
 		numCharacters = thePlayers.size();

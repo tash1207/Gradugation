@@ -311,7 +311,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	                return true;
 	        };
 		};
-		diceButton.setScale((float) .7);
+		diceButton.setScale((float) .5);
 
 		// Load the Pause Scene
 		this.mPauseScene = new CameraScene(this.mCamera);

@@ -66,12 +66,11 @@ public class Event {
 		    int rowDim = Integer.parseInt(rowCol[0]);
 			int colDim = Integer.parseInt(rowCol[1]);
 			
-			for (int i = 0; i < rowDim; i++) {
+			for (int y = rowDim-1; y >= 0; y--) {
 				String mapText = buffreader.readLine();//sc.nextLine();
-				for (int j = 0; j < colDim; j++) {
-					if (mapText.charAt(j) == 'X') {
-						mapPath.add(new MapCoordinate(i,j));
-						Log.d("Coordinate", i+","+j);
+				for (int x = 0; x < colDim; x++) {
+					if (mapText.charAt(x) == 'X') {
+						mapPath.add(new MapCoordinate(x,y));
 					}
 				}
 			}
@@ -82,14 +81,16 @@ public class Event {
 	}
 	
 	
-	public static SpriteCoordinate checkBoundaries(SpriteCoordinate coordinate, SpriteCoordinate offset) {
+	public SpriteCoordinate checkBoundaries(SpriteCoordinate coordinate, SpriteCoordinate offset) {
 		MapCoordinate mapEndLocation = offset.spriteToMap();
 		MapCoordinate mapStartLocation = coordinate.spriteToMap();
 		
 		float yDifference = offset.getY() - coordinate.getY();
 		float xDifference = offset.getX() - coordinate.getX();
 
-		
+		if (!mapPath.contains(mapEndLocation)) {
+			return coordinate;
+		}
 		return mapEndLocation.mapToSprite();
 	}
 	

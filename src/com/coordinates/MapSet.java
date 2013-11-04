@@ -4,9 +4,6 @@ import java.util.HashSet;
 
 public class MapSet extends HashSet<String> {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	public MapSet() {

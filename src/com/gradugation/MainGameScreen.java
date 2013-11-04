@@ -638,7 +638,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 			
 			offset = offset.add(characterCoordinates[thisCurrent]);
 			
-			offset = Event.checkBoundaries(characterCoordinates[currentCharacter], offset);
+			offset = this.mainMapEvent.checkBoundaries(characterCoordinates[currentCharacter], offset);
 
 			mySprite.registerEntityModifier(new MoveModifier(0.5f,
 					characterCoordinates[thisCurrent].getX(), characterCoordinates[thisCurrent].getY(),

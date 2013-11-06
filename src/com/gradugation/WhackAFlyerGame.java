@@ -1,6 +1,7 @@
 package com.gradugation;
 
 import java.io.IOException;
+import java.util.HashSet;
 
 import org.andengine.engine.camera.BoundCamera;
 import org.andengine.engine.camera.Camera;
@@ -39,12 +40,14 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
     private static final int CAMERA_WIDTH = 480;
     private static final int CAMERA_HEIGHT = 320;
     private static final int MAX_NUMBER_OF_FLYERS = 4;
-    private static final int MAX_TIME_DELAY_FOR_FLYER = 5;
-    private static final int MIN_TIME_DELAY_FOR_FLYER = 2;
-    private static final float MAX_SPAWN_DELAY = 4;
+    private static final float MAX_TIME_DELAY_FOR_FLYER = 3;
+    private static final float MIN_TIME_DELAY_FOR_FLYER = .25f;
+    private static final float MAX_SPAWN_DELAY = 1;
     private static final float MIN_SPAWN_DELAY = .5f;
-    private static final int POINTS_REQUIRED = 8;
+    private static final int POINTS_REQUIRED = 25;
     private static final int CREDITS_EARNED = 3;
+    private HashSet<Float> xLocTaken = new HashSet<Float>();
+    private HashSet<Float> yLocTaken = new HashSet<Float>();
     
     // Need handler for callbacks to the UI thread
     final Handler mHandler = new Handler();
@@ -182,6 +185,7 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
     }
     
     public void updateResultsInUi() {
+    	try {
     	this.mEngine.getScene().registerUpdateHandler(new IUpdateHandler () {
             @Override
             public void reset() { }
@@ -229,7 +233,10 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
         });
         
         AlertDialog dialog = builder.create();
-        dialog.show();
+        dialog.show();}
+    	catch (Exception e) {
+    		Log.d("ERROR", "FIND THIS:" + e.getMessage());
+    	}
     }
     
     private Sprite createSprite(float pX, float pY, ITextureRegion spriteTexture) {
@@ -273,33 +280,38 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
     }
     private void createFlyerDestroyTimeHandler(Sprite sprite) {
         final Sprite spriteToRemove = sprite;
-        final int timeToKeepFlyer = MathUtils.random(MIN_TIME_DELAY_FOR_FLYER,
+        final float timeToKeepFlyer = MathUtils.random(MIN_TIME_DELAY_FOR_FLYER,
                                                      MAX_TIME_DELAY_FOR_FLYER);
         this.getEngine().registerUpdateHandler(new TimerHandler(timeToKeepFlyer,
                 new ITimerCallback() {
             @Override
             public void onTimePassed(TimerHandler pTimerHandler) {
                 removeSprite(spriteToRemove);
+                xLocTaken.remove(spriteToRemove.getX());
+                yLocTaken.remove(spriteToRemove.getY());
                 
             } 
         }));
     }
 
     private void createFlyerSpawnTimeHandler() {
-        float xPos, yPos = MathUtils.random(0, CAMERA_HEIGHT-32.0f);
-        yPos = 32.0f * (int)(yPos / 32);
+        float xPos,yPos;
+        
+        do {
+	        xPos = MathUtils.random(0, CAMERA_WIDTH-32.0f); 
+	    	yPos = MathUtils.random(0, CAMERA_HEIGHT-32.0f);
+	        //xPos = (int)xPos / 32;
+	        //yPos = (int)yPos / 32;
+        } while (yLocTaken.contains(xPos) || xLocTaken.contains(yPos));
+
+        yLocTaken.add(yPos);
+        xLocTaken.add(xPos);
+
         final int imgPos = MathUtils.random(MAX_NUMBER_OF_FLYERS);
-            
-        if (imgPos < MAX_NUMBER_OF_FLYERS / 2) {
-            // image is for the right side of the board
-            xPos = CAMERA_WIDTH - 32.0f;
-        } else {
-            // image is for the left side of the board
-            xPos = 20;
-        }
                    
         if (!finished && gameStarted) {
         	Sprite spriteCreated = createSprite(xPos, yPos, flyers[imgPos]);
+        	
         	createFlyerDestroyTimeHandler(spriteCreated);
         }
     }
@@ -307,7 +319,7 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
     private void gameFinished() {
         finished = true;
         if (this.points >= POINTS_REQUIRED) {
-            Toast.makeText(WhackAFlyerGame.this, getString(R.string.whack_aflyer_success, this.points, 
+            Toast.makeText(WhackAFlyerGame.this, getString(R.string.whack_aflyer_success, this.points,
                     CREDITS_EARNED), Toast.LENGTH_LONG).show();
             // Code to add CREDITS_EARNED number of credits to the character
         }

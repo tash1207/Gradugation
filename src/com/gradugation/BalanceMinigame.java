@@ -59,7 +59,4 @@ public class BalanceMinigame extends SimpleBaseGameActivity {
 		
 		return scene;
 	}
-	private void addFloor(){
-		
-	}
 }

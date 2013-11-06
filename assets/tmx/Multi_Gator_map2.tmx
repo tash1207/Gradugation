@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="25" height="15" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="grass-tiles-2-small" tilewidth="32" tileheight="32">
+  <image source="tileset/grass-tiles-2-small.png" width="384" height="192"/>
+ </tileset>
+ <tileset firstgid="73" name="qubodup-bush_berries_0" tilewidth="32" tileheight="32">
+  <image source="tileset/qubodup-bush_berries_0.png" width="32" height="32"/>
+ </tileset>
+ <tileset firstgid="74" name="Library west" tilewidth="32" tileheight="32">
+  <image source="tileset/Library west.png" trans="ffffff" width="64" height="64"/>
+ </tileset>
+ <tileset firstgid="78" name="Stadium" tilewidth="32" tileheight="32">
+  <image source="tileset/Stadium.png" trans="ffffff" width="64" height="64"/>
+ </tileset>
+ <tileset firstgid="82" name="O'Connell Center" tilewidth="32" tileheight="32">
+  <image source="tileset/O'Connell Center.png" trans="ffffff" width="64" height="64"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="25" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA4WUwQoDMQhE1bt+TA/tsbD9/3/qFhIYXpQeJLuJjjpOkmbmt8VtuVZf3y57tb4TvrXM8a/7tc7UXPC2vQU3GnziuuwzbuPvM82nPgWcgq/mzCZvIU/aWW+HHQ3+1GvaWU+XX3ne/srDNDe3s5YOX+MTuagPB7bWovvEohYT+Mo9Z9/x/69WngVif+tlvV60L2qWvU0ch+T6NH25nZxQ0wFfRxzvZncvqsGf5jndHeXxAZ6oU609gB3IzXfiedsLMRM+34qwc17dXC70pZzwfSB+p0fWN72bvCdlJzdat2qF2v8C8Fg1cNwFAAA=
+  </data>
+ </layer>
+ <layer name="path" width="25" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA91TMRIAIAjyEf7/ra0NwIHVEncuHgpqVf2PBvG6Zwsu4jCNxIPyxjxOPbh5xFP+nDuxOVAt03d6MbgzJvwbGukbT3e116RQvtxcojXVTTQm+ztF8k8Wu9foONwFAAA=
+  </data>
+ </layer>
+ <layer name="Tile Layer 2" width="25" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA2NgGDjgB8T+JOrxAmJvPPJBQByMxA8A4kA86j2hGBn4ALEvHj0hQByKR54YO8hRQ6keethBKcBlH7l+JcUsatpBTzAU0w49wo1Wdgw2t3syYE+LAOPCql3cBQAA
+  </data>
+ </layer>
+</map>

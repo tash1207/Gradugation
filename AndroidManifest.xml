@@ -15,8 +15,9 @@
         android:theme="@android:style/Theme.NoTitleBar" >
         <activity
             android:name="com.gradugation.MainActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="landscape" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,40 +25,52 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.gradugation.NewGameActivity"
-            android:label="@string/title_activity_new_game" >
+             android:name="com.gradugation.NewGameActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:label="@string/title_activity_new_game"
+            android:screenOrientation="landscape" >
         </activity>
         <activity
             android:name="com.gradugation.ChooseCharacterActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_choose_character"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="landscape" >
         </activity>
         <activity
             android:name="com.gradugation.HowToPlayActivity"
-            android:label="@string/title_activity_how_to_play" >
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:label="@string/title_activity_how_to_play"
+            android:screenOrientation="landscape" >
         </activity>
         <activity
             android:name="com.gradugation.SettingsActivity"
-            android:label="@string/title_activity_settings" >
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:label="@string/title_activity_settings"
+            android:screenOrientation="landscape" >
         </activity>
         <activity
             android:name="com.gradugation.MinigamesActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_minigames"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="landscape" >
         </activity>
         <activity
             android:name="com.gradugation.WiresMiniGame"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_wires_mini_game"
             android:screenOrientation="landscape" >
         </activity>
         <activity
             android:name="com.gradugation.ContinueActivity"
-            android:label="@string/title_activity_continue" >
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:label="@string/title_activity_continue"
+            android:screenOrientation="landscape" >
         </activity>
         <activity
             android:name="com.gradugation.BenchPressMinigame"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_bench_press_minigame"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="landscape" >
         </activity>
 
         <service android:name="com.gradugation.BackgroundMusicService" >
@@ -65,7 +78,8 @@
 
         <activity
             android:name="com.gradugation.MainGameScreen"
-            android:label="@string/title_activity_main_game_screen" >
+            android:label="@string/title_activity_main_game_screen"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
         </activity>
         <activity
             android:name="com.gradugation.BalanceMinigame"
@@ -73,7 +87,13 @@
         </activity>
         <activity
             android:name="com.gradugation.WhackAFlyerGame"
-            android:label="@string/title_activity_whack_aflyer" >
+            android:label="@string/title_activity_whack_aflyer"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
+        </activity>
+        <activity
+            android:name="com.gradugation.FoodMiniGame"
+            android:label="@string/title_activity_food_mini_game"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
         </activity>
     </application>
 

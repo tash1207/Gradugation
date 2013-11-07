@@ -3,20 +3,12 @@ package com.gradugation;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import com.gradugation.Character.characterType;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
-import android.content.Intent;
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.Menu;
 import android.view.View.OnClickListener;
-import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -46,7 +38,7 @@ public class ChooseCharacterActivity extends BaseActivity {
                 btnDisplay.setOnClickListener(new OnClickListener(){
                         public void onClick(View v){
                                 Intent intent = getIntent();
-                            int        numPlayers = intent.getIntExtra(NewGameActivity.NUMBER_OF_PLAYERS, 1);
+                                int numPlayers = intent.getIntExtra(NewGameActivity.NUMBER_OF_PLAYERS, 1);
                                 if (playersChosen > numPlayers-1){                                        
                                         startGame(v);
                                 }
@@ -61,7 +53,9 @@ public class ChooseCharacterActivity extends BaseActivity {
                                         thePlayers.add(thePlayer);
                                         
                                         
-                                        Toast.makeText(ChooseCharacterActivity.this,  "Player " + Integer.toString(playersChosen+1) + " is " + thePlayers.get(playersChosen).getName(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(ChooseCharacterActivity.this,  
+                                        		"Player " + Integer.toString(playersChosen+1) + " is " + 
+                                        		thePlayers.get(playersChosen).getName(), Toast.LENGTH_SHORT).show();
                                         playersChosen++;
                                         startGame(v);
                                 }
@@ -75,7 +69,9 @@ public class ChooseCharacterActivity extends BaseActivity {
                                         thePlayer.setName((String)radioGroup1Button.getText());
                                         thePlayers.add(thePlayer);
                                         
-                                        Toast.makeText(ChooseCharacterActivity.this,  "Player " + Integer.toString(playersChosen+1) + " is " + thePlayers.get(playersChosen).getName(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(ChooseCharacterActivity.this,  
+                                        		"Player " + Integer.toString(playersChosen+1) + " is " + 
+                                        		thePlayers.get(playersChosen).getName(), Toast.LENGTH_SHORT).show();
                                         playersChosen++;
                                 }
                         }
@@ -95,7 +91,11 @@ public class ChooseCharacterActivity extends BaseActivity {
                 if (isSoundOn) {
                         SongPlayer.playSong();
                 }
-    }
+        }
+        
+        public void btnBackClicked(View view) {
+        	super.onBackPressed();
+        }
         
         public void startGame(View view) {
             Intent intent = new Intent(this, MainGameScreen.class);

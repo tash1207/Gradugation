@@ -21,9 +21,10 @@
     <string name="how_to_play">How To Play</string>
     <string name="settings">Settings</string>
     <string name="minigames">Minigames</string>
-    <string name="how_many_players">How many players?</string>
+    <string name="how_many_players">How Many Players?</string>
     <string name="music_on">Music</string>
     <string name="okay">Okay</string>
+    <string name="back">Back</string>
     <string name="menu_settings">Settings</string>
 
     <!-- New Game -->
@@ -34,7 +35,7 @@
         <item>4</item> 
     </string-array>
     <!-- Choose Character -->
-    <string name="choose_character">Choose a character</string>
+    <string name="choose_character">Choose a Character</string>
     <string name="character_engineer">Engineer</string>
     <string name="character_athlete">Athlete</string>
     <string name="character_gradugator">Gradugator</string>

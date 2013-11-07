@@ -1,79 +1,90 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gator_blue"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin" >
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity" >
+
+    <TextView
+        android:id="@+id/choose_character_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="12dp"
+        android:text="@string/choose_character"
+        android:textColor="@color/gator_orange"
+        android:textSize="@dimen/header_text_size" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/choose_character_text" >
+
+        <RadioButton
+            android:id="@+id/radio0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:drawableRight="@drawable/athlete"
+            android:text="@string/character_athlete" />
+
+        <RadioButton
+            android:id="@+id/radio1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/engineer"
+            android:text="@string/character_engineer" />
+
+        <RadioButton
+            android:id="@+id/radio2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/ic_launcher"
+            android:text="@string/character_gradugator" />
+    </RadioGroup>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#2040B8"
-        android:orientation="vertical"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        tools:context=".MainActivity" >
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal" >
 
-        <TextView
-            android:id="@+id/gradugation_text"
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/btn_back"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/app_name"
-            android:textColor="#E67022"
-            android:textSize="48sp" />
+            android:layout_marginTop="40dp"
+            android:layout_weight="1"
+            android:background="@drawable/button_rectangle_orange"
+            android:minHeight="55dp"
+            android:onClick="btnBackClicked"
+            android:padding="14dp"
+            android:text="@string/back"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/choose_character_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:layout_marginTop="28dp"
-            android:text="@string/choose_character"
-            android:textColor="@color/gator_orange"
-            android:textSize="36sp" />
-
-        <RadioGroup
-            android:id="@+id/radioGroup1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-
-            <RadioButton
-                android:id="@+id/radio0"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:drawableRight="@drawable/athlete"
-                android:text="@string/character_athlete" />
-
-            <RadioButton
-                android:id="@+id/radio1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableRight="@drawable/engineer"
-                android:text="@string/character_engineer" />
-
-            <RadioButton
-                android:id="@+id/radio2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableRight="@drawable/ic_launcher"
-                android:text="@string/character_gradugator" />
-        </RadioGroup>
+        <View
+            android:layout_width="12dp"
+            android:layout_height="0dp" />
 
         <Button
             android:id="@+id/btn_continue_game"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
+            android:layout_weight="1"
             android:background="@drawable/button_rectangle_orange"
+            android:minHeight="55dp"
             android:onClick="startGame"
             android:padding="14dp"
             android:text="@string/continue_game"
             android:textColor="@android:color/black"
             android:textSize="16sp" />
     </LinearLayout>
-</ScrollView>
+
+</RelativeLayout>

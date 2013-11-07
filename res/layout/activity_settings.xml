@@ -11,20 +11,20 @@
     tools:context=".MainActivity" >
 
     <TextView
-        android:id="@+id/gradugation_text"
+        android:id="@+id/settings_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="@string/app_name"
+        android:text="@string/menu_settings"
         android:textColor="#E67022"
         android:textSize="@dimen/header_text_size" />
 
     <TextView
-        android:id="@+id/how_many_player_text"
+        android:id="@+id/volume_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="27dp"
-        android:text="@string/settings"
+        android:text="@string/volume"
         android:textColor="#E67022"
         android:textSize="36sp" />
 

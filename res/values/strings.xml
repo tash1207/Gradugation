@@ -40,7 +40,11 @@
     <string name="character_engineer">Engineer</string>
     <string name="character_athlete">Athlete</string>
     <string name="character_gradugator">Gradugator</string>
-
+    
+    <string name="attributes_athlete">The athlete gets a credit bonus at the Stadium for the Bench Press Minigame</string>
+    <string name="attributes_engineer">The engineer gets a credit bonus at the Physics Building for the Wires Minigame</string>
+    <string name="attributes_gradugator">Gradugator gets a credit bonus in Turlington for the Whack-A-Flyer Minigame</string>
+    
     <!-- Minigames Screen -->
     <string name="wires">Wires</string>
     <string name="bench_press">Bench Press</string>

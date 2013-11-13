@@ -11,30 +11,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin" >
 
         <TextView
-            android:id="@+id/gradugation_text"
+            android:id="@+id/minigames_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/app_name"
-            android:textColor="@color/gator_orange"
-            android:textSize="48sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="27dp"
             android:text="@string/minigames"
-            android:textColor="#E67022"
-            android:textSize="36sp" />
+            android:textColor="@color/gator_orange"
+            android:textSize="@dimen/header_text_size" />
 
         <RelativeLayout
             android:id="@+id/minigame_wires_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="12dp"
+            android:layout_marginTop="12dp"
             android:background="@drawable/button_rectangle_orange"
             android:clickable="true"
             android:onClick="minigameWiresButtonClick"
@@ -65,7 +60,7 @@
             android:id="@+id/minigame_bench_press_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="12dp"
+            android:layout_marginTop="12dp"
             android:background="@drawable/button_rectangle_orange"
             android:clickable="true"
             android:onClick="minigameBenchPressButtonClick"
@@ -96,7 +91,7 @@
             android:id="@+id/minigame_whack_aflyer_press_button"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="12dp"
+            android:layout_marginTop="12dp"
             android:background="@drawable/button_rectangle_orange"
             android:clickable="true"
             android:onClick="minigameWhackAFlyerButtonClick"
@@ -111,7 +106,8 @@
                 android:contentDescription="@string/whack_aflyer"
                 android:src="@drawable/bricks" />
 
-            <TextView android:id="@+id/minigame_whack_aflyer_text"
+            <TextView
+                android:id="@+id/minigame_whack_aflyer_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -126,7 +122,7 @@
             android:id="@+id/minigame_food_press_button"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="12dp"
+            android:layout_marginTop="12dp"
             android:background="@drawable/button_rectangle_orange"
             android:clickable="true"
             android:onClick="minigameFoodButtonClick"
@@ -157,7 +153,7 @@
             android:id="@+id/minigame_color_game_button"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="12dp"
+            android:layout_marginTop="12dp"
             android:background="@drawable/button_rectangle_orange"
             android:clickable="true"
             android:onClick="minigameColorButtonClick"
@@ -188,7 +184,7 @@
             android:id="@+id/minigame_wait_in_line_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="12dp"
+            android:layout_marginTop="12dp"
             android:background="@drawable/button_rectangle_orange"
             android:clickable="true"
             android:onClick="minigameWaitInLineButtonClick"
@@ -203,7 +199,8 @@
                 android:contentDescription="@string/wait_in_line"
                 android:src="@drawable/hub" />
 
-            <TextView android:id="@+id/minigame_wait_in_line_text" 
+            <TextView
+                android:id="@+id/minigame_wait_in_line_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"

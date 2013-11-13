@@ -76,6 +76,7 @@
         <activity
             android:name=".WaitInLineMinigame"
             android:label="@string/title_activity_waitinline_minigame"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:screenOrientation="landscape" >
         </activity>
 

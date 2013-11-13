@@ -75,7 +75,7 @@ public class Event {
 				}
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			// problem reading a necessary file
 			e.printStackTrace();
 		}
 	}

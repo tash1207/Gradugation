@@ -5,7 +5,7 @@ _______XXXXX________X____
 ___XXXXX___X__XXXX__X____
 ___X_______XXXX__XXXXXXX_
 __XX_______X_____X_____X_
-__X________XXXXXXX_____X_
+__X____XXXXXXXXXXX_____X_
 __XXXXXXXX____X__X___XXX_
 _____X_XXX____X__X___X___
 _____X___X____X__XXXXX___

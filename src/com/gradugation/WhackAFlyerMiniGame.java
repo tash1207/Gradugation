@@ -1,6 +1,7 @@
 package com.gradugation;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import org.andengine.engine.camera.BoundCamera;
@@ -30,6 +31,7 @@ import org.andengine.util.math.MathUtils;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
@@ -102,12 +104,24 @@ public class WhackAFlyerMiniGame extends SimpleBaseGameActivity implements IOnSc
 
     @Override
     protected void onCreateResources() throws IOException {
+    	
+    	Intent intent = getIntent();
+    	String characterType = intent.getStringExtra("character_type");
+    	if (characterType == null) characterType = "Gradugator";
+    	String imgName = "splash2.png";
+    	if (characterType.equals("Athlete")) {
+    		imgName = "athlete.png";
+    	}
+    	else if (characterType.equals("Engineer")) {
+    		imgName = "engineer.png";
+    	}
+		
         this.points = 0;
 
         this.characterTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(),
-                512,512,TextureOptions.BILINEAR);
+                600,600,TextureOptions.BILINEAR);
         this.character = BitmapTextureAtlasTextureRegionFactory.createFromAsset
-                (characterTextureAtlas, this, "gfx/splash2.png", 0, 0);;
+                (characterTextureAtlas, this, "gfx/" + imgName, 0, 0);
         this.characterTextureAtlas.load();
         
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/whack_aflyer_img/");
@@ -118,7 +132,7 @@ public class WhackAFlyerMiniGame extends SimpleBaseGameActivity implements IOnSc
         this.bgTextureAtlas.load();
     
         for (int i = 0; i < MAX_NUMBER_OF_FLYERS; i++) {
-            String imgName = "flyer_" + (i+1) + ".png";
+            imgName = "flyer_" + (i+1) + ".png";
             this.flyerAtlas[i] = new BitmapTextureAtlas(this.getTextureManager(),
                     1024,1024,TextureOptions.BILINEAR);
             this.flyers[i] = BitmapTextureAtlasTextureRegionFactory.createFromAsset

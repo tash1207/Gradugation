@@ -40,7 +40,8 @@ public class BenchPressMinigame extends Activity {
 		image = (ImageView) findViewById(R.id.bench_press_image);
 		
 		characterType = getIntent().getStringExtra("character_type");
-		Log.d("character type", characterType);
+		if (characterType == null) characterType = "Athlete";
+		
 		if (characterType.equals("Engineer")) image.setImageResource(R.drawable.bench_press_engineer1);
 		else if (characterType.equals("Athlete")) image.setImageResource(R.drawable.bench_press_athlete1);
 		else if (characterType.equals("Gradugator")) image.setImageResource(R.drawable.bench_press_gradugator1);

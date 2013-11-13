@@ -1,5 +1,7 @@
 package com.gradugation;
 
+import java.io.Serializable;
+
 import android.app.Activity;
 import android.content.Intent;
 

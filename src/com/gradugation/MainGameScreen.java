@@ -635,22 +635,6 @@ if (move == true && turnDone == false && diceDone == true) {
 					finishTurn = false;
 					diceButton.setColor(Color.WHITE);
 					finishTurnButton.setColor(Color.GRAY);
-
-					// if(currentCharacter==0){
-					// SpriteList[currentCharacter].registerEntityModifier(new
-					// MoveModifier(0.5f,currentX,currentY, currentX,
-					// currentY+1));
-					// SpriteList[currentCharacter].registerEntityModifier(new
-					// MoveModifier(0.5f,currentX,currentY, currentX,
-					// currentY-1));
-					// }else if(currentCharacter ==1){
-					// SpriteList[currentCharacter].registerEntityModifier(new
-					// MoveModifier(0.5f,currentX2,currentY2, currentX2,
-					// currentY2+1 ));
-					// SpriteList[currentCharacter].registerEntityModifier(new
-					// MoveModifier(0.5f,currentX2,currentY2, currentX2,
-					// currentY2-1 ));
-					// }
 				}
 
 				if (swipeDone == false) {
@@ -671,10 +655,11 @@ if (move == true && turnDone == false && diceDone == true) {
 
 	boolean move = false;
 
-	protected void movementFunction(final Sprite mySprite) {
+	protected void movementFunction(Sprite mySprite) {
 		if (swipeDone) {
 			int thisCurrent = currentCharacter;
-			SpriteCoordinate offset = new SpriteCoordinate();
+			SpriteCoordinate offset = new SpriteCoordinate(), finalPosition = new SpriteCoordinate();
+			SpriteCoordinate originalPosition = characterCoordinates[thisCurrent];
 			if (finalY - initY > 40) {
 				offset.setY(CHARACTER_WIDTH);
 			} else if (finalY - initY < -40) {
@@ -684,16 +669,30 @@ if (move == true && turnDone == false && diceDone == true) {
 			} else if (finalX - initX < -40) {
 				offset.setX(-CHARACTER_WIDTH);
 			}
+			finalPosition.setX(offset.getX()*ranNumb);
+			finalPosition.setY(offset.getY()*ranNumb);
+			SpriteCoordinate newPosition = offset.add(characterCoordinates[thisCurrent]);
 			
-			offset = offset.add(characterCoordinates[thisCurrent]);
+			newPosition = this.mainMapEvent.checkBoundaries(characterCoordinates[thisCurrent], newPosition);
 			
-			offset = this.mainMapEvent.checkBoundaries(characterCoordinates[currentCharacter], offset);
+			
+			finalPosition = characterCoordinates[thisCurrent].add(finalPosition);
+			Log.d("character coordinates", finalPosition.toString());
+			Log.d("current position", characterCoordinates[thisCurrent].toString());
+			Log.d("offset", offset.toString());
+			
+			moveSprite(originalPosition, finalPosition, newPosition, offset, thisCurrent, mySprite);
+			
+		}
+	}
+	
+	public void moveSprite(final SpriteCoordinate originalPosition, final SpriteCoordinate finalPosition,
+			final SpriteCoordinate newPosition, final SpriteCoordinate offset, final int thisCurrent, final Sprite mySprite) {
 
 			mySprite.registerEntityModifier(new MoveModifier(0.5f,
 					characterCoordinates[thisCurrent].getX(), characterCoordinates[thisCurrent].getY(),
-					offset.getX(), offset.getY()) {
+					newPosition.getX(), newPosition.getY()) {
 				
-				int thisCurrent = currentCharacter;
 				
 				@Override
 				protected void onModifierStarted(IEntity pItem) {
@@ -708,21 +707,24 @@ if (move == true && turnDone == false && diceDone == true) {
 					characterCoordinates[thisCurrent].setX(mySprite.getX());
 					characterCoordinates[thisCurrent].setY(mySprite.getY());
 					super.onModifierFinished(pItem);
+					Log.d("character coords", characterCoordinates[thisCurrent].toString());
 					
-					//if (characterCoordinates[thisCurrent].compareTo(newOffset) == 0) {
-						movementCount--;
-					//}
-					if (movementCount == 0) {
-						
+					if (characterCoordinates[thisCurrent].compareTo(finalPosition) == 0) {
 						checkMiniGameHotSpots(thisCurrent);
 						swipeDone = false;
 						turnDone = true;
+					} else if (characterCoordinates[thisCurrent].compareTo(newPosition) == 0) {
+						SpriteCoordinate newPos = newPosition.add(offset);//offset.add(characterCoordinates[thisCurrent]);
+						Log.d("calling movement again", "adding to offset");
+						moveSprite(originalPosition, finalPosition, newPos, offset, thisCurrent, mySprite);
 					}
+					
 
 				}
 			});
-		}
+			
 	}
+
 
 	// Checks the hot spots for the minigames
 	protected void checkMiniGameHotSpots(int current) {

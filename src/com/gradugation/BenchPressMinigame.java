@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,6 +16,8 @@ public class BenchPressMinigame extends Activity {
 	static int REPS_REQUIRED = 8;
 	// The number of credits earned by completing this minigame
 	static int CREDITS_EARNED = 3;
+	
+	String characterType;
 	
 	CountDownTimer timer;
 	TextView seconds_text, reps_text;
@@ -35,6 +38,12 @@ public class BenchPressMinigame extends Activity {
 		seconds_text = (TextView) findViewById(R.id.bench_press_time);
 		reps_text = (TextView) findViewById(R.id.bench_press_reps);
 		image = (ImageView) findViewById(R.id.bench_press_image);
+		
+		characterType = getIntent().getStringExtra("character_type");
+		Log.d("character type", characterType);
+		if (characterType.equals("Engineer")) image.setImageResource(R.drawable.bench_press_engineer1);
+		else if (characterType.equals("Athlete")) image.setImageResource(R.drawable.bench_press_athlete1);
+		else if (characterType.equals("Gradugator")) image.setImageResource(R.drawable.bench_press_gradugator1);
 
 		timer = new CountDownTimer(10500, 1000) {
 			public void onTick(long millisUntilFinished) {
@@ -100,14 +109,38 @@ public class BenchPressMinigame extends Activity {
 			
 			reps_text.setText("Reps: " + reps);
 			
-			if (clicks % 4 == 0) {
-				image.setImageResource(R.drawable.bench_press3);
+			if (characterType.equals("Engineer")) {
+				if (clicks % 4 == 0) {
+					image.setImageResource(R.drawable.bench_press_engineer3);
+				}
+				else if (clicks == 2 || clicks % 2 == 1) {
+					image.setImageResource(R.drawable.bench_press_engineer2);
+				}
+				else {
+					image.setImageResource(R.drawable.bench_press_engineer1);
+				}
 			}
-			else if (clicks == 2 || clicks % 2 == 1) {
-				image.setImageResource(R.drawable.bench_press2);
+			else if (characterType.equals("Athlete")) {
+				if (clicks % 4 == 0) {
+					image.setImageResource(R.drawable.bench_press_athlete3);
+				}
+				else if (clicks == 2 || clicks % 2 == 1) {
+					image.setImageResource(R.drawable.bench_press_athlete2);
+				}
+				else {
+					image.setImageResource(R.drawable.bench_press_athlete1);
+				}
 			}
-			else {
-				image.setImageResource(R.drawable.bench_press1);
+			else if (characterType.equals("Gradugator")) {
+				if (clicks % 4 == 0) {
+					image.setImageResource(R.drawable.bench_press_gradugator3);
+				}
+				else if (clicks == 2 || clicks % 2 == 1) {
+					image.setImageResource(R.drawable.bench_press_gradugator2);
+				}
+				else {
+					image.setImageResource(R.drawable.bench_press_gradugator1);
+				}
 			}
 		}
 	}

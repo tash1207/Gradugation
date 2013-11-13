@@ -729,13 +729,7 @@ if (move == true && turnDone == false && diceDone == true) {
 	// Checks the hot spots for the minigames
 	protected void checkMiniGameHotSpots(int current) {
 
-		/*if (!eventCompleted) {
-			Event.getEvent(spriteCoord, gameDone, move, this);
-			eventCompleted = true;
-		}*/
-		
-		Event.getEvent(characterCoordinates[current], true, gameDone, move,
-				this, NameToImageName(characterNames[current]));
+		Event.getEvent(characterCoordinates[current], true, gameDone, move, this, characterNames[current]);
 		
 		if (!(move || gameDone)) {
 			gameDone = true;

@@ -105,4 +105,8 @@
     <string name="title_activity_food_mini_game">FoodMiniGame</string>
     <string name="food_mini_game">Junk Food Ninja</string>
 
+    <!-- Math Minigame -->
+    <string name="new_puzzle">New Puzzle</string>
+    <string name="square_size">150dp</string>
+    
 </resources>

@@ -96,6 +96,11 @@
             android:label="@string/title_activity_food_mini_game"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
         </activity>
+        <activity
+            android:name="com.gradugation.MathMiniGame" 
+            android:label="@string/title_activity_color_mini_game"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
+        </activity>
     </application>
 
 </manifest>

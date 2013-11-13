@@ -21,10 +21,12 @@
     <string name="how_to_play">How To Play</string>
     <string name="settings">Settings</string>
     <string name="minigames">Minigames</string>
-    <string name="how_many_players">How many players?</string>
+    <string name="how_many_players">How Many Players?</string>
     <string name="music_on">Music</string>
     <string name="okay">Okay</string>
+    <string name="back">Back</string>
     <string name="menu_settings">Settings</string>
+    <string name="volume">Volume</string>
 
     <!-- New Game -->
     <string-array name="number_array">
@@ -34,11 +36,15 @@
         <item>4</item> 
     </string-array>
     <!-- Choose Character -->
-    <string name="choose_character">Choose a character</string>
+    <string name="choose_character">Choose a Character</string>
     <string name="character_engineer">Engineer</string>
     <string name="character_athlete">Athlete</string>
     <string name="character_gradugator">Gradugator</string>
-
+    
+    <string name="attributes_athlete">The athlete gets a credit bonus at the Stadium for the Bench Press Minigame</string>
+    <string name="attributes_engineer">The engineer gets a credit bonus at the Physics Building for the Wires Minigame</string>
+    <string name="attributes_gradugator">Gradugator gets a credit bonus in Turlington for the Whack-A-Flyer Minigame</string>
+    
     <!-- Minigames Screen -->
     <string name="wires">Wires</string>
     <string name="bench_press">Bench Press</string>

@@ -88,6 +88,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 	private BitmapTextureAtlas diceTextureAtlas;
 	private TextureRegion diceTextureRegion;
+	private BitmapTextureAtlas finishTurnTextureAtlas;
+	private TextureRegion finishTurnTextureRegion;
 	
 	private ITexture mFaceTexture;
 	private ITextureRegion mFaceTextureRegion;
@@ -131,6 +133,9 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	float initY;
 	float finalX;
 	float finalY;
+	
+	private boolean finishTurn = false; 
+	private boolean diceDone = false;
 
 	boolean swipeDone = false;
 
@@ -187,8 +192,16 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		this.diceTextureRegion = BitmapTextureAtlasTextureRegionFactory
                 .createFromAsset(diceTextureAtlas, this, "dice.png",
                                 0, 0);
-		;
 		this.diceTextureAtlas.load();
+		
+		this.finishTurnTextureAtlas = new BitmapTextureAtlas(
+                this.getTextureManager(), 170, 90, TextureOptions.BILINEAR);
+		this.finishTurnTextureRegion = BitmapTextureAtlasTextureRegionFactory
+                .createFromAsset(finishTurnTextureAtlas, this, "finish_button.png",
+                                0, 0);
+		this.finishTurnTextureAtlas.load();
+		
+		
 		// Pause Assets
 		this.mFaceTexture = new AssetBitmapTexture(this.getTextureManager(),
 				this.getAssets(), "gfx/menu.png", TextureOptions.BILINEAR);
@@ -288,7 +301,36 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		 * test the randomizer, I believe this should suffice.
 		 */
 
-		final Sprite diceButton = new Sprite(250, CAMERA_HEIGHT/10, this.diceTextureRegion,
+		final Sprite diceButton = new Sprite(180, CAMERA_HEIGHT/10, this.diceTextureRegion,
+                this.getVertexBufferObjectManager()) {
+
+	        public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
+	                /*
+	                 * Here, you can update the randomizer when the user presses the
+	                 * button. Disregard the effect, just lets me know that the
+	                 * button is being pressed.
+	                 */
+	                //generate random number [1,3]
+	                random = new Random();
+	                diceRoll = random.nextInt(3) + 1;
+	                if (diceDone == false) {
+	                	swipeDone = false;
+	                	if (touchEvent.isActionUp()) {
+	                		this.setColor(Color.GRAY);
+	                		textStroke5.setText("You rolled: " + diceRoll);
+	                		diceDone = true;
+	                		
+	                	}
+	                	if (touchEvent.isActionDown()) {
+	                		this.setColor(Color.WHITE);
+	                	}
+	                }
+	                return true;
+	        };
+		};
+		diceButton.setScale((float) .5);	
+		
+		final Sprite finishTurnButton = new Sprite(310, CAMERA_HEIGHT/10, this.finishTurnTextureRegion,
                 this.getVertexBufferObjectManager()) {
 
 	        public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
@@ -303,15 +345,16 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	                
 	                if (touchEvent.isActionUp()) {
 	                        this.setColor(Color.GRAY);
-	                        textStroke5.setText("You rolled: " + diceRoll);
-	                }
+	                        finishTurn = true;
+	                        }
 	                if (touchEvent.isActionDown()) {
-	                        this.setColor(Color.WHITE);
+	                        this.setColor(Color.GRAY);
 	                }
 	                return true;
 	        };
 		};
-		diceButton.setScale((float) .7);
+		finishTurnButton.setScale((float) .5);
+		finishTurnButton.setColor(Color.GRAY);
 
 		// Load the Pause Scene
 		this.mPauseScene = new CameraScene(this.mCamera);
@@ -400,7 +443,9 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 		mHUD.attachChild(textStroke5);
 		mHUD.registerTouchArea(diceButton);
-		mHUD.attachChild(diceButton);
+		mHUD.attachChild(diceButton);	
+		mHUD.registerTouchArea(finishTurnButton);
+		mHUD.attachChild(finishTurnButton);
 
 		mHUD.registerTouchArea(pauseSprite);
 		mHUD.attachChild(pauseSprite);
@@ -568,20 +613,26 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 							tmxLayer.getTileY(tmxTile.getTileRow()));
 				}
 
-				if (move) {
+				if (move == true && turnDone == false && diceDone == true) {
 					movementFunction(spriteList[currentCharacter]);
 					moving = true;
 					MainGameScreen.this.mCamera.updateChaseEntity();
-
+					finishTurnButton.setColor(Color.WHITE);
 				}
 
-				if (moving == true && turnDone == true && swipeDone == false) {
+				if (moving == true && turnDone == true  && finishTurn == true) { //&& swipeDone == false
 					moving = false;
+					move = false;
 					turnDone = false;
+					diceDone = false;
 					currentCharacter = (currentCharacter + 1) % (numCharacters);
 					// consider a delay here so the camera doesn't switch back and forth so fast
 					MainGameScreen.this.mCamera
 							.setChaseEntity(spriteList[currentCharacter]);
+					finishTurn = false;
+					diceButton.setColor(Color.WHITE);
+					finishTurnButton.setColor(Color.GRAY);
+
 					// if(currentCharacter==0){
 					// SpriteList[currentCharacter].registerEntityModifier(new
 					// MoveModifier(0.5f,currentX,currentY, currentX,

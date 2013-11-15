@@ -46,9 +46,12 @@ import org.andengine.ui.activity.SimpleBaseGameActivity;
 import org.andengine.util.Constants;
 import org.andengine.util.debug.Debug;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -66,12 +69,25 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	private static final int CAMERA_HEIGHT = 320;
 	
 	//private static final int MAX_CHARACTER_MOVEMENT = 3;
-	private static final int CHARACTER_WIDTH = 32;
+	public static final int CHARACTER_WIDTH = 32;
 	private static final String MAP_NAME = "map_text_file.txt";
 
 	// ===========================================================
 	// Fields
 	// ===========================================================
+
+	// Need handler for callbacks to the UI thread
+    final Handler mHandler = new Handler();
+
+    // Create runnable for posting
+    final Runnable mUpdateResults = new Runnable() {
+        public void run() {
+            askDirection();
+        }
+    };
+    
+    private AlertDialog.Builder alertDialogBuilder;
+	private AlertDialog alertDialog;
 
 	private BoundCamera mCamera;
 
@@ -658,8 +674,8 @@ if (move == true && turnDone == false && diceDone == true) {
 	protected void movementFunction(Sprite mySprite) {
 		if (swipeDone) {
 			int thisCurrent = currentCharacter;
-			SpriteCoordinate offset = new SpriteCoordinate(), finalPosition = new SpriteCoordinate();
-			SpriteCoordinate originalPosition = characterCoordinates[thisCurrent];
+			SpriteCoordinate offset = new SpriteCoordinate();
+
 			if (finalY - initY > 40) {
 				offset.setY(CHARACTER_WIDTH);
 			} else if (finalY - initY < -40) {
@@ -669,25 +685,20 @@ if (move == true && turnDone == false && diceDone == true) {
 			} else if (finalX - initX < -40) {
 				offset.setX(-CHARACTER_WIDTH);
 			}
-			finalPosition.setX(offset.getX()*ranNumb);
-			finalPosition.setY(offset.getY()*ranNumb);
+			
+			SpriteCoordinate finalPosition = new SpriteCoordinate(offset.getX()*ranNumb, offset.getY()*ranNumb);
 			SpriteCoordinate newPosition = offset.add(characterCoordinates[thisCurrent]);
 			
 			newPosition = this.mainMapEvent.checkBoundaries(characterCoordinates[thisCurrent], newPosition);
-			
-			
+				
 			finalPosition = characterCoordinates[thisCurrent].add(finalPosition);
-			Log.d("character coordinates", finalPosition.toString());
-			Log.d("current position", characterCoordinates[thisCurrent].toString());
-			Log.d("offset", offset.toString());
 			
-			moveSprite(originalPosition, finalPosition, newPosition, offset, thisCurrent, mySprite);
-			
+			moveSprite(finalPosition, newPosition, offset, thisCurrent, mySprite);		
 		}
 	}
 	
-	public void moveSprite(final SpriteCoordinate originalPosition, final SpriteCoordinate finalPosition,
-			final SpriteCoordinate newPosition, final SpriteCoordinate offset, final int thisCurrent, final Sprite mySprite) {
+	public void moveSprite(final SpriteCoordinate finalPosition, final SpriteCoordinate newPosition,
+			final SpriteCoordinate offset, final int thisCurrent, final Sprite mySprite) {
 
 			mySprite.registerEntityModifier(new MoveModifier(0.5f,
 					characterCoordinates[thisCurrent].getX(), characterCoordinates[thisCurrent].getY(),
@@ -714,9 +725,15 @@ if (move == true && turnDone == false && diceDone == true) {
 						swipeDone = false;
 						turnDone = true;
 					} else if (characterCoordinates[thisCurrent].compareTo(newPosition) == 0) {
-						SpriteCoordinate newPos = newPosition.add(offset);//offset.add(characterCoordinates[thisCurrent]);
-						Log.d("calling movement again", "adding to offset");
-						moveSprite(originalPosition, finalPosition, newPos, offset, thisCurrent, mySprite);
+						SpriteCoordinate newPos = newPosition.add(offset);
+						newPos = mainMapEvent.checkBoundaries(characterCoordinates[thisCurrent], newPos);
+						
+						// if not a valid move, newPos = newPosition, and we need to show options
+						if (newPos.compareTo(newPosition) == 0) {
+							getNewMove(mainMapEvent.getPossiblePath(newPos), finalPosition, thisCurrent, mySprite);
+							return;
+						}
+						moveSprite(finalPosition, newPos, offset, thisCurrent, mySprite);
 					}
 					
 
@@ -725,7 +742,56 @@ if (move == true && turnDone == false && diceDone == true) {
 			
 	}
 
+	private void getNewMove(SpriteCoordinate[] pathOptions, final SpriteCoordinate finalPosition,
+			final int thisCurrent, final Sprite mySprite) {
+		StringBuilder options = new StringBuilder();
+		StringBuilder choices = new StringBuilder();
+		
+		for (Event.DIRECTION dir : Event.DIRECTION.values()) {
+			if (pathOptions[dir.getIndex()] != null) {
+				options.append(dir.getName());
+				options.append(",");
+				choices.append(dir.name());
+				choices.append(",");
+			}
+		}
+		
+		String[] dialogOptions = options.toString().split(",");
+		final String[] dialogChoices = choices.toString().split(",");
 
+		
+		alertDialogBuilder = new AlertDialog.Builder(this);
+
+		// set title and message
+		alertDialogBuilder.setTitle("Choose a direction:");
+		alertDialogBuilder.setMessage("Please select the direction you want to go.");
+		alertDialogBuilder.setCancelable(false);
+
+		// create continue button
+		alertDialogBuilder.setItems(dialogOptions, 
+				new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+						SpriteCoordinate offset = Event.getPositionFromDirection(dialogChoices[which]);
+						SpriteCoordinate newPos = offset.add(characterCoordinates[thisCurrent]);
+						moveSprite(finalPosition, newPos, offset, thisCurrent, mySprite);
+					}
+				});
+
+		mHandler.post(mUpdateResults);
+		
+	}
+
+	public void askDirection() {
+		// create alert dialog
+		alertDialog = alertDialogBuilder.create();
+
+		// show it
+		alertDialog.show();
+		
+	}
 	// Checks the hot spots for the minigames
 	protected void checkMiniGameHotSpots(int current) {
 

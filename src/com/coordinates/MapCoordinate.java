@@ -19,7 +19,7 @@ public class MapCoordinate extends Coordinate {
 	}
 
 	@Override
-	public Coordinate add(Coordinate toAdd) {
+	public MapCoordinate add(Coordinate toAdd) {
 		return new MapCoordinate (this.x + toAdd.getX(), this.y + toAdd.getY());
 	}
 	

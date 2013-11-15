@@ -14,3 +14,11 @@ _______XXX____X____X_____
 _________X__XXX____X_____
 _________XXXX_X____X_____
 ______________XXXXXX_____
+
+
+
+# Comments can appear below here
+This is a text map that represents the tile map for Gradugation.
+The 'X' represents a walkable path, and '-' represents a path that
+the character cannot take. If you update the tile map, please update
+this as well.

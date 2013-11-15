@@ -25,7 +25,26 @@ replace checkMiniGameHotspot() in mainGameScreen
 
 public class Event {
 	
+	public enum DIRECTION {
+		RIGHT(0, "Right"), LEFT(1, "Left"), DOWN(2, "Down"), UP(3, "Up");
 
+		private final int index;
+		private final String name;
+
+		private DIRECTION(int index, String name) {
+			this.index = index;
+			this.name = name;
+		}
+
+		public int getIndex() {
+			return this.index;
+		}
+		
+		public String getName() {
+			return this.name;
+		}
+    }
+	
 	private final static MapCoordinate OCONNELL_CENTER = new MapCoordinate(3,11);
 	private final static MapCoordinate STADIUM = new MapCoordinate(7,12);
 	private final static MapCoordinate NEW_PHYSICS_BUILDING = new MapCoordinate(5,4);
@@ -84,15 +103,61 @@ public class Event {
 	
 	public SpriteCoordinate checkBoundaries(SpriteCoordinate coordinate, SpriteCoordinate offset) {
 		MapCoordinate mapEndLocation = offset.spriteToMap();
-		MapCoordinate mapStartLocation = coordinate.spriteToMap();
-		
-		float yDifference = offset.getY() - coordinate.getY();
-		float xDifference = offset.getX() - coordinate.getX();
 
 		if (!mapPath.contains(mapEndLocation)) {
 			return coordinate;
 		}
 		return mapEndLocation.mapToSprite();
+	}
+	
+	public SpriteCoordinate[] getPossiblePath(SpriteCoordinate position) {
+		SpriteCoordinate[] possiblePaths = new SpriteCoordinate[4];
+		MapCoordinate spritePosition = position.spriteToMap();
+		MapCoordinate right = spritePosition.add(new MapCoordinate(1,0));
+		// Check position to the right
+		if (mapPath.contains(right)) {//spritePosition.add(new MapCoordinate(1,0)))) {
+			possiblePaths[DIRECTION.RIGHT.getIndex()] = new SpriteCoordinate(MainGameScreen.CHARACTER_WIDTH, 0);
+		}
+		
+		// Check position to the left 
+		if (mapPath.contains(spritePosition.add(new MapCoordinate(-1,0)))) {
+			possiblePaths[DIRECTION.LEFT.getIndex()] = new SpriteCoordinate(-MainGameScreen.CHARACTER_WIDTH, 0);
+		}
+		
+		// Check position behind 
+		if (mapPath.contains(spritePosition.add(new MapCoordinate(0,1)))) {
+			possiblePaths[DIRECTION.UP.getIndex()] = new SpriteCoordinate(0, MainGameScreen.CHARACTER_WIDTH);
+		}
+		
+		// Check position forward 
+		if (mapPath.contains(spritePosition.add(new MapCoordinate(0,-1)))) {
+			possiblePaths[DIRECTION.DOWN.getIndex()] = new SpriteCoordinate(0, -MainGameScreen.CHARACTER_WIDTH);
+		}
+
+		return possiblePaths;
+	}
+	
+	public static SpriteCoordinate getPositionFromDirection(String dirName) {
+		SpriteCoordinate newPosition = null;
+		DIRECTION dir = DIRECTION.valueOf(dirName);
+		
+		switch (dir) {
+			case DOWN:
+				newPosition = new SpriteCoordinate(0, -MainGameScreen.CHARACTER_WIDTH);
+				break;
+			case UP:
+				newPosition = new SpriteCoordinate(0, MainGameScreen.CHARACTER_WIDTH);
+				break;
+			case LEFT:
+				newPosition =  new SpriteCoordinate(-MainGameScreen.CHARACTER_WIDTH, 0);
+				break;
+			case RIGHT:
+				newPosition = new SpriteCoordinate(MainGameScreen.CHARACTER_WIDTH, 0);
+				break;
+			default:
+				break;
+		}
+		return newPosition;
 	}
 	
 	public static void getEvent(SpriteCoordinate coordinate, boolean doneSwiping, 

@@ -81,31 +81,31 @@ public class DbHelper extends SQLiteOpenHelper {
                 db = database;
                 //create database tables
                 /*
-        db.execSQL("create table if not exists " + GAMES +
+        		db.execSQL("create table if not exists " + GAMES +
                         "(" + G_ID + " integer, "  + NUM_OF_PLAYERS + " integer," + CURRENT_PLAYER + " integer, " +
                         "primary key  (" + G_ID + "));");
-        db.execSQL("create table if not exists " + CHARACTER +
+        		db.execSQL("create table if not exists " + CHARACTER +
                         "(" + CHARACTER_ID + " integer," + CHARACTER_TYPE + " text," + CHARACTER_NAME + " text, " + 
                         PICTURE + " text, primary key (" + CHARACTER_ID + "));");
-        db.execSQL("create table if not exists " + GAME_CHARACTER +
+        		db.execSQL("create table if not exists " + GAME_CHARACTER +
                         "("+GAME_ID+" integer, "+CHAR_ID+" integer, "+PLAYER_ORDER+" integer, "+CREDITS+" integer, "+COINS+" integer, "+CURRENT_TILE+" integer, " +
                         "primary key ("+GAME_ID+", "+CHAR_ID+"));");
-        db.execSQL("create table if not exists " + TILES +
+        		db.execSQL("create table if not exists " + TILES +
                         "("+TILE_ID+" integer, "+TILE_TYPE+" text, "+TILE_NAME+" text, "+X_COORD+" integer, "+Y_COORD+" integer," +
                         "primary key  ("+TILE_ID+"));");
-        db.execSQL("create table if not exists " + TILE_TILE + 
+        		db.execSQL("create table if not exists " + TILE_TILE + 
                         "("+TILE_ID1+" integer, "+TILE_ID2+" integer, "+DIRECTION+" text, " +
                         "primary key  ("+TILE_ID1+", "+TILE_ID2+"));");
-        db.execSQL("create table if not exists "+ EVENTS +
+        		db.execSQL("create table if not exists "+ EVENTS +
                         "("+EVENT_ID+" integer, "+EVENT_TYPE+" text, "+EVENT_AFFECTS+" text, "+EVENT_AMOUNT+" integer, "+EVENT_TXT+" text, " +
                         "primary key  ("+EVENT_ID+"));");
-        db.execSQL("create table if not exists " + ITEMS +
+        		db.execSQL("create table if not exists " + ITEMS +
                         "("+ITEM_ID+" integer, "+ITEM_NAME+" text, "+COST+" integer, "+ITEM_TYPE+" text, "+ITEM_AFFECTS+" text, "+ITEM_AMOUNT+" integer, "+ITEM_TXT+" text," +
                         "primary key  ("+ITEM_ID+"));");
-        db.execSQL("create table if not exists " + MINIGAMES +
+        		db.execSQL("create table if not exists " + MINIGAMES +
                         "("+MINIGAME_ID+" integer, "+MINIGAME_CREDITS+" integer, " +
                         "primary key  ("+MINIGAME_ID+"));");
-        db.execSQL("create table if not exists " + MINIGAME_CHARACTER +
+        		db.execSQL("create table if not exists " + MINIGAME_CHARACTER +
                         "("+MINIGAME_GAME_ID+" integer, "+MINIGAME_GID+" integer, "+MINIGAME_CHAR_ID+" integer, "+TIMES_PLAYED+" integer," +
                         "primary key  ("+MINIGAME_GAME_ID+", "+MINIGAME_GID+", "+MINIGAME_CHAR_ID+"));");
                         */

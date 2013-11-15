@@ -3,31 +3,25 @@ package com.gradugation;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import com.gradugation.Character.characterType;
-
-import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
-import android.content.Intent;
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.View.OnClickListener;
-import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class ChooseCharacterActivity extends BaseActivity {
 
         public static final String THE_PLAYERS = "com.gradugation.the_players";
-        private RadioGroup radioGroup1;
+        private RadioGroup radioGroup;
         private RadioButton radioGroup1Button;
-        private Button btnDisplay;
+        
+        private ImageView characterImage;
+        private TextView characterAttributes;
+        
         ArrayList<Character> thePlayers = new ArrayList<Character>();
         int playersChosen = 0;
         @Override
@@ -35,69 +29,76 @@ public class ChooseCharacterActivity extends BaseActivity {
                 super.onCreate(savedInstanceState);
                 setContentView(R.layout.activity_choose_character);
                 
-                addListenerOnButton();
+                radioGroup = (RadioGroup) findViewById(R.id.radioGroup1);
+                characterImage = (ImageView) findViewById(R.id.character_image);
+                characterAttributes = (TextView) findViewById(R.id.character_attributes);
+                
+                radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+					
+					@Override
+					public void onCheckedChanged(RadioGroup group, int checkedId) {
+						if (checkedId == R.id.radio0) {
+							characterImage.setImageResource(R.drawable.athlete_big);
+							characterAttributes.setText(getString(R.string.attributes_athlete));
+						}
+						else if (checkedId == R.id.radio1) {
+							characterImage.setImageResource(R.drawable.engineer_big);
+							characterAttributes.setText(getString(R.string.attributes_engineer));
+						}
+						else if (checkedId == R.id.radio2) {
+							characterImage.setImageResource(R.drawable.gradugator_big);
+							characterAttributes.setText(getString(R.string.attributes_gradugator));
+						}
+						
+					}
+				});
         }
         
-        public void addListenerOnButton(){
-                radioGroup1 = (RadioGroup) findViewById(R.id.radioGroup1);
-                btnDisplay = (Button) findViewById(R.id.btn_continue_game);
-                
-                
-                btnDisplay.setOnClickListener(new OnClickListener(){
-                        public void onClick(View v){
-                                Intent intent = getIntent();
-                            int        numPlayers = intent.getIntExtra(NewGameActivity.NUMBER_OF_PLAYERS, 1);
-                                if (playersChosen > numPlayers-1){                                        
-                                        startGame(v);
-                                }
-                                else if (playersChosen == numPlayers-1){
-                                        int selectedId = radioGroup1.getCheckedRadioButtonId();
-                                        
-                                        //find the radiobutton by returned id
-                                        radioGroup1Button = (RadioButton) findViewById(selectedId);
-                                        
-                                        Character thePlayer = new Character((String)radioGroup1Button.getText());
-                                        thePlayer.setName((String)radioGroup1Button.getText());
-                                        thePlayers.add(thePlayer);
-                                        
-                                        
-                                        Toast.makeText(ChooseCharacterActivity.this,  "Player " + Integer.toString(playersChosen+1) + " is " + thePlayers.get(playersChosen).getName(), Toast.LENGTH_SHORT).show();
-                                        playersChosen++;
-                                        startGame(v);
-                                }
-                                else{
-                                        int selectedId = radioGroup1.getCheckedRadioButtonId();
-                                        
-                                        //find the radiobutton by returned id
-                                        radioGroup1Button = (RadioButton) findViewById(selectedId);
-                                        
-                                        Character thePlayer = new Character((String)radioGroup1Button.getText());
-                                        thePlayer.setName((String)radioGroup1Button.getText());
-                                        thePlayers.add(thePlayer);
-                                        
-                                        Toast.makeText(ChooseCharacterActivity.this,  "Player " + Integer.toString(playersChosen+1) + " is " + thePlayers.get(playersChosen).getName(), Toast.LENGTH_SHORT).show();
-                                        playersChosen++;
-                                }
-                        }
-                });
+        public void btnBackClicked(View view) {
+        	super.onBackPressed();
         }
         
-        public void onPause() {
-                super.onPause();
-                SongPlayer.stopSongDelayed();
+        public void btnContinueClicked(View view) {
+        	Intent intent = getIntent();
+            int numPlayers = intent.getIntExtra(NewGameActivity.NUMBER_OF_PLAYERS, 1);
+            if (playersChosen > numPlayers-1) {                                        
+                    startGame();
+            }
+            else if (playersChosen == numPlayers-1) {
+                    int selectedId = radioGroup.getCheckedRadioButtonId();
+                    
+                    //find the radiobutton by returned id
+                    radioGroup1Button = (RadioButton) findViewById(selectedId);
+                    
+                    Character thePlayer = new Character((String)radioGroup1Button.getText());
+                    thePlayer.setName((String)radioGroup1Button.getText());
+                    thePlayers.add(thePlayer);
+                    
+                    
+                    Toast.makeText(ChooseCharacterActivity.this,  
+                    		"Player " + Integer.toString(playersChosen+1) + " is " + 
+                    		thePlayers.get(playersChosen).getName(), Toast.LENGTH_SHORT).show();
+                    playersChosen++;
+                    startGame();
+            }
+            else {
+                    int selectedId = radioGroup.getCheckedRadioButtonId();
+                    
+                    //find the radiobutton by returned id
+                    radioGroup1Button = (RadioButton) findViewById(selectedId);
+                    
+                    Character thePlayer = new Character((String)radioGroup1Button.getText());
+                    thePlayer.setName((String)radioGroup1Button.getText());
+                    thePlayers.add(thePlayer);
+                    
+                    Toast.makeText(ChooseCharacterActivity.this,  
+                    		"Player " + Integer.toString(playersChosen+1) + " is " + 
+                    		thePlayers.get(playersChosen).getName(), Toast.LENGTH_SHORT).show();
+                    playersChosen++;
+            }
         }
         
-        protected void onResume() {
-            super.onResume();
-            SharedPreferences settings = getSharedPreferences(SettingsActivity.SOUND_PREFERENCE, 0);
-                boolean isSoundOn = settings.getBoolean(SettingsActivity.SOUND_ON, true);
-                
-                if (isSoundOn) {
-                        SongPlayer.playSong();
-                }
-    }
-        
-        public void startGame(View view) {
+        public void startGame() {
             Intent intent = new Intent(this, MainGameScreen.class);
             intent.putExtra(THE_PLAYERS, (Serializable)thePlayers);
             startActivity(intent);

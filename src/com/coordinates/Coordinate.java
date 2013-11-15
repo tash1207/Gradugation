@@ -20,4 +20,8 @@ public abstract class Coordinate {
 	public void setY(float y) {
 		this.y = y;
 	}
+	
+	abstract Coordinate add(Coordinate toAdd);
+	
+	abstract int compareTo(Coordinate toCompare);
 }

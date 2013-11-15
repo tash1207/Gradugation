@@ -3,10 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/gator_blue"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
     <TextView
@@ -20,8 +20,8 @@
 
     <Button
         android:id="@+id/btn_settings"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_alignParentRight="true"
         android:background="@drawable/gear"
         android:onClick="settingsButtonClick"
@@ -39,7 +39,8 @@
             android:layout_height="0dp"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            android:layout_weight="4"
+            android:layout_weight="6"
+            android:padding="20dp"
             android:adjustViewBounds="true"
             android:contentDescription="@string/app_name"
             android:scaleType="fitCenter"
@@ -48,7 +49,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="6"
+            android:layout_weight="4"
             android:orientation="horizontal"
             android:paddingLeft="12dp"
             android:paddingRight="12dp" >
@@ -70,27 +71,7 @@
                     android:onClick="newGameButtonClick"
                     android:padding="14dp"
                     android:text="@string/new_game"
-                    android:textSize="16sp" />
-
-                <Button
-                    android:id="@+id/btn_how_to_play"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginBottom="12dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/button_rectangle_orange"
-                    android:onClick="howToPlayClick"
-                    android:padding="14dp"
-                    android:text="@string/how_to_play"
-                    android:textSize="16sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:paddingLeft="12dp" >
+                    android:textSize="24sp" />
 
                 <Button
                     android:id="@+id/btn_continue_game"
@@ -102,7 +83,27 @@
                     android:onClick="continueGameButtonClick"
                     android:padding="14dp"
                     android:text="@string/continue_game"
-                    android:textSize="16sp" />
+                    android:textSize="24sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:paddingLeft="12dp" >
+
+                <Button
+                    android:id="@+id/btn_how_to_play"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="12dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_rectangle_orange"
+                    android:onClick="howToPlayClick"
+                    android:padding="14dp"
+                    android:text="@string/how_to_play"
+                    android:textSize="24sp" />
 
                 <Button
                     android:id="@+id/btn_minigames"
@@ -114,7 +115,7 @@
                     android:onClick="minigamesButtonClick"
                     android:padding="14dp"
                     android:text="@string/minigames"
-                    android:textSize="16sp" />
+                    android:textSize="24sp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

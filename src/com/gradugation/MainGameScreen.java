@@ -703,7 +703,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 					characterCoordinates[thisCurrent].setY(mySprite.getY());
 	
 					super.onModifierFinished(pItem);
-					checkMiniGameHotSpots(characterCoordinates[thisCurrent]);
+					checkMiniGameHotSpots(thisCurrent);
 					swipeDone = false;
 					turnDone = true;
 					
@@ -715,9 +715,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	}
 
 	// Checks the hot spots for the minigames
-	protected void checkMiniGameHotSpots(SpriteCoordinate spriteCoord) {
-
-		Event.getEvent(spriteCoord, true, gameDone, move, this);
+	protected void checkMiniGameHotSpots(int current) {
+		Event.getEvent(characterCoordinates[current], true, gameDone, move, this, characterNames[current]);
 		
 		if (!(move || gameDone)) {
 			gameDone = true;

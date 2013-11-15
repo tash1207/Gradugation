@@ -48,7 +48,7 @@
         android:contentDescription="@string/bench_press_reps"
         android:onClick="benchPress"
         android:scaleType="fitCenter"
-        android:src="@drawable/bench_press1" />
+        android:src="@drawable/bench_press_athlete1" />
 
     <RelativeLayout
         android:id="@id/footer"

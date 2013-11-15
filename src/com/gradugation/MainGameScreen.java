@@ -756,7 +756,7 @@ if (move == true && turnDone == false && diceDone == true) {
 			}
 		}
 		
-		String[] dialogOptions = options.toString().split(",");
+		CharSequence[] dialogOptions = options.toString().split(",");
 		final String[] dialogChoices = choices.toString().split(",");
 
 		
@@ -764,7 +764,7 @@ if (move == true && turnDone == false && diceDone == true) {
 
 		// set title and message
 		alertDialogBuilder.setTitle("Choose a direction:");
-		alertDialogBuilder.setMessage("Please select the direction you want to go.");
+		//alertDialogBuilder.setMessage("Please select the direction you want to go.");
 		alertDialogBuilder.setCancelable(false);
 
 		// create continue button

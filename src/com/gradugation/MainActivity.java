@@ -10,7 +10,6 @@ import android.view.Menu;
 import android.view.View;
 
 public class MainActivity extends BaseActivity {
-	private DbHelper dbhelper;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {

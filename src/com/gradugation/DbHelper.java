@@ -1,7 +1,11 @@
 package com.gradugation;
 
+import java.util.ArrayList;
+
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -9,7 +13,7 @@ import android.util.Log;
 public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db;
         public static final String DB_NAME = "gradugation";
-        public static final int DB_VERSION = 2;
+        public static final int DB_VERSION = 3;
         
         //Game Table
         public static final String GAMES = "games";
@@ -81,31 +85,31 @@ public class DbHelper extends SQLiteOpenHelper {
                 db = database;
                 //create database tables
                 /*
-        db.execSQL("create table if not exists " + GAMES +
+        		db.execSQL("create table if not exists " + GAMES +
                         "(" + G_ID + " integer, "  + NUM_OF_PLAYERS + " integer," + CURRENT_PLAYER + " integer, " +
                         "primary key  (" + G_ID + "));");
-        db.execSQL("create table if not exists " + CHARACTER +
+        		db.execSQL("create table if not exists " + CHARACTER +
                         "(" + CHARACTER_ID + " integer," + CHARACTER_TYPE + " text," + CHARACTER_NAME + " text, " + 
                         PICTURE + " text, primary key (" + CHARACTER_ID + "));");
-        db.execSQL("create table if not exists " + GAME_CHARACTER +
+        		db.execSQL("create table if not exists " + GAME_CHARACTER +
                         "("+GAME_ID+" integer, "+CHAR_ID+" integer, "+PLAYER_ORDER+" integer, "+CREDITS+" integer, "+COINS+" integer, "+CURRENT_TILE+" integer, " +
                         "primary key ("+GAME_ID+", "+CHAR_ID+"));");
-        db.execSQL("create table if not exists " + TILES +
+        		db.execSQL("create table if not exists " + TILES +
                         "("+TILE_ID+" integer, "+TILE_TYPE+" text, "+TILE_NAME+" text, "+X_COORD+" integer, "+Y_COORD+" integer," +
                         "primary key  ("+TILE_ID+"));");
-        db.execSQL("create table if not exists " + TILE_TILE + 
+        		db.execSQL("create table if not exists " + TILE_TILE + 
                         "("+TILE_ID1+" integer, "+TILE_ID2+" integer, "+DIRECTION+" text, " +
                         "primary key  ("+TILE_ID1+", "+TILE_ID2+"));");
-        db.execSQL("create table if not exists "+ EVENTS +
+        		db.execSQL("create table if not exists "+ EVENTS +
                         "("+EVENT_ID+" integer, "+EVENT_TYPE+" text, "+EVENT_AFFECTS+" text, "+EVENT_AMOUNT+" integer, "+EVENT_TXT+" text, " +
                         "primary key  ("+EVENT_ID+"));");
-        db.execSQL("create table if not exists " + ITEMS +
+        		db.execSQL("create table if not exists " + ITEMS +
                         "("+ITEM_ID+" integer, "+ITEM_NAME+" text, "+COST+" integer, "+ITEM_TYPE+" text, "+ITEM_AFFECTS+" text, "+ITEM_AMOUNT+" integer, "+ITEM_TXT+" text," +
                         "primary key  ("+ITEM_ID+"));");
-        db.execSQL("create table if not exists " + MINIGAMES +
+        		db.execSQL("create table if not exists " + MINIGAMES +
                         "("+MINIGAME_ID+" integer, "+MINIGAME_CREDITS+" integer, " +
                         "primary key  ("+MINIGAME_ID+"));");
-        db.execSQL("create table if not exists " + MINIGAME_CHARACTER +
+        		db.execSQL("create table if not exists " + MINIGAME_CHARACTER +
                         "("+MINIGAME_GAME_ID+" integer, "+MINIGAME_GID+" integer, "+MINIGAME_CHAR_ID+" integer, "+TIMES_PLAYED+" integer," +
                         "primary key  ("+MINIGAME_GAME_ID+", "+MINIGAME_GID+", "+MINIGAME_CHAR_ID+"));");
                         */
@@ -117,7 +121,8 @@ public class DbHelper extends SQLiteOpenHelper {
                 		Y_COORD + " integer, " + CREDITS + " integer, " + COINS + " integer, " + PLAYER_ORDER + " integer, " +
                         "primary key  (" + CHARACTER_ID + "));");
                 db.execSQL("create table if not exists " + ITEMS +
-                		"(" + G_ID + " integer, " + CHAR_BASE_ID + " integer, " + NUM_OF_PLAYERS + " integer," + CURRENT_PLAYER + " integer, " +
+                		"(" + ITEM_ID + " integer, " + ITEM_NAME + " text, " + COST + " integer," + ITEM_TYPE + " text, " + 
+                		ITEM_AFFECTS + " text, " + ITEM_AMOUNT + " integer, " + ITEM_TXT + " text, " +
                         "primary key  (" + ITEM_ID + "));");
                 db.execSQL("create table if not exists " + MINIGAME +
                 		"(" + MINIGAME_GAME_ID + " integer, " + MINIGAME_GID + " integer, " + 
@@ -258,11 +263,11 @@ public class DbHelper extends SQLiteOpenHelper {
                                 tableName = CHARACTER;
                                 db.delete(tableName, CHARACTER_ID + " = " + key[0], null);
                                 break;
-                        case 7: 
+                        case 3: 
                                 tableName = ITEMS;
                                 db.delete(tableName, ITEM_ID + " = " + key[0], null);
                                 break;
-                        case 9: 
+                        case 4: 
                                 tableName = MINIGAME;
                                 db.delete(tableName, MINIGAME_GAME_ID + " = " + key[0] + 
                                                 " AND " + MINIGAME_GID + " = " + key[1], null);
@@ -273,6 +278,127 @@ public class DbHelper extends SQLiteOpenHelper {
                 }
                 
         }
-
+        
+        public ArrayList<Object> getRow(int tableNum, String[] key){
+        	ArrayList<Object> rowArray = new ArrayList<Object>();
+        	Cursor cursor;
+        	
+        	try{
+                String tableName = null;
+                
+                switch (tableNum){
+                        case 1: 
+                                tableName = GAMES;
+                                cursor = db.query
+                        				(
+                        						tableName,
+                        						null,
+                        						G_ID + " = " + key[0],
+                        						null, null, null, null, null
+                        				);
+                        		cursor.moveToFirst();
+                        		if (!cursor.isAfterLast())
+                        		{
+                        			do
+                        			{
+                        				rowArray.add(cursor.getString(0));
+                        				rowArray.add(cursor.getString(1));
+                        				rowArray.add(cursor.getString(2));
+                        				rowArray.add(cursor.getString(3));
+                        			}
+                        			while (cursor.moveToNext());
+                        		}
+                        		cursor.close();
+                                break;
+                        case 2: 
+                                tableName = CHARACTER;
+                                cursor = db.query
+                        				(
+                        						tableName,
+                        						null,
+                        						CHARACTER_ID + " = " + key[0],
+                        						null, null, null, null, null
+                        				);
+                                cursor.moveToFirst();
+                        		if (!cursor.isAfterLast())
+                        		{
+                        			do
+                        			{
+                        				rowArray.add(cursor.getString(0));
+                        				rowArray.add(cursor.getString(1));
+                        				rowArray.add(cursor.getString(2));
+                        				rowArray.add(cursor.getString(3));
+                        				rowArray.add(cursor.getString(4));
+                        				rowArray.add(cursor.getString(5));
+                        				rowArray.add(cursor.getString(6));
+                        				rowArray.add(cursor.getString(7));
+                        			}
+                        			while (cursor.moveToNext());
+                        		}
+                        		cursor.close();
+                                break;
+                        case 3: 
+                                tableName = ITEMS;
+                                cursor = db.query
+                        				(
+                        						tableName,
+                        						null,
+                        						ITEM_ID + " = " + key[0],
+                        						null, null, null, null, null
+                        				);
+                                cursor.moveToFirst();
+                        		if (!cursor.isAfterLast())
+                        		{
+                        			do
+                        			{
+                        				rowArray.add(cursor.getString(0));
+                        				rowArray.add(cursor.getString(1));
+                        				rowArray.add(cursor.getString(2));
+                        				rowArray.add(cursor.getString(3));
+                        				rowArray.add(cursor.getString(4));
+                        				rowArray.add(cursor.getString(5));
+                        				rowArray.add(cursor.getString(6));
+                        			}
+                        			while (cursor.moveToNext());
+                        		}
+                        		cursor.close();
+                                break;
+                        case 4: 
+                                tableName = MINIGAME;
+                                cursor = db.query
+                        				(
+                        						tableName,
+                        						null,
+                        						MINIGAME_GAME_ID + " = " + key[0] + " AND " + MINIGAME_GID + " = " + key[1],
+                        						null, null, null, null, null
+                        				);
+                                cursor.moveToFirst();
+                        		if (!cursor.isAfterLast())
+                        		{
+                        			do
+                        			{
+                        				rowArray.add(cursor.getString(0));
+                        				rowArray.add(cursor.getString(1));
+                        				rowArray.add(cursor.getString(2));
+                        				rowArray.add(cursor.getString(3));
+                        				rowArray.add(cursor.getString(4));
+                        				rowArray.add(cursor.getString(5));
+                        			}
+                        			while (cursor.moveToNext());
+                        		}
+                        		cursor.close();
+                                break;
+                        default: 
+                                Log.e("getRow Error", "Not valid table number");
+                                break;
+                }
+        	}catch (SQLException e) {
+        		Log.e("DB ERROR", e.toString());
+        		e.printStackTrace();
+        	}
+        	return rowArray;
+        }
 
 }
+
+                

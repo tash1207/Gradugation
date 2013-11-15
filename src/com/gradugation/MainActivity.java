@@ -1,5 +1,8 @@
 package com.gradugation;
 
+import java.io.File;
+import java.util.ArrayList;
+
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -24,48 +27,70 @@ public class MainActivity extends BaseActivity {
         //Open Database
         dbhelper = new DbHelper(this);
         SQLiteDatabase db = dbhelper.openDB();
-        //dbhelper.onCreate(db);
         Log.d("TEST", "Database has been created");
         
         //Insert Some Data into Database
-        String[] tableValues = {"128","1","2"};
+        String[] game = {"1","0","4","2"};
+        String[] character = {"8","Engineer","Ahmad","34","11","105","45","3"};
+        String[] item = {"12","Scooter","500","Movement","Speed","700","Ridin 'round and I'm gettin it"};
+        String[] minigame = {"1","6","4","2","1","3"};
         
-        //Update method 
+        String[] gameNew = {"1","4","3","2"};
+        String[] characterNew = {"8","Athlete","Ahmad","34","11","105","45","3"};
+        String[] itemNew = {"12","Car","5100","Movement","Speed","700","Ridin 'round and I'm gettin it"};
+        String[] minigameNew = {"1","6","1","2","3","4"};
         
-        String[] key = {"7965"};
-        String[] newValues = {"11","16","2009"};
-        Log.d("TEST", "Update method stopped here");
-        dbhelper.updateRow(1, key, newValues);
+        String[] gameKey = {"1"};
+        String[] characterKey = {"8"};
+        String[] itemKey = {"12"};
+        String[] minigameKey = {"1","6"};
         
-        Log.d("Update Method", "Method has worked");
-        //dbhelper.insertRow(1, tableValues);
-        Cursor c = db.rawQuery("SELECT * FROM games;", null);
-        while (c.moveToNext()){
-	        Log.d("TEST", "Data has been put into database");
-	        Log.d("RESULTS", c.getString(c.getColumnIndex("id")));
-	        Log.d("RESULTS", c.getString(c.getColumnIndex("num_of_players")));
-	        Log.d("RESULTS", c.getString(c.getColumnIndex("current_player")));
-	        
-        }   
+        //Insert Row method
         /*
-        String[] key = {"65"};
-     
-        dbhelper.deleteRow(1, key);
-        while (c.moveToNext()){
-	        //c.moveToFirst();
-	        Log.d("RESULTS", c.getString(c.getColumnIndex("id")));
-	        Log.d("RESULTS", c.getString(c.getColumnIndex("num_of_players")));
-	        Log.d("RESULTS", c.getString(c.getColumnIndex("current_player")));
-	        Log.d("TEST", "Data has been put into database");
+        dbhelper.insertRow(1, game);
+        dbhelper.insertRow(2, character);
+        dbhelper.insertRow(3, item);
+        dbhelper.insertRow(4, minigame);
+        */
+        
+        //Update Row Method
+        /*
+        dbhelper.updateRow(1, gameKey, gameNew);
+        dbhelper.updateRow(2, characterKey, characterNew);
+        dbhelper.updateRow(3, itemKey, itemNew);
+        dbhelper.updateRow(4, minigameKey,minigameNew);
+        */
+        
+        //Delete Row Method
+        /*
+        dbhelper.deleteRow(1, gameKey);
+        dbhelper.deleteRow(2, characterKey);
+        dbhelper.deleteRow(3, itemKey);
+        dbhelper.deleteRow(4, minigameKey);
+        */
+        
+        //getRow Method
+        /*
+        ArrayList gameList = dbhelper.getRow(1, gameKey);
+        ArrayList characterList = dbhelper.getRow(2, characterKey);
+        ArrayList itemList = dbhelper.getRow(3, itemKey);
+        ArrayList minigameList = dbhelper.getRow(4, minigameKey);
+        
+        
+        for(int i = 0; i < gameList.size(); i++){
+            Log.d("getRow Game", (String)gameList.get(i));
+        }
+        for(int i = 0; i < characterList.size(); i++){
+        	Log.d("getRow Character",(String)characterList.get(i));
+        }
+        for(int i = 0; i < itemList.size(); i++){
+        	Log.d("getRow Item",(String)itemList.get(i));
+        }
+        for(int i = 0; i < minigameList.size(); i++){
+        	Log.d("getRow Minigame",(String)minigameList.get(i));
         }
         */
         
-        //Close Database
-        Log.d("TEST", "stopped before db.close");
-        db.close();
-        Log.d("TEST", "stopped after db.close");
-        dbhelper.close();
-        Log.d("TEST", "Database has been closed");
     }
 
 

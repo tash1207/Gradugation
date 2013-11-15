@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="25" height="15" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="Library west" tilewidth="32" tileheight="32">
+  <image source="gfx/tileset/Library west.png" trans="ffffff" width="64" height="64"/>
+ </tileset>
+ <tileset firstgid="5" name="Stadium" tilewidth="32" tileheight="32">
+  <image source="gfx/tileset/Stadium.png" trans="ffffff" width="64" height="64"/>
+ </tileset>
+ <tileset firstgid="9" name="O'Connell Center" tilewidth="32" tileheight="32">
+  <image source="gfx/tileset/O'Connell Center.png" trans="ffffff" width="64" height="64"/>
+ </tileset>
+ <tileset firstgid="13" name="trees" tilewidth="32" tileheight="32">
+  <image source="gfx/tileset/trees.png" width="416" height="416"/>
+ </tileset>
+ <tileset firstgid="182" name="Psych" tilewidth="32" tileheight="32">
+  <image source="gfx/tileset/Psych.png" trans="ffffff" width="64" height="64"/>
+ </tileset>
+ <tileset firstgid="186" name="Turlington" tilewidth="32" tileheight="32">
+  <image source="gfx/tileset/Turlington.png" trans="ffffff" width="64" height="64"/>
+ </tileset>
+ <tileset firstgid="190" name="Shands" tilewidth="32" tileheight="32">
+  <image source="gfx/tileset/Shands.png" trans="ffffff" width="128" height="32"/>
+ </tileset>
+ <tileset firstgid="194" name="Reitz" tilewidth="32" tileheight="32">
+  <image source="gfx/tileset/Reitz.png" trans="ffffff" width="96" height="64"/>
+ </tileset>
+ <tileset firstgid="200" name="NEB" tilewidth="32" tileheight="32">
+  <image source="gfx/tileset/NEB.png" trans="ffffff" width="64" height="64"/>
+ </tileset>
+ <tileset firstgid="204" name="NPB" tilewidth="32" tileheight="32">
+  <image source="gfx/tileset/NPB.png" trans="ffffff" width="64" height="64"/>
+ </tileset>
+ <tileset firstgid="208" name="Hough" tilewidth="32" tileheight="32">
+  <image source="gfx/tileset/Hough.png" trans="ffffff" width="64" height="64"/>
+ </tileset>
+ <tileset firstgid="212" name="Hub" tilewidth="32" tileheight="32">
+  <image source="gfx/tileset/Hub.png" trans="ffffff" width="64" height="64"/>
+ </tileset>
+ <tileset firstgid="216" name="CSE" tilewidth="32" tileheight="32">
+  <image source="gfx/tileset/CSE.png" trans="ffffff" width="64" height="64"/>
+ </tileset>
+ <tileset firstgid="220" name="Food" tilewidth="32" tileheight="32">
+  <image source="gfx/tileset/Food.png" trans="ffffff" width="64" height="64"/>
+ </tileset>
+ <tileset firstgid="224" name="Little" tilewidth="32" tileheight="32">
+  <image source="gfx/tileset/Little.png" trans="ffffff" width="64" height="64"/>
+ </tileset>
+ <tileset firstgid="228" name="path1" tilewidth="32" tileheight="32">
+  <image source="gfx/tileset/path1.png" trans="ffffff" width="256" height="256"/>
+ </tileset>
+ <tileset firstgid="292" name="path2" tilewidth="32" tileheight="32">
+  <image source="gfx/tileset/path2.png" trans="ffffff" width="256" height="256"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="25" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA5WUsRLDMAhD+f9/NRue26V3OvWJtIMuOI5BSDhTVeeNludIfAVj8Wd9FnRYt50fyDlybgCnmIPmpj3iqbU1f4c8T0g8N826uM+BnL9onzShPUXyZeOmOtE310BeDOz5u00P8tD7uPXth85Z8jD19u/8kx+bVl6jLe7KnpJum1ZJP7+Pm2/bfXX/0xxq/MSTvNaz3j/9yzwPeU98vB754rxpHgnJB6qfdH8Be8OWKtwFAAA=
+  </data>
+ </layer>
+ <layer name="path" width="25" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA2NgGP7AjBET09pMZD4udYTcQYw8LnNxYWz6yXEDseLY1OFzHzHxhMsf2PTisp8Ys3ABYv1Iinpq2EFqGic1rJD1kArwuYtYMVLsItdeUuwgJ/woBaTkEwCIfsK03AUAAA==
+  </data>
+ </layer>
+ <layer name="Trees" width="25" height="15" opacity="0.99">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA73UoRKCQBCAYd5B6WoHOtrVDnSlo12pQEe72oFX5C80Z25Z7/xnvrZ7287z5J1wRm5p7lsFLrhamptaYAkfN9xRGnakc1MrrLERzmsKECJyeCPGFjuHN/5ZhRqNw/0WDzyVNyT7L7zxMby1xwFHxX6HHoPhRoIUmXJf0i//iLS5/4imuf+IrUZeqIVv3AUAAA==
+  </data>
+ </layer>
+ <layer name="Stadium" width="25" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA2NgGDjACsRsNLaDHYg5aGzHKBgFo2AUDDYAAMaEyhbcBQAA
+  </data>
+ </layer>
+ <layer name="Turlington" width="25" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA2NgGNlgFxDvprEde4B4L43tGAWjYBSMAmQAADM0BnDcBQAA
+  </data>
+ </layer>
+ <layer name="Library" width="25" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA2NgGFqAEYiZaGwHMxCz0NiOUTAKRsEooCUAANQtDx/cBQAA
+  </data>
+ </layer>
+ <layer name="Hub" width="25" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA2NgGAVDFVwB4qs0tuMaEF+nsR2jYBSMAuoDANltgDjcBQAA
+  </data>
+ </layer>
+ <layer name="Little" width="25" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA2NgGAWDATwA4oc0tuMRED+msR2jYBSMgsEBAMkAX5/cBQAA
+  </data>
+ </layer>
+ <layer name="CSE" width="25" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA2NgGAWjYPCAG0B8k8Z23ALi2zS2YxSMgoEGAB1r1b7cBQAA
+  </data>
+ </layer>
+ <layer name="Reitz" width="25" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA2NgGAWjYPiBQ0B8GIiP0NCOo0B8DIiP09COUTAKyAUAzUz75dwFAAA=
+  </data>
+ </layer>
+ <layer name="Pysch" width="25" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA2NgGAWjYBQMZbANiLfT2I4dQLyTxnaMAuoCACa5/4PcBQAA
+  </data>
+ </layer>
+ <layer name="Hough" width="25" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA2NgGAWjYPCDC0B8kcZ2XALiyzS2YxSMAnoBAAOY343cBQAA
+  </data>
+ </layer>
+ <layer name="NEB" width="25" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA2NgGAWjYBSMAvqCE0B8ksZ2nALi0zS2YzADABfoV4bcBQAA
+  </data>
+ </layer>
+ <layer name="NPB" width="25" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA2NgGAWjYBSMglFALDgDxGdpbMc5ID5PoRkAPed5a9wFAAA=
+  </data>
+ </layer>
+ <layer name="Shands" width="25" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA2NgGAWjYBSMglEwVME+IN4PxAeA+CCSOAAuMsaV3AUAAA==
+  </data>
+ </layer>
+ <layer name="Food" width="25" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA2NgGAWjYBSMNHAHiO/S2I57QHyfxnaMAtwAAGYsThfcBQAA
+  </data>
+ </layer>
+ <layer name="O'Connell" width="25" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA2NgGF6AE4i5aGwHNxDz0NiOUTAKRsEooAQAACbSLN7cBQAA
+  </data>
+ </layer>
+</map>

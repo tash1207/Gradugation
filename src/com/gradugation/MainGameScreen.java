@@ -479,7 +479,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 						}
 					});
 			this.mTMXTiledMap = tmxLoader
-					.loadFromAsset("tmx/New_Multi_Gator_map.tmx");
+					.loadFromAsset("tmx/MultiGator14Layers.tmx");
 			this.mTMXTiledMap.setOffsetCenter(0, 0);
 
 			// this.toastOnUiThread("Cactus count in this TMXTiledMap: " +
@@ -575,14 +575,14 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		 * Now we are going to create a rectangle that will always highlight the
 		 * tile below the feet of the pEntity.
 		 */
-		final Rectangle currentTileRectangle = new Rectangle(0, 0,
-				this.mTMXTiledMap.getTileWidth(),
-				this.mTMXTiledMap.getTileHeight(),
-				this.getVertexBufferObjectManager());
-		/* Set the OffsetCenter to 0/0, so that it aligns with the TMXTiles. */
-		currentTileRectangle.setOffsetCenter(0, 0);
-		currentTileRectangle.setColor(1, 0, 0, 0.25f);
-		scene.attachChild(currentTileRectangle);
+//		final Rectangle currentTileRectangle = new Rectangle(0, 0,
+//				this.mTMXTiledMap.getTileWidth(),
+//				this.mTMXTiledMap.getTileHeight(),
+//				this.getVertexBufferObjectManager());
+//		/* Set the OffsetCenter to 0/0, so that it aligns with the TMXTiles. */
+//		currentTileRectangle.setOffsetCenter(0, 0);
+		//currentTileRectangle.setColor(1, 0, 0, 0.25f);
+		//scene.attachChild(currentTileRectangle);
 
 		/* The layer for the player to walk on. */
 		final TMXLayer tmxLayer = this.mTMXTiledMap.getTMXLayers().get(0);
@@ -605,13 +605,13 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				final TMXTile tmxTile = tmxLayer.getTMXTileAt(
 						playerFootCordinates[Constants.VERTEX_INDEX_X],
 						playerFootCordinates[Constants.VERTEX_INDEX_Y]);
-				if (tmxTile != null) {
-					// tmxTile.setTextureRegion(null); <-- Eraser-style removing
-					// of tiles =D
-					currentTileRectangle.setPosition(
-							tmxLayer.getTileX(tmxTile.getTileColumn()),
-							tmxLayer.getTileY(tmxTile.getTileRow()));
-				}
+//				if (tmxTile != null) {
+//					// tmxTile.setTextureRegion(null); <-- Eraser-style removing
+//					// of tiles =D
+//					currentTileRectangle.setPosition(
+//							tmxLayer.getTileX(tmxTile.getTileColumn()),
+//							tmxLayer.getTileY(tmxTile.getTileRow()));
+//				}
 
 				if (move == true && turnDone == false && diceDone == true) {
 					movementFunction(spriteList[currentCharacter]);

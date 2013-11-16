@@ -339,11 +339,11 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
         Intent output = new Intent();
         if (collisionOccurred) {
         	builder.setMessage(getString(R.string.wait_in_line_failure_hit));
-        	output.putExtra(Event.WAIT_IN_LINE_REQUEST_CODE+"", CREDITS_EARNED);
+        	output.putExtra(Event.WAIT_IN_LINE_REQUEST_CODE+"", 0);
         }
         else if (timeUp) {
         	builder.setMessage(getString(R.string.wait_in_line_failure_time));
-        	output.putExtra(Event.WAIT_IN_LINE_REQUEST_CODE+"", CREDITS_EARNED);
+        	output.putExtra(Event.WAIT_IN_LINE_REQUEST_CODE+"", 0);
         }
         else {
         	builder.setMessage(getString(R.string.wait_in_line_success, CREDITS_EARNED));

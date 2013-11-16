@@ -109,6 +109,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	private final SpriteCoordinate centerSprite = centerMap.mapToSprite();
 
 	private SpriteCoordinate[] characterCoordinates; 
+	private int[] characterCredits;
 	private String[] characterNames;
 	private int[] characterCoins;
 	ArrayList<Character> thePlayers;
@@ -165,6 +166,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		numCharacters = thePlayers.size();
 		
 		characterCoordinates = new SpriteCoordinate[numCharacters];
+		characterCredits = new int[numCharacters];
 		characterNames = new String[numCharacters];
 		characterCoins = new int[numCharacters];
 		
@@ -773,6 +775,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		}
 		int result = data.getIntExtra(requestCode+"", 0);
 		Log.d("MINIGAME", result+", "+resultCode);
+		characterCredits[currentCharacter] += result;
 		
 		/*if (requestCode == Event.BENCH_PRESS_REQUEST_CODE) {
 			num1 = data.getIntExtra(Number1Code);

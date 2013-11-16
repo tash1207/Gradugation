@@ -693,11 +693,11 @@ if (move == true && turnDone == false && diceDone == true) {
 				
 			finalPosition = characterCoordinates[thisCurrent].add(finalPosition);
 			
-			moveSprite(finalPosition, newPosition, offset, thisCurrent, mySprite);		
+			moveSprite(ranNumb, newPosition, offset, thisCurrent, mySprite);		
 		}
 	}
 	
-	public void moveSprite(final SpriteCoordinate finalPosition, final SpriteCoordinate newPosition,
+	public void moveSprite(final int moves, final SpriteCoordinate newPosition,
 			final SpriteCoordinate offset, final int thisCurrent, final Sprite mySprite) {
 
 			mySprite.registerEntityModifier(new MoveModifier(0.5f,
@@ -720,20 +720,21 @@ if (move == true && turnDone == false && diceDone == true) {
 					super.onModifierFinished(pItem);
 					Log.d("character coords", characterCoordinates[thisCurrent].toString());
 					
-					if (characterCoordinates[thisCurrent].compareTo(finalPosition) == 0) {
+					if (moves == 1) {
 						checkMiniGameHotSpots(thisCurrent);
 						swipeDone = false;
 						turnDone = true;
 					} else if (characterCoordinates[thisCurrent].compareTo(newPosition) == 0) {
 						SpriteCoordinate newPos = newPosition.add(offset);
 						newPos = mainMapEvent.checkBoundaries(characterCoordinates[thisCurrent], newPos);
-						
+						int numMoves = moves - 1;
 						// if not a valid move, newPos = newPosition, and we need to show options
 						if (newPos.compareTo(newPosition) == 0) {
-							getNewMove(mainMapEvent.getPossiblePath(newPos), finalPosition, thisCurrent, mySprite);
+							getNewMove(mainMapEvent.getPossiblePath(newPos), numMoves, thisCurrent, mySprite);
 							return;
 						}
-						moveSprite(finalPosition, newPos, offset, thisCurrent, mySprite);
+						
+						moveSprite(numMoves, newPos, offset, thisCurrent, mySprite);
 					}
 					
 
@@ -742,7 +743,7 @@ if (move == true && turnDone == false && diceDone == true) {
 			
 	}
 
-	private void getNewMove(SpriteCoordinate[] pathOptions, final SpriteCoordinate finalPosition,
+	private void getNewMove(SpriteCoordinate[] pathOptions, final int moves,
 			final int thisCurrent, final Sprite mySprite) {
 		StringBuilder options = new StringBuilder();
 		StringBuilder choices = new StringBuilder();
@@ -776,7 +777,7 @@ if (move == true && turnDone == false && diceDone == true) {
 						dialog.dismiss();
 						SpriteCoordinate offset = Event.getPositionFromDirection(dialogChoices[which]);
 						SpriteCoordinate newPos = offset.add(characterCoordinates[thisCurrent]);
-						moveSprite(finalPosition, newPos, offset, thisCurrent, mySprite);
+						moveSprite(moves, newPos, offset, thisCurrent, mySprite);
 					}
 				});
 

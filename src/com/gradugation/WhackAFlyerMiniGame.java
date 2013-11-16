@@ -331,15 +331,19 @@ public class WhackAFlyerMiniGame extends SimpleBaseGameActivity implements IOnSc
     
     private void gameFinished() {
         finished = true;
+        Intent output = new Intent();
         if (this.points >= POINTS_REQUIRED) {
             Toast.makeText(WhackAFlyerMiniGame.this, getString(R.string.whack_aflyer_success, this.points,
                     CREDITS_EARNED), Toast.LENGTH_LONG).show();
             // Code to add CREDITS_EARNED number of credits to the character
+            output.putExtra(Event.WHACK_AFLYER_REQUEST_CODE+"", CREDITS_EARNED);
         }
         else {
             Toast.makeText(WhackAFlyerMiniGame.this, getString(R.string.whack_aflyer_failure, this.points), 
                     Toast.LENGTH_LONG).show();
+            output.putExtra(Event.WHACK_AFLYER_REQUEST_CODE+"", 0);
         }
+        setResult(RESULT_OK, output);
         
         BitmapTextureAtlas continueButtonAtlas = new BitmapTextureAtlas(this.getTextureManager(),
                 951,720,TextureOptions.NEAREST_PREMULTIPLYALPHA);

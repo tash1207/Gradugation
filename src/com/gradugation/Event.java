@@ -1,9 +1,8 @@
 package com.gradugation;
 
-import java.io.Serializable;
-
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 
 import com.coordinates.MapCoordinate;
 import com.coordinates.MiniGameCoordinate;
@@ -39,6 +38,13 @@ public class Event {
 	private final static MiniGameCoordinate COLOR_MINI_GAME = new MiniGameCoordinate(PSYCHOLOGY_BUILDING);
 	private final static MiniGameCoordinate FOOD_MINI_GAME = new MiniGameCoordinate(FOOD_SCIENCE);
 	
+	public final static int BENCH_PRESS_REQUEST_CODE = 0;
+	public final static int WIRES_REQUEST_CODE = 1;
+	public final static int WAIT_IN_LINE_REQUEST_CODE = 2;
+	public final static int WHACK_AFLYER_REQUEST_CODE = 3;
+	public final static int COLOR_REQUEST_CODE = 4;
+	public final static int FOOD_REQUEST_CODE = 5;
+	
 	
 	//public void method for each event, use switch case for each eventID
 	//eventID 0 - do nothing, 1 - lose a turn? depends on turn mechanics - maybe do something else, 2 - pick up an item
@@ -60,31 +66,31 @@ public class Event {
 			//call bench press game
 			Intent intent = new Intent(context, BenchPressMinigame.class);
 			intent.putExtra("character_type", characterType);
-			context.startActivity(intent);
+			context.startActivityForResult(intent, BENCH_PRESS_REQUEST_CODE);
 		} else if (WIRES_MINI_GAME.inRange(coordinate) && !gameDone && !move) {
 			//call wires mini game
 			Intent intent = new Intent(context, WiresMiniGame.class);
 			intent.putExtra("character_type", characterType);
-			context.startActivity(intent);
+			context.startActivityForResult(intent, WIRES_REQUEST_CODE);
 		} else if (WAIT_IN_LINE_MINI_GAME.inRange(coordinate) && !gameDone && !move) {
 			// call wait in line
 			Intent intent = new Intent(context, WaitInLineMinigame.class);
 			intent.putExtra("character_type", characterType);
-			context.startActivity(intent);
+			context.startActivityForResult(intent, WAIT_IN_LINE_REQUEST_CODE);
 		} else if (WHACK_AFLYER_MINI_GAME.inRange(coordinate) && !gameDone && !move) {
 			// call whack a flyer
 			Intent intent = new Intent(context, WhackAFlyerMiniGame.class);
 			intent.putExtra("character_type", characterType);
-			context.startActivity(intent);
+			context.startActivityForResult(intent, WHACK_AFLYER_REQUEST_CODE);
 		} else if (COLOR_MINI_GAME.inRange(coordinate) && !gameDone && !move) {
 			// call colors
 			Intent intent = new Intent(context, ColorMiniGame.class);
 			intent.putExtra("character_type", characterType);
-			context.startActivity(intent);
+			context.startActivityForResult(intent, COLOR_REQUEST_CODE);
 		} else if (FOOD_MINI_GAME.inRange(coordinate) && !gameDone && !move) {
 			Intent intent = new Intent(context, FoodMiniGame.class);
 			intent.putExtra("character_type", characterType);
-			context.startActivity(intent);
+			context.startActivityForResult(intent, FOOD_REQUEST_CODE);
 		} else {
 			// generate random event
 		}

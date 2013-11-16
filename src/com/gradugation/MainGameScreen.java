@@ -703,9 +703,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 					characterCoordinates[thisCurrent].setY(mySprite.getY());
 	
 					super.onModifierFinished(pItem);
+					
+					
 					checkMiniGameHotSpots(thisCurrent);
-					swipeDone = false;
-					turnDone = true;
+					
 					
 					//currentCharacter = (currentCharacter + 1) % (numCharacters);
 	
@@ -716,12 +717,15 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 	// Checks the hot spots for the minigames
 	protected void checkMiniGameHotSpots(int current) {
+
 		Event.getEvent(characterCoordinates[current], true, gameDone, move, this, characterNames[current]);
 		
 		if (!(move || gameDone)) {
 			gameDone = true;
 		}
-
+		
+		swipeDone = false;
+		turnDone = true;
 	}
 
 	@Override
@@ -757,13 +761,24 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 			super.onResumeGame();
 	}
 
-	// ===========================================================
-	// Methods
-	// ===========================================================
+	public void onActivityResult (int requestCode, int resultCode, Intent data) {
+		if (!(move || gameDone)) {
+			gameDone = true;
+		}
+		swipeDone = false;
+		turnDone = true;
 
-	// ===========================================================
-	// Inner and Anonymous Classes
-	// ===========================================================
+		if (resultCode != RESULT_OK || data == null) {
+			return;
+		}
+		int result = data.getIntExtra(requestCode+"", 0);
+		Log.d("MINIGAME", result+", "+resultCode);
+		
+		/*if (requestCode == Event.BENCH_PRESS_REQUEST_CODE) {
+			num1 = data.getIntExtra(Number1Code);
+			num2 = data.getIntExtra(Number2Code);
+		}*/
+	}
 }
 
 

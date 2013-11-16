@@ -3,6 +3,14 @@ package com.gradugation;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+
+
+
+
+
+import com.gradugation.Character.characterType;
+
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -22,6 +30,7 @@ public class ChooseCharacterActivity extends BaseActivity {
         private ImageView characterImage;
         private TextView characterAttributes;
         
+
         ArrayList<Character> thePlayers = new ArrayList<Character>();
         int playersChosen = 0;
         @Override
@@ -99,6 +108,7 @@ public class ChooseCharacterActivity extends BaseActivity {
         }
         
         public void startGame() {
+
             Intent intent = new Intent(this, MainGameScreen.class);
             intent.putExtra(THE_PLAYERS, (Serializable)thePlayers);
             startActivity(intent);

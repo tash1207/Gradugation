@@ -2,6 +2,7 @@ package com.gradugation;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
 import java.util.Random;
 
 import org.andengine.engine.camera.BoundCamera;
@@ -47,6 +48,7 @@ import org.andengine.util.Constants;
 import org.andengine.util.debug.Debug;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.util.Log;
@@ -93,9 +95,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	
 	private ITexture mFaceTexture;
 	private ITextureRegion mFaceTextureRegion;
-	private ITexture mPausedTexture, mResumeTexture, mMainMenuTexture;
+	private ITexture mPausedTexture, mResumeTexture, mMainMenuTexture, mSaveGameTexture;
 	private ITextureRegion mPausedTextureRegion, mResumeTextureRegion,
-			mMainMenuTextureRegion;
+			mMainMenuTextureRegion, mSaveGameTextureRegion;
+	
 
 	private CameraScene mPauseScene;
 	private Scene scene;
@@ -201,7 +204,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
                                 0, 0);
 		this.finishTurnTextureAtlas.load();
 		
-		
 		// Pause Assets
 		this.mFaceTexture = new AssetBitmapTexture(this.getTextureManager(),
 				this.getAssets(), "gfx/menu.png", TextureOptions.BILINEAR);
@@ -227,6 +229,12 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		this.mMainMenuTextureRegion = TextureRegionFactory
 				.extractFromTexture(this.mMainMenuTexture);
 		this.mMainMenuTexture.load();
+
+		this.mSaveGameTexture = new AssetBitmapTexture(this.getTextureManager(),
+				this.getAssets(), "gfx/savegame.png", TextureOptions.BILINEAR);
+		this.mSaveGameTextureRegion = TextureRegionFactory
+				.extractFromTexture(this.mSaveGameTexture);
+		this.mSaveGameTexture.load();
 
 		// UI Fonts
 		final ITexture fontTexture = new EmptyTexture(this.getTextureManager(),
@@ -280,6 +288,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				.getVertexBufferObjectManager();
 
 		final Text[] textStrokes = new Text[numCharacters];
+
 
 		/*
 		 * To update text, use [text].setText("blah blah"); In which "blah blah"
@@ -411,8 +420,55 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				return true;
 			};
 		};
+		
 		this.mPauseScene.registerTouchArea(mainMenuButton);
 		this.mPauseScene.attachChild(mainMenuButton);
+		//save game button
+//		final Sprite saveGameButton = new Sprite(cX+(CAMERA_WIDTH/10), cY + (CAMERA_HEIGHT/4),
+//				this.mSaveGameTextureRegion, this.getVertexBufferObjectManager()) {
+//			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
+//				switch (touchEvent.getAction()) {
+//				case TouchEvent.ACTION_DOWN:
+//					String[] key1 = {"128"};
+//					String[] key2 = {"128"};
+//					String[] key3 = {"128","1"};
+//					String[] key4 = {"128"};
+//					String[] key5 = {"128","1"};
+//					String[] key6 = {"128"};
+//					String[] key7 = {"128"};
+//					String[] key8 = {"128"};
+//					String[] key9 = {"128","1","2"};
+//			        
+//					String[] newTable1Values = {"128","1","2"};
+//			        String[] newTable2Values = {"128","1","2","4"};
+//			        String[] newTable3Values = {"128","1","2","3","4","5"};
+//			        String[] newTable4Values = {"128","1","4","3","4"};
+//			        String[] newTable5Values = {"128","1","9"};
+//			        String[] newTable6Values = {"128","1","5","3","4"};
+//			        String[] newTable7Values = {"128","1","5","1","4","5","6"};
+//			        String[] newTable8Values = {"128","0"};
+//			        String[] newTable9Values = {"128","1","2","3"};
+//					//db.updateRow(tableNum, table1Values, newTable1Values);
+//			        dbhelper.updateRow(1,key1,newTable1Values);
+//			        dbhelper.updateRow(2,key2,newTable2Values);
+//			        dbhelper.updateRow(3,key3,newTable3Values);
+//			        dbhelper.updateRow(4,key4,newTable4Values);
+//			        dbhelper.updateRow(5,key5,newTable5Values);
+//			        dbhelper.updateRow(6,key6,newTable6Values);
+//			        dbhelper.updateRow(7,key7,newTable7Values);
+//			        dbhelper.updateRow(8,key8,newTable8Values);
+//			        dbhelper.updateRow(9,key9,newTable9Values);
+//					break;
+//				case TouchEvent.ACTION_MOVE:
+//					break;
+//				case TouchEvent.ACTION_UP:
+//					break;
+//				}
+//				return true;
+//			};
+//		};
+//		this.mPauseScene.registerTouchArea(saveGameButton);
+//		this.mPauseScene.attachChild(saveGameButton);
 
 		/* Makes the paused Game look through. */
 		this.mPauseScene.setBackgroundEnabled(false);
@@ -447,6 +503,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		mHUD.registerTouchArea(finishTurnButton);
 		mHUD.attachChild(finishTurnButton);
 		mHUD.attachChild(textStroke5);
+
 
 		mHUD.registerTouchArea(pauseSprite);
 		mHUD.attachChild(pauseSprite);

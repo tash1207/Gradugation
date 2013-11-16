@@ -290,9 +290,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 			textStrokes[i] = new Text(coord.getX(), coord.getY(), this.mStrokeFont,
 					characterNames[i]   +"\nCredits: " + characterCoins[0], vertexBufferObjectManager); 
 		}
-		final Text textStroke5 = new Text(400, 100, this.mStrokeFont,
-                "You rolled " + diceRoll, vertexBufferObjectManager);
+		final Text textStroke5 = new Text(180, 20, this.mStrokeFont,
+                " " + diceRoll, vertexBufferObjectManager);
 
+		textStroke5.setScale((float) .7 ); 
 		mHUD = new HUD();
 		mHUD.attachChild(scene);
 
@@ -317,7 +318,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	                	swipeDone = false;
 	                	if (touchEvent.isActionUp()) {
 	                		this.setColor(Color.GRAY);
-	                		textStroke5.setText("You rolled: " + diceRoll);
+	                		textStroke5.setText(" " + diceRoll);
 	                		diceDone = true;
 	                		
 	                	}
@@ -441,11 +442,11 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 			mHUD.attachChild(textStrokes[i]);
 		}
 
-		mHUD.attachChild(textStroke5);
 		mHUD.registerTouchArea(diceButton);
 		mHUD.attachChild(diceButton);	
 		mHUD.registerTouchArea(finishTurnButton);
 		mHUD.attachChild(finishTurnButton);
+		mHUD.attachChild(textStroke5);
 
 		mHUD.registerTouchArea(pauseSprite);
 		mHUD.attachChild(pauseSprite);

@@ -123,7 +123,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	private int[] characterCredits;
 	private String[] characterNames;
 	private int[] characterCoins;
-	ArrayList<Character> thePlayers;
+	static ArrayList<Character> thePlayers;
 	
 	private Text[] textStrokes;
 	final private SpriteCoordinate[] textStrokeCoordinates = {
@@ -842,6 +842,11 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				+ "\nCoins: " + characterCoins[currentCharacter]);
 	}
 	
+	// Get the character names and credits for game over screen
+	public static ArrayList<Character> getPlayers() {
+		return thePlayers;
+	}
+	
 	private void checkCredits(int character) {
 		if (characterCredits[currentCharacter] >= CREDITS_NEEDED_GRADUATE) {
 			runOnUiThread(new Runnable() {                  
@@ -862,6 +867,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				+ "\nCredits: " + characterCredits[currentCharacter]
 				+ "\nCoins: " + characterCoins[currentCharacter]);
 	}
+	
+	
 }
 
 

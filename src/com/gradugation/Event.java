@@ -1,9 +1,13 @@
 package com.gradugation;
 
 import java.io.Serializable;
+import java.util.Random;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.coordinates.MapCoordinate;
 import com.coordinates.MiniGameCoordinate;
@@ -87,6 +91,32 @@ public class Event {
 			context.startActivity(intent);
 		} else {
 			// generate random event
+			int[] eventArray = new int[10];
+			Random r = new Random();
+			int eventIndex;
+			
+			String[] event = {"Learn from yesterday", "Live for today", "Hope for tomorrow"};
+			int eventMessage;
+			
+			for (int i = 0; i < eventArray.length; i++){
+				eventIndex = r.nextInt(2);
+				eventArray[i] = eventIndex;
+				if (eventArray[i] == 1){
+					eventMessage = r.nextInt(3);
+					
+					//Create Message for random event
+					/*
+					Context toastContext = getApplicationContext();
+					CharSequence text = event[eventMessage];
+					int duration = Toast.LENGTH_SHORT;
+
+					Toast toast = Toast.makeText(toastContext, text, duration);
+					toast.show();
+					*/
+				}
+				break;
+			}
 		}
+		
 	}
 }

@@ -2,7 +2,6 @@ package com.gradugation;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
 import java.util.Random;
 
 import org.andengine.audio.music.Music;
@@ -55,6 +54,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
@@ -199,7 +199,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		mainMapEvent = new Event(this, R.raw.map_text_file);
 
         Intent intent = getIntent();
-		thePlayers = (ArrayList<Character>) intent.getSerializableExtra(ChooseCharacterActivity.THE_PLAYERS);
+        Bundle bundle = intent.getExtras();
+		thePlayers = (ArrayList<Character>) bundle.getSerializable(ChooseCharacterActivity.THE_PLAYERS);
 		numCharacters = thePlayers.size();
 		
 		characterCoordinates = new SpriteCoordinate[numCharacters];
@@ -223,7 +224,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 			characterTextureAtlas[i] = new BitmapTextureAtlas(
 					this.getTextureManager(), 1000, 1000, TextureOptions.BILINEAR);
 			character[i] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(characterTextureAtlas[i],
-					this, NameToImageName(characterNames[i]), 0, 0);
+					this, thePlayers.get(i).getCharacterImage(), 0 , 0);   //NameToImageName(characterTypes[i]), 0, 0);
 			characterTextureAtlas[i].load();
 		}
 

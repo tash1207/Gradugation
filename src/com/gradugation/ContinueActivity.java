@@ -125,7 +125,10 @@ public class ContinueActivity extends Activity {
 
 			// Go to main game screen
 			Intent intent = new Intent(this, MainGameScreen.class);
-			intent.putExtra(THE_PLAYERS, (Serializable) thePlayers);
+			Bundle bundle = new Bundle();
+			bundle.putSerializable(THE_PLAYERS, thePlayers);
+			intent.putExtras(bundle);
+//			intent.putExtra(THE_PLAYERS, bundle);
 			startActivity(intent);
 
 		}

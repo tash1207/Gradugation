@@ -31,9 +31,9 @@ public class MainActivity extends BaseActivity {
         
         //Insert Some Data into Database
         String[] game = {"0","0","3","2"};
-        String[] character1 = {"000","Engineer","Ahmad","34","11","105","45","3"};
-        String[] character2 = {"001","Athlete","Dorian","34","11","105","45","3"};
-        String[] character3 = {"002","Gradugator","Ashley","34","11","105","45","3"};
+        String[] character1 = {"000","Engineer","Ahmad","7","7","105","45","3"};
+        String[] character2 = {"001","Athlete","Dorian","7","8","105","45","3"};
+        String[] character3 = {"002","Gradugator","Ashley","7","9","105","45","3"};
         String[] item = {"12","Scooter","500","Movement","Speed","700","Ridin 'round and I'm gettin it"};
         String[] minigame = {"1","6","4","2","1","3"};
         

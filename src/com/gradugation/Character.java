@@ -150,7 +150,7 @@ public class Character implements Serializable {
         	return this.location.spriteToMap();
         }
         
-        public String getCharacterType() {
+        public String getCharacterImage() {
         	return this.character.getImageName();
         }
 }        

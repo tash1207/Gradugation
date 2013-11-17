@@ -57,6 +57,8 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
     private BitmapTextureAtlas busTextureAtlas;
     public ITextureRegion busTextureRegion;
     
+    private String characterType;
+    
     private Sprite sprChar;
     private Sprite sprBg;
     private Sprite spr1;
@@ -119,6 +121,10 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
 
 	@Override
 	protected void onCreateResources() throws IOException {
+    	Intent intent = getIntent();
+    	characterType = intent.getStringExtra("character_type");
+    	if (characterType == null) characterType = "Gradugator";
+    	
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		// Background
 		this.bgTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 960, 720, 
@@ -165,16 +171,42 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
 		scene.setBackground(new Background(Color.WHITE));
 		sprBg = new Sprite(CAMERA_WIDTH - 80, CAMERA_HEIGHT - 10, bgRegion, this.getVertexBufferObjectManager());
 
-		sprChar = new Sprite(currentX, currentY, character, this.getVertexBufferObjectManager());
-		sprChar.setScale(0.125f);
-		
-		spr1 = new Sprite(spr1X, spr1Y, athleteTextureRegion, this.getVertexBufferObjectManager());
-		spr1.setScale(0.115f);
-		spr1.setVisible(false);
-		
-		spr2 = new Sprite(spr2X, spr2Y, engineerTextureRegion, this.getVertexBufferObjectManager());
-		spr2.setScale(0.115f);
-		spr2.setVisible(false);
+		if (characterType.equals("Gradugator")) {
+			sprChar = new Sprite(currentX, currentY, character, this.getVertexBufferObjectManager());
+			sprChar.setScale(0.125f);
+			
+			spr1 = new Sprite(spr1X, spr1Y, athleteTextureRegion, this.getVertexBufferObjectManager());
+			spr1.setScale(0.115f);
+			spr1.setVisible(false);
+			
+			spr2 = new Sprite(spr2X, spr2Y, engineerTextureRegion, this.getVertexBufferObjectManager());
+			spr2.setScale(0.115f);
+			spr2.setVisible(false);
+		}
+		else if (characterType.equals("Athlete")) {
+			sprChar = new Sprite(currentX, currentY, athleteTextureRegion, this.getVertexBufferObjectManager());
+			sprChar.setScale(0.115f);
+			
+			spr1 = new Sprite(spr1X, spr1Y, character, this.getVertexBufferObjectManager());
+			spr1.setScale(0.125f);
+			spr1.setVisible(false);
+			
+			spr2 = new Sprite(spr2X, spr2Y, engineerTextureRegion, this.getVertexBufferObjectManager());
+			spr2.setScale(0.115f);
+			spr2.setVisible(false);
+		}
+		else if (characterType.equals("Engineer")) {
+			sprChar = new Sprite(currentX, currentY, engineerTextureRegion, this.getVertexBufferObjectManager());
+			sprChar.setScale(0.115f);
+			
+			spr1 = new Sprite(spr1X, spr1Y, athleteTextureRegion, this.getVertexBufferObjectManager());
+			spr1.setScale(0.115f);
+			spr1.setVisible(false);
+			
+			spr2 = new Sprite(spr2X, spr2Y, character, this.getVertexBufferObjectManager());
+			spr2.setScale(0.125f);
+			spr2.setVisible(false);
+		}
 		
 		sprBus = new Sprite(sprBusX, sprBusY, busTextureRegion, this.getVertexBufferObjectManager());
 		sprBus.setScale(0.8f);
@@ -211,7 +243,7 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
 	                public void onClick(DialogInterface dialog, int arg1) {
 	                        dialog.dismiss();
 	                        gameStarted = true;
-	                		timer = new CountDownTimer(15800, 1000) {
+	                		timer = new CountDownTimer(16100, 1000) {
 	                			public void onTick(long millisUntilFinished) {
 	                			}
 	                			

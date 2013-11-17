@@ -116,8 +116,11 @@ public class ContinueActivity extends Activity {
 				int credits = Integer.valueOf((String) characterList.get(5));
 				int coins = Integer.valueOf((String) characterList.get(6));
 				
+				/// grab gameid
+				int gameId = 0;
+				
 				Log.d("characterstype", type);
-				Character thePlayer = new Character(type.toUpperCase(), name, location.mapToSprite(), (id << 2) + i, credits, coins);
+				Character thePlayer = new Character(type.toUpperCase(), name, location.mapToSprite(), (id << 2) + i, gameId, credits, coins);
 				thePlayers.add(thePlayer);
 			}
 			// Close database

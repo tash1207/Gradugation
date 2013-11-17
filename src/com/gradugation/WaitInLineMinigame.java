@@ -24,6 +24,7 @@ import org.andengine.util.adt.color.Color;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.DisplayMetrics;
@@ -335,16 +336,21 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
 	
 	public void finishGame() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        Intent output = new Intent();
         if (collisionOccurred) {
         	builder.setMessage(getString(R.string.wait_in_line_failure_hit));
+        	output.putExtra(Event.WAIT_IN_LINE_REQUEST_CODE+"", 0);
         }
         else if (timeUp) {
         	builder.setMessage(getString(R.string.wait_in_line_failure_time));
+        	output.putExtra(Event.WAIT_IN_LINE_REQUEST_CODE+"", 0);
         }
         else {
         	builder.setMessage(getString(R.string.wait_in_line_success, CREDITS_EARNED));
         	// Code to give character CREDITS_EARNED credits
+        	output.putExtra(Event.WAIT_IN_LINE_REQUEST_CODE+"", CREDITS_EARNED);
         }
+        setResult(RESULT_OK, output);
         builder.setCancelable(false);
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 

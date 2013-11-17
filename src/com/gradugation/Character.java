@@ -7,6 +7,7 @@ import com.coordinates.SpriteCoordinate;
 
 
 public class Character implements Serializable {
+
         public enum CHARACTERTYPE {
             ALBERT(""), GRADUGATOR("splash2.png"), ENGINEER("engineer.png"), ATHLETE("athlete.png");
             
@@ -28,9 +29,18 @@ public class Character implements Serializable {
         int id, credits, coins;
         SpriteCoordinate location;
         
-        public Character(CHARACTERTYPE characterType, String name, SpriteCoordinate location,
+        /**
+         * 
+         * @param characterType
+         * @param name
+         * @param location
+         * @param charID
+         * @param credits
+         * @param coins
+         */
+        public Character(String characterType, String name, SpriteCoordinate location,
         		int charID, int credits, int coins) {
-        	this.character = characterType;
+        	this.character = CHARACTERTYPE.valueOf(characterType);
         	this.name = name;
         	this.location = location;
         	this.id = charID;
@@ -44,8 +54,9 @@ public class Character implements Serializable {
          * @param coordinate SpriteCoordinate Where the sprite is in terms of screen size.
          * @param charID
          */
-        public Character(CHARACTERTYPE characterType, SpriteCoordinate coordinate, int charID) {
+        public Character(String characterType, SpriteCoordinate coordinate, int charID) {
         	this(characterType, "", coordinate, charID, 0, 0);
+        	
         }
         
         /**
@@ -54,7 +65,7 @@ public class Character implements Serializable {
          * @param coordinate MapCoordinate Where the sprite is in terms of the tile map.
          * @param charID
          */
-        public Character(CHARACTERTYPE characterType, MapCoordinate coordinate, int charID) {
+        public Character(String characterType, MapCoordinate coordinate, int charID) {
         	this(characterType, "", coordinate.mapToSprite(), charID, 0, 0);
         }
         
@@ -65,7 +76,7 @@ public class Character implements Serializable {
          * @param y float Where character is in terms of screen size y
          * @param charID
          */
-        public Character(CHARACTERTYPE characterType, float x, float y, int charID) {
+        public Character(String characterType, float x, float y, int charID) {
         	this(characterType, "", new SpriteCoordinate(x,y), charID, 0, 0);
         }
         
@@ -76,12 +87,15 @@ public class Character implements Serializable {
          * @param y int Where character is in terms of tile map y
          * @param charID
          */
-        public Character(CHARACTERTYPE characterType, int x, int y, int charID) {
+        public Character(String characterType, int x, int y, int charID) {
         	this(characterType, "", new MapCoordinate(x,y).mapToSprite(), charID, 0, 0);
         }
         
+        /**
+         * Sets everything to 0, and no string for name.
+         */
         public Character() {
-            this(CHARACTERTYPE.ALBERT, "", new SpriteCoordinate(), 0, 0, 0);
+            this("", "", new SpriteCoordinate(), 0, 0, 0);
         }
         
         public void setName(String name){
@@ -104,12 +118,20 @@ public class Character implements Serializable {
                 this.credits+=credits;
         }
         
+        public void setCredits(int credits) {
+        	this.credits = credits;
+        }
+        
         public int getCredits(){
                 return credits;
         }
         
         public void addCoins(int coins)        {
                 this.coins+=coins;
+        }
+        
+        public void setCoins(int coins) {
+        	this.coins = coins;
         }
         
         public int getCoins()        {

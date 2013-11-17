@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.coordinates.MapCoordinate;
+
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -110,12 +112,16 @@ public class ContinueActivity extends Activity {
 			for (int i = 0; i < (numCharacters); i++) {
 				String[] tempStringArray = { "" + (id << 2) + i };
 				characterList = dbhelper.getRow(2, tempStringArray);
-				Character thePlayer = new Character((String) characterList.get(1));
-				thePlayer.setName((String) characterList.get(1));
-				thePlayer.setX((float) Integer.valueOf((String) characterList.get(3)));
-				thePlayer.setY((float) (Integer) Integer.valueOf((String) characterList.get(4)));
-				thePlayer.addCredits((Integer) Integer.valueOf((String) characterList.get(5)));
-				thePlayer.addCoins((Integer) Integer.valueOf((String) characterList.get(6)));
+				
+				String name = (String) characterList.get(1);
+				// being loaded as map coordinates
+				int x = Integer.valueOf((String) characterList.get(3));
+				int y = Integer.valueOf((String) characterList.get(4));
+				MapCoordinate location = new MapCoordinate(x,y);
+				int credits = Integer.valueOf((String) characterList.get(5));
+				int coins = Integer.valueOf((String) characterList.get(6));
+				
+				Character thePlayer = new Character(name, name, location.mapToSprite(), i, credits, coins);
 				thePlayers.add(thePlayer);
 			}
 			// Close database

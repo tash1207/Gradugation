@@ -3,14 +3,6 @@ package com.gradugation;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-
-
-
-
-
-import com.gradugation.Character.characterType;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -21,6 +13,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.coordinates.MapCoordinate;
+
 public class ChooseCharacterActivity extends BaseActivity {
 
         public static final String THE_PLAYERS = "com.gradugation.the_players";
@@ -29,6 +23,8 @@ public class ChooseCharacterActivity extends BaseActivity {
         
         private ImageView characterImage;
         private TextView characterAttributes;
+        
+        private static final MapCoordinate defaultLocation = new MapCoordinate(7,7);
         
 
         ArrayList<Character> thePlayers = new ArrayList<Character>();
@@ -79,7 +75,8 @@ public class ChooseCharacterActivity extends BaseActivity {
                     //find the radiobutton by returned id
                     radioGroup1Button = (RadioButton) findViewById(selectedId);
                     
-                    Character thePlayer = new Character((String)radioGroup1Button.getText());
+                    String name = (String)radioGroup1Button.getText();
+                    Character thePlayer = new Character(name, name, defaultLocation.mapToSprite(), playersChosen, 0, 0);
                     thePlayer.setName((String)radioGroup1Button.getText());
                     thePlayers.add(thePlayer);
                     
@@ -96,8 +93,9 @@ public class ChooseCharacterActivity extends BaseActivity {
                     //find the radiobutton by returned id
                     radioGroup1Button = (RadioButton) findViewById(selectedId);
                     
-                    Character thePlayer = new Character((String)radioGroup1Button.getText());
-                    thePlayer.setName((String)radioGroup1Button.getText());
+                    String name = (String)radioGroup1Button.getText();
+                    Character thePlayer = new Character(name, name, defaultLocation.mapToSprite(), playersChosen, 0, 0);
+
                     thePlayers.add(thePlayer);
                     
                     Toast.makeText(ChooseCharacterActivity.this,  

@@ -1,17 +1,17 @@
 package com.gradugation;
 
+import static org.andengine.extension.physics.box2d.util.constants.PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static org.andengine.extension.physics.box2d.util.constants.PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT;
-
+import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
-import org.andengine.engine.Engine;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
@@ -31,29 +31,29 @@ import org.andengine.opengl.font.StrokeFont;
 import org.andengine.opengl.texture.EmptyTexture;
 import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.TextureOptions;
-import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
-import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.bitmap.AssetBitmapTexture;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.TextureRegionFactory;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.adt.align.HorizontalAlign;
 
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.hardware.SensorManager;
 import android.widget.Toast;
+
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 public class FoodMiniGame extends BaseGameActivity {
 
 	private static final int CAMERA_WIDTH = 800;
 	private static final int CAMERA_HEIGHT = 480;
 	private static final int POINTS_NEEDED = 5;
+	private static final int CREDITS_EARNED = 3;
 	private int score = 0;
 
 	protected Engine engine;
@@ -247,12 +247,15 @@ public class FoodMiniGame extends BaseGameActivity {
 						countdown--;
 						timerText.setText("Timer: " + countdown);
 						if (countdown == 0) {
-
+							Intent output = new Intent();
 							if (score >= POINTS_NEEDED) {
 								gameOver.setText("Game Over! You won!");
+								output.putExtra(Event.FOOD_REQUEST_CODE+"", CREDITS_EARNED);
 							} else {
 								gameOver.setText("Game Over! You lost!");
+								output.putExtra(Event.FOOD_REQUEST_CODE+"", 0);
 							}
+							setResult(RESULT_OK, output);
 							scene.setIgnoreUpdate(true);
 							scene.clearTouchAreas();
 							createContinueButton();

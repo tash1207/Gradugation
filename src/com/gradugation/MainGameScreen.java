@@ -55,6 +55,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import com.coordinates.MapCoordinate;
 import com.coordinates.SpriteCoordinate;
@@ -96,6 +97,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 	private TMXTiledMap mTMXTiledMap;
 	protected int mCactusCount;
+	private int CREDITS_NEEDED_GRADUATE = 15;
 
 	//private BitmapTextureAtlas characterTextureAtlas,characterTextureAtlas2,characterTextureAtlas3,characterTextureAtlas4;
 	//public ITextureRegion character,character2,character3,character4;
@@ -127,10 +129,12 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	private final SpriteCoordinate centerSprite = centerMap.mapToSprite();
 
 	private SpriteCoordinate[] characterCoordinates; 
+	private int[] characterCredits;
 	private String[] characterNames;
 	private int[] characterCoins;
 	ArrayList<Character> thePlayers;
 	
+	private Text[] textStrokes;
 	final private SpriteCoordinate[] textStrokeCoordinates = {
 	        new SpriteCoordinate(80,300), new SpriteCoordinate(400,300), 
 	        new SpriteCoordinate(80,20), new SpriteCoordinate(400,20) };
@@ -188,12 +192,14 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		numCharacters = thePlayers.size();
 		
 		characterCoordinates = new SpriteCoordinate[numCharacters];
+		characterCredits = new int[numCharacters];
 		characterNames = new String[numCharacters];
 		characterCoins = new int[numCharacters];
 		
 		for (int i = 0; i < numCharacters; i++) {
 			characterNames[i] = thePlayers.get(i).getName();
 			characterCoins[i] = thePlayers.get(i).getCoins();
+			characterCredits[i] = thePlayers.get(i).getCredits();
 		}
 		
 		//Create all four character sprites
@@ -299,10 +305,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		 * player's information Include number of credits There will be a button
 		 * to roll dice and turn number will be displayed.
 		 */
-		final VertexBufferObjectManager vertexBufferObjectManager = this
+		VertexBufferObjectManager vertexBufferObjectManager = this
 				.getVertexBufferObjectManager();
 
-		final Text[] textStrokes = new Text[numCharacters];
+		textStrokes = new Text[numCharacters];
 
 		/*
 		 * To update text, use [text].setText("blah blah"); In which "blah blah"
@@ -311,7 +317,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		for (int i = 0; i < numCharacters; i++) {
 			SpriteCoordinate coord = textStrokeCoordinates[i];
 			textStrokes[i] = new Text(coord.getX(), coord.getY(), this.mStrokeFont,
-					characterNames[i]   +"\nCredits: " + characterCoins[0], vertexBufferObjectManager); 
+					characterNames[i]   +"\nCredits: " + characterCredits[i]
+				    + "\nCoins: " + characterCoins[i], vertexBufferObjectManager); 
 		}
 		final Text textStroke5 = new Text(400, 100, this.mStrokeFont,
                 "You rolled " + diceRoll, vertexBufferObjectManager);
@@ -720,7 +727,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 					characterCoordinates[thisCurrent].setX(mySprite.getX());
 					characterCoordinates[thisCurrent].setY(mySprite.getY());
 					super.onModifierFinished(pItem);
-					Log.d("character coords", characterCoordinates[thisCurrent].toString());
 					
 					if (moves == 0) {
 						checkMiniGameHotSpots(thisCurrent);
@@ -795,13 +801,14 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	}
 	// Checks the hot spots for the minigames
 	protected void checkMiniGameHotSpots(int current) {
-
 		Event.getEvent(characterCoordinates[current], this, characterNames[current]);
 		
 		if (!(move || gameDone)) {
 			gameDone = true;
 		}
-
+		
+		swipeDone = false;
+		turnDone = true;
 	}
 
 	@Override
@@ -837,13 +844,44 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 			super.onResumeGame();
 	}
 
-	// ===========================================================
-	// Methods
-	// ===========================================================
+	public void onActivityResult (int requestCode, int resultCode, Intent data) {
+		if (!(move || gameDone)) {
+			gameDone = true;
+		}
+		swipeDone = false;
+		turnDone = true;
 
-	// ===========================================================
-	// Inner and Anonymous Classes
-	// ===========================================================
+		if (resultCode != RESULT_OK || data == null) {
+			return;
+		}
+
+		int result = data.getIntExtra(requestCode+"", 0);
+		addCredits(currentCharacter, result);
+		Log.d("MINIGAME", result+", "+resultCode);
+		
+		checkCredits(currentCharacter);
+	}
+	
+	private void addCredits(int character, int creditsToAdd) {
+		characterCredits[currentCharacter] += creditsToAdd;
+		textStrokes[character].setText(characterNames[character]
+				+ "\nCredits: " + characterCredits[currentCharacter]
+				+ "\nCoins: " + characterCoins[currentCharacter]);
+	}
+	
+	private void checkCredits(int character) {
+		if (characterCredits[currentCharacter] >= CREDITS_NEEDED_GRADUATE) {
+			Toast.makeText(this, getString(R.string.ready_to_graduate, currentCharacter,
+					characterCredits[currentCharacter]), Toast.LENGTH_LONG).show();
+		}
+	}
+	
+	private void addCoins(int character, int coinsToAdd) {
+		characterCoins[currentCharacter] += coinsToAdd;
+		textStrokes[character].setText(characterNames[character]
+				+ "\nCredits: " + characterCredits[currentCharacter]
+				+ "\nCoins: " + characterCoins[currentCharacter]);
+	}
 }
 
 

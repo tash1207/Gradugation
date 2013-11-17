@@ -53,7 +53,7 @@ public class Event {
 	private final static MapCoordinate HUB = new MapCoordinate(11,9);
 	private final static MapCoordinate TURLINGTON = new MapCoordinate(14,11);
 	private final static MapCoordinate COMPUTER_SCIENCE = new MapCoordinate(14,7);
-	private final static MapCoordinate PSYCHOLOGY_BUILDING = new MapCoordinate(12,2);
+	private final static MapCoordinate PSYCHOLOGY_BUILDING = new MapCoordinate(12,1);
 	private final static MapCoordinate FOOD_SCIENCE = new MapCoordinate(17,5);
 	private final static MapCoordinate LIBRARY_WEST = new MapCoordinate(20,12);
 	private final static MapCoordinate LITTLE_HALL = new MapCoordinate(22,7);
@@ -70,6 +70,14 @@ public class Event {
 	
 	private MapSet mapPath = new MapSet() ;
 
+	public final static int BENCH_PRESS_REQUEST_CODE = 0;
+	public final static int WIRES_REQUEST_CODE = 1;
+	public final static int WAIT_IN_LINE_REQUEST_CODE = 2;
+	public final static int WHACK_AFLYER_REQUEST_CODE = 3;
+	public final static int COLOR_REQUEST_CODE = 4;
+	public final static int FOOD_REQUEST_CODE = 5;
+	
+	
 	//public void method for each event, use switch case for each eventID
 	//eventID 0 - do nothing, 1 - lose a turn? depends on turn mechanics - maybe do something else, 2 - pick up an item
 	
@@ -169,31 +177,31 @@ public class Event {
 			//call bench press game
 			Intent intent = new Intent(context, BenchPressMinigame.class);
 			intent.putExtra("character_type", characterType);
-			context.startActivity(intent);
-		} else if (WIRES_MINI_GAME.isEqual(coordinate)) {
+			context.startActivityForResult(intent, BENCH_PRESS_REQUEST_CODE);
+		} else if (WIRES_MINI_GAME.inRange(coordinate)) {
 			//call wires mini game
 			Intent intent = new Intent(context, WiresMiniGame.class);
 			intent.putExtra("character_type", characterType);
-			context.startActivity(intent);
-		} else if (WAIT_IN_LINE_MINI_GAME.isEqual(coordinate)) {
+			context.startActivityForResult(intent, WIRES_REQUEST_CODE);
+		} else if (WAIT_IN_LINE_MINI_GAME.inRange(coordinate)) {
 			// call wait in line
 			Intent intent = new Intent(context, WaitInLineMinigame.class);
 			intent.putExtra("character_type", characterType);
-			context.startActivity(intent);
-		} else if (WHACK_AFLYER_MINI_GAME.isEqual(coordinate)) {
+			context.startActivityForResult(intent, WAIT_IN_LINE_REQUEST_CODE);
+		} else if (WHACK_AFLYER_MINI_GAME.inRange(coordinate)) {
 			// call whack a flyer
 			Intent intent = new Intent(context, WhackAFlyerMiniGame.class);
 			intent.putExtra("character_type", characterType);
-			context.startActivity(intent);
-		} else if (COLOR_MINI_GAME.isEqual(coordinate)) {
+			context.startActivityForResult(intent, WHACK_AFLYER_REQUEST_CODE);
+		} else if (COLOR_MINI_GAME.inRange(coordinate)) {
 			// call colors
 			Intent intent = new Intent(context, ColorMiniGame.class);
 			intent.putExtra("character_type", characterType);
-			context.startActivity(intent);
-		} else if (FOOD_MINI_GAME.isEqual(coordinate)) {
+			context.startActivityForResult(intent, COLOR_REQUEST_CODE);
+		} else if (FOOD_MINI_GAME.inRange(coordinate)) {
 			Intent intent = new Intent(context, FoodMiniGame.class);
 			intent.putExtra("character_type", characterType);
-			context.startActivity(intent);
+			context.startActivityForResult(intent, FOOD_REQUEST_CODE);
 		} else {
 			// generate random event
 		}

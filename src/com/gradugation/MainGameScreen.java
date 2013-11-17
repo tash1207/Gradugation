@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import java.util.Random;
 
+import org.andengine.audio.music.Music;
+import org.andengine.audio.music.MusicFactory;
 import org.andengine.engine.camera.BoundCamera;
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.engine.camera.hud.HUD;
@@ -47,13 +49,18 @@ import org.andengine.ui.activity.SimpleBaseGameActivity;
 import org.andengine.util.Constants;
 import org.andengine.util.debug.Debug;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import com.coordinates.MapCoordinate;
 import com.coordinates.SpriteCoordinate;
@@ -68,11 +75,25 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	private static final int CAMERA_HEIGHT = 320;
 	
 	//private static final int MAX_CHARACTER_MOVEMENT = 3;
-	private static final int CHARACTER_WIDTH = 32;
+	public static final int CHARACTER_WIDTH = 32;
+	private static final String MAP_NAME = "map_text_file.txt";
 
 	// ===========================================================
 	// Fields
 	// ===========================================================
+
+	// Need handler for callbacks to the UI thread
+    final Handler mHandler = new Handler();
+
+    // Create runnable for posting
+    final Runnable mUpdateResults = new Runnable() {
+        public void run() {
+            askDirection();
+        }
+    };
+    
+    private AlertDialog.Builder alertDialogBuilder;
+	private AlertDialog alertDialog;
 
 	private BoundCamera mCamera;
 
@@ -81,6 +102,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 	private TMXTiledMap mTMXTiledMap;
 	protected int mCactusCount;
+	private int CREDITS_NEEDED_GRADUATE = 15;
 
 	//private BitmapTextureAtlas characterTextureAtlas,characterTextureAtlas2,characterTextureAtlas3,characterTextureAtlas4;
 	//public ITextureRegion character,character2,character3,character4;
@@ -92,6 +114,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	private TextureRegion diceTextureRegion;
 	private BitmapTextureAtlas finishTurnTextureAtlas;
 	private TextureRegion finishTurnTextureRegion;
+	private BitmapTextureAtlas musicTextureAtlas;
+	private ITextureRegion mMusicTextureRegion;
 	
 	private ITexture mFaceTexture;
 	private ITextureRegion mFaceTextureRegion;
@@ -102,30 +126,37 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 	private CameraScene mPauseScene;
 	private Scene scene;
+	private Event mainMapEvent;
 
 	private HUD mHUD;
 
 	private Font mFont;
 	private StrokeFont mStrokeFont, mStrokeFontLarge;
 	
+	private Music mMusic;
+	
 	private final MapCoordinate centerMap = new MapCoordinate(7,7);
 	private final SpriteCoordinate centerSprite = centerMap.mapToSprite();
 
 	private SpriteCoordinate[] characterCoordinates; 
+	private int[] characterCredits;
 	private String[] characterNames;
 	private int[] characterCoins;
-	ArrayList<Character> thePlayers;
+	static ArrayList<Character> thePlayers;
 	
+	private Text[] textStrokes;
 	final private SpriteCoordinate[] textStrokeCoordinates = {
 	        new SpriteCoordinate(80,300), new SpriteCoordinate(400,300), 
 	        new SpriteCoordinate(80,20), new SpriteCoordinate(400,20) };
 
 	private boolean turnDone;
+	private boolean eventCompleted;
 	private boolean moving;
 	public int turnNum;
 	public int currentCharacter;
 	public int ranNumb;
 	private int numCharacters;
+	private int movementCount;
 
 	private Random random;
     private int diceRoll = 0;
@@ -136,6 +167,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	float initY;
 	float finalX;
 	float finalY;
+	
+	float variable;
 	
 	private boolean finishTurn = false; 
 	private boolean diceDone = false;
@@ -154,26 +187,30 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		this.mCamera = new SmoothCamera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT,
 				maxVelocityX, maxVelocityY, maxZoomFactorChange);
 		this.mCamera.setBoundsEnabled(false);
+		
+        final EngineOptions engineOptions = new EngineOptions(true, ScreenOrientation.LANDSCAPE_SENSOR, new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT), this.mCamera);
+        engineOptions.getAudioOptions().setNeedsMusic(true);
 
-		return new EngineOptions(true, ScreenOrientation.LANDSCAPE_SENSOR,
-				new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT),
-				this.mCamera);
+		return engineOptions;
 	}
 
 	@Override
 	public void onCreateResources() throws IOException {
-		
+		mainMapEvent = new Event(this, R.raw.map_text_file);
+
         Intent intent = getIntent();
 		thePlayers = (ArrayList<Character>) intent.getSerializableExtra(ChooseCharacterActivity.THE_PLAYERS);
 		numCharacters = thePlayers.size();
 		
 		characterCoordinates = new SpriteCoordinate[numCharacters];
+		characterCredits = new int[numCharacters];
 		characterNames = new String[numCharacters];
 		characterCoins = new int[numCharacters];
 		
 		for (int i = 0; i < numCharacters; i++) {
 			characterNames[i] = thePlayers.get(i).getName();
 			characterCoins[i] = thePlayers.get(i).getCoins();
+			characterCredits[i] = thePlayers.get(i).getCredits();
 		}
 		
 		//Create all four character sprites
@@ -256,6 +293,18 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				strokeFontTexture, Typeface.create(Typeface.DEFAULT,
 						Typeface.BOLD), 32, true, Color.WHITE, 1, Color.BLACK);
 		this.mStrokeFontLarge.load();
+		
+		this.musicTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 128, 128, TextureOptions.BILINEAR);
+        this.mMusicTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.musicTextureAtlas, this, "notes.png", 0, 0);
+        this.musicTextureAtlas.load();
+        
+		MusicFactory.setAssetBasePath("mfx/");
+        try {
+                this.mMusic = MusicFactory.createMusicFromAsset(this.mEngine.getMusicManager(), this, "wagner_the_ride_of_the_valkyries.ogg");
+                this.mMusic.setLooping(true);
+        } catch (final IOException e) {
+                Debug.e(e);
+        }
 
 	}
 	
@@ -284,10 +333,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		 * player's information Include number of credits There will be a button
 		 * to roll dice and turn number will be displayed.
 		 */
-		final VertexBufferObjectManager vertexBufferObjectManager = this
+		VertexBufferObjectManager vertexBufferObjectManager = this
 				.getVertexBufferObjectManager();
 
-		final Text[] textStrokes = new Text[numCharacters];
+		textStrokes = new Text[numCharacters];
 
 
 		/*
@@ -297,7 +346,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		for (int i = 0; i < numCharacters; i++) {
 			SpriteCoordinate coord = textStrokeCoordinates[i];
 			textStrokes[i] = new Text(coord.getX(), coord.getY(), this.mStrokeFont,
-					characterNames[i]   +"\nCredits: " + characterCoins[0], vertexBufferObjectManager); 
+					characterNames[i]   +"\nCredits: " + characterCredits[i]
+				    + "\nCoins: " + characterCoins[i], vertexBufferObjectManager); 
 		}
 		final Text textStroke5 = new Text(180, 20, this.mStrokeFont,
                 " " + diceRoll, vertexBufferObjectManager);
@@ -372,6 +422,33 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				/ 2 + (this.mPausedTextureRegion.getWidth() / 3);
 		final float cY = (CAMERA_HEIGHT - this.mPausedTextureRegion.getHeight()) / 5;
 
+		// Music Button
+		// Default - Music on.
+		mMusic.play();
+		
+        final Sprite musicButton = new Sprite(CAMERA_WIDTH / 12, cY - (CAMERA_HEIGHT / 13), this.mMusicTextureRegion,
+				this.getVertexBufferObjectManager()) {
+			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
+				switch (touchEvent.getAction()) {
+				case TouchEvent.ACTION_DOWN:
+					if (mMusic.isPlaying()) {
+						mMusic.pause();
+					} else {
+						mMusic.play();
+					}
+					break;
+				case TouchEvent.ACTION_MOVE:
+					break;
+				case TouchEvent.ACTION_UP:
+					break;
+				}
+				return true;
+			};
+		};
+        
+        this.mPauseScene.registerTouchArea(musicButton);
+		this.mPauseScene.attachChild(musicButton);
+        
 		// Resume Button
 
 		final Sprite resumeButton = new Sprite(cX + (CAMERA_WIDTH / 10), cY
@@ -412,9 +489,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 					onClick(mRenderSurfaceView);
 					finish();
 					break;
-				case TouchEvent.ACTION_MOVE:
-					break;
-				case TouchEvent.ACTION_UP:
+				default:
 					break;
 				}
 				return true;
@@ -483,11 +558,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 					scene.setIgnoreUpdate(true);
 					mHUD.setChildScene(mPauseScene, false, true, true);
 					break;
-				case TouchEvent.ACTION_MOVE:
-
-					break;
-				case TouchEvent.ACTION_UP:
-
+				default:
 					break;
 				}
 				return true;
@@ -671,14 +742,15 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 //							tmxLayer.getTileY(tmxTile.getTileRow()));
 //				}
 
-				if (move == true && turnDone == false && diceDone == true) {
+				if (move && !turnDone && diceDone) {
 					movementFunction(spriteList[currentCharacter]);
-					moving = true;
 					MainGameScreen.this.mCamera.updateChaseEntity();
 					finishTurnButton.setColor(Color.WHITE);
 				}
+				
+				
 
-				if (moving == true && turnDone == true  && finishTurn == true) { //&& swipeDone == false
+				if (turnDone && finishTurn) { //&& swipeDone == false
 					moving = false;
 					move = false;
 					turnDone = false;
@@ -689,28 +761,16 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 							.setChaseEntity(spriteList[currentCharacter]);
 					finishTurn = false;
 					diceButton.setColor(Color.WHITE);
-					finishTurnButton.setColor(Color.GRAY);
+					finishTurnButton.setColor(Color.GRAY);					
+					checkCredits(currentCharacter);					
 
-					// if(currentCharacter==0){
-					// SpriteList[currentCharacter].registerEntityModifier(new
-					// MoveModifier(0.5f,currentX,currentY, currentX,
-					// currentY+1));
-					// SpriteList[currentCharacter].registerEntityModifier(new
-					// MoveModifier(0.5f,currentX,currentY, currentX,
-					// currentY-1));
-					// }else if(currentCharacter ==1){
-					// SpriteList[currentCharacter].registerEntityModifier(new
-					// MoveModifier(0.5f,currentX2,currentY2, currentX2,
-					// currentY2+1 ));
-					// SpriteList[currentCharacter].registerEntityModifier(new
-					// MoveModifier(0.5f,currentX2,currentY2, currentX2,
-					// currentY2-1 ));
-					// }
 				}
+				
+				
 
 				if (swipeDone == false) {
 					//ranNumb = (1 + (int) (Math.random() * ((MAX_CHARACTER_MOVEMENT - 1) + 1))) * CHARACTER_WIDTH;
-					ranNumb = diceRoll * CHARACTER_WIDTH;
+					ranNumb = diceRoll;// * CHARACTER_WIDTH;
 				}
 
 			}
@@ -726,60 +786,138 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 	boolean move = false;
 
-	protected void movementFunction(final Sprite mySprite) {
-		if (swipeDone) {
+	protected void movementFunction(Sprite mySprite) {
+		if (!moving && swipeDone) {
 			int thisCurrent = currentCharacter;
 			SpriteCoordinate offset = new SpriteCoordinate();
+
 			if (finalY - initY > 40) {
-				offset.setY(ranNumb);
+				offset.setY(CHARACTER_WIDTH);
 			} else if (finalY - initY < -40) {
-				offset.setY(-ranNumb);
+				offset.setY(-CHARACTER_WIDTH);
 			} else if (finalX - initX > 40) {
-				offset.setX(ranNumb);
+				offset.setX(CHARACTER_WIDTH);
 			} else if (finalX - initX < -40) {
-				offset.setX(-ranNumb);
+				offset.setX(-CHARACTER_WIDTH);
+			} else {
+				return;
 			}
+
+			moving = true;
+
+			SpriteCoordinate finalPosition = new SpriteCoordinate(offset.getX()*ranNumb, offset.getY()*ranNumb);
+			SpriteCoordinate newPosition = offset.add(characterCoordinates[thisCurrent]);
 			
-			offset = offset.add(characterCoordinates[thisCurrent]);
+			newPosition = this.mainMapEvent.checkBoundaries(characterCoordinates[thisCurrent], newPosition);
+				
+			finalPosition = characterCoordinates[thisCurrent].add(finalPosition);
 			
+			moveSprite(ranNumb-1, newPosition, offset, thisCurrent, mySprite);		
+		}
+	}
+	
+	public void moveSprite(final int moves, final SpriteCoordinate newPosition,
+			final SpriteCoordinate offset, final int thisCurrent, final Sprite mySprite) {
+
 			mySprite.registerEntityModifier(new MoveModifier(0.5f,
 					characterCoordinates[thisCurrent].getX(), characterCoordinates[thisCurrent].getY(),
-					offset.getX(), offset.getY()) {
-				
-				int thisCurrent = currentCharacter;
+					newPosition.getX(), newPosition.getY()) {
 				
 				@Override
 				protected void onModifierStarted(IEntity pItem) {
 					super.onModifierStarted(pItem);
 					move = false;
 					gameDone = false;
+					eventCompleted = false;
 				}
 				
 				@Override
 				protected void onModifierFinished(IEntity pItem) {
 					characterCoordinates[thisCurrent].setX(mySprite.getX());
 					characterCoordinates[thisCurrent].setY(mySprite.getY());
-	
 					super.onModifierFinished(pItem);
-					checkMiniGameHotSpots(thisCurrent);
-					swipeDone = false;
-					turnDone = true;
 					
-					//currentCharacter = (currentCharacter + 1) % (numCharacters);
-	
+					if (moves == 0) {
+						checkMiniGameHotSpots(thisCurrent);
+						swipeDone = false;
+						turnDone = true;
+						moving = false;
+					} else if (characterCoordinates[thisCurrent].compareTo(newPosition) == 0) {
+						SpriteCoordinate newPos = newPosition.add(offset);
+						newPos = mainMapEvent.checkBoundaries(characterCoordinates[thisCurrent], newPos);
+						int numMoves = moves - 1;
+						// if not a valid move, newPos = newPosition, and we need to show options
+						if (newPos.compareTo(newPosition) == 0) {
+							getNewMove(mainMapEvent.getPossiblePath(newPos), numMoves, thisCurrent, mySprite);
+							return;
+						}
+						
+						moveSprite(numMoves, newPos, offset, thisCurrent, mySprite);
+					}
 				}
 			});
-		}
 	}
 
+	private void getNewMove(SpriteCoordinate[] pathOptions, final int moves,
+			final int thisCurrent, final Sprite mySprite) {
+		StringBuilder options = new StringBuilder();
+		StringBuilder choices = new StringBuilder();
+		
+		for (Event.DIRECTION dir : Event.DIRECTION.values()) {
+			if (pathOptions[dir.getIndex()] != null) {
+				options.append(dir.getName());
+				options.append(",");
+				choices.append(dir.name());
+				choices.append(",");
+			}
+		}
+		
+		CharSequence[] dialogOptions = options.toString().split(",");
+		final String[] dialogChoices = choices.toString().split(",");
+
+		
+		alertDialogBuilder = new AlertDialog.Builder(this);
+
+		// set title and message
+		alertDialogBuilder.setTitle("Choose a direction:");
+		//alertDialogBuilder.setMessage("Please select the direction you want to go.");
+		alertDialogBuilder.setCancelable(false);
+
+		// create continue button
+		alertDialogBuilder.setItems(dialogOptions, 
+				new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+						SpriteCoordinate offset = Event.getPositionFromDirection(dialogChoices[which]);
+						SpriteCoordinate newPos = offset.add(characterCoordinates[thisCurrent]);
+						moveSprite(moves, newPos, offset, thisCurrent, mySprite);
+					}
+				});
+
+		mHandler.post(mUpdateResults);
+		
+	}
+
+	public void askDirection() {
+		// create alert dialog
+		alertDialog = alertDialogBuilder.create();
+
+		// show it
+		alertDialog.show();
+		
+	}
 	// Checks the hot spots for the minigames
 	protected void checkMiniGameHotSpots(int current) {
-		Event.getEvent(characterCoordinates[current], true, gameDone, move, this, characterNames[current]);
+		Event.getEvent(characterCoordinates[current], this, characterNames[current]);
 		
 		if (!(move || gameDone)) {
 			gameDone = true;
 		}
-
+		
+		swipeDone = false;
+		turnDone = true;
 	}
 
 	@Override
@@ -815,13 +953,70 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 			super.onResumeGame();
 	}
 
+	/*void gameOver(){
+        runOnUiThread(new Runnable() {                  
+            @Override
+            public void run() {
+            	Toast.makeText(getApplicationContext(), "You have won! Please head to the O'Connoll Center for gradugation.",
+            			   Toast.LENGTH_LONG).show();
+                }                  
+            });
+                }*/
 	// ===========================================================
 	// Methods
 	// ===========================================================
+	public void onActivityResult (int requestCode, int resultCode, Intent data) {
+		if (!(move || gameDone)) {
+			gameDone = true;
+		}
+		swipeDone = false;
+		turnDone = true;
 
-	// ===========================================================
-	// Inner and Anonymous Classes
-	// ===========================================================
+		if (resultCode != RESULT_OK || data == null) {
+			return;
+		}
+
+		int result = data.getIntExtra(requestCode+"", 0);
+		addCredits(currentCharacter, result);
+		Log.d("MINIGAME", result+", "+resultCode);
+		
+		checkCredits(currentCharacter);
+	}
+	
+	private void addCredits(int character, int creditsToAdd) {
+		characterCredits[currentCharacter] += creditsToAdd;
+		textStrokes[character].setText(characterNames[character]
+				+ "\nCredits: " + characterCredits[currentCharacter]
+				+ "\nCoins: " + characterCoins[currentCharacter]);
+	}
+	
+	// Get the character names and credits for game over screen
+	public static ArrayList<Character> getPlayers() {
+		return thePlayers;
+	}
+	
+	private void checkCredits(int character) {
+		if (characterCredits[currentCharacter] >= CREDITS_NEEDED_GRADUATE) {
+			runOnUiThread(new Runnable() {                  
+	            @Override
+	            public void run() {
+	            	Toast.makeText(getApplicationContext(), R.string.ready_to_graduate,
+	            			   Toast.LENGTH_LONG).show();
+	                }                  
+	            });
+			
+			
+		}
+	}
+	
+	private void addCoins(int character, int coinsToAdd) {
+		characterCoins[currentCharacter] += coinsToAdd;
+		textStrokes[character].setText(characterNames[character]
+				+ "\nCredits: " + characterCredits[currentCharacter]
+				+ "\nCoins: " + characterCoins[currentCharacter]);
+	}
+	
+	
 }
 
 

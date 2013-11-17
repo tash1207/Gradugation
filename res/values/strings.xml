@@ -14,6 +14,8 @@
     <string name="title_activity_bench_press_minigame">BenchPressMinigame</string>
     <string name="title_activity_wires_mini_game">WiresMiniGame</string>
     <string name="title_activity_waitinline_minigame">WaitInLineMinigame</string>
+    <string name="title_activity_game_over_screen">GameOverScreen</string>
+    <string name="game_over_text">Game Over Screen</string>
 
     <!-- Main Activity -->
     <string name="new_game">New Game</string>
@@ -35,6 +37,7 @@
         <item>3</item>
         <item>4</item> 
     </string-array>
+   
     <!-- Choose Character -->
     <string name="choose_character">Choose a Character</string>
     <string name="character_engineer">Engineer</string>
@@ -45,6 +48,10 @@
     <string name="attributes_engineer">The engineer gets a credit bonus at the Physics Building for the Wires Minigame</string>
     <string name="attributes_gradugator">Gradugator gets a credit bonus in Turlington for the Whack-A-Flyer Minigame</string>
     
+    <!-- MainGameScreen -->
+    <string name="ready_to_graduate">Player %1$d has earned %2$d credits! You are ready to graduate.
+        Please head to the O\'Connell Center!</string>
+  
     <!-- Minigames Screen -->
     <string name="wires">Wires</string>
     <string name="bench_press">Bench Press</string>

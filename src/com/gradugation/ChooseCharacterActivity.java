@@ -107,7 +107,13 @@ public class ChooseCharacterActivity extends BaseActivity {
             }
         }
         
-        public void startGame() {
+        public void startGame() {        	
+        	// need to have as many character objects as characters to pass to main game screen
+        	// character needs: SpriteCoordiate location, credits, coins, id for use in db, id for use in game
+        	// game id, characterNames, characterTypes, function to get the image for the character based on their names
+        	// characterLocation is default position
+        	// need credits/coints = 0 for each player
+        	// need to generate gameId for use in db
 
             Intent intent = new Intent(this, MainGameScreen.class);
             intent.putExtra(THE_PLAYERS, (Serializable)thePlayers);

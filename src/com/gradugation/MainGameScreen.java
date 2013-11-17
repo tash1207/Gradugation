@@ -134,11 +134,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	private StrokeFont mStrokeFont, mStrokeFontLarge;
 	
 	private Music mMusic;
-	
-	private final MapCoordinate centerMap = new MapCoordinate(7,7);
-	private final SpriteCoordinate centerSprite = centerMap.mapToSprite();
 
-	private int[] characterCoins;
 	static ArrayList<Character> thePlayers;
 	
 	private Text[] textStrokes;
@@ -201,12 +197,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
         Bundle bundle = intent.getExtras();
 		thePlayers = (ArrayList<Character>) bundle.getSerializable(ChooseCharacterActivity.THE_PLAYERS);
 		numCharacters = thePlayers.size();
-		
-		characterCoins = new int[numCharacters];
-		
-		for (int i = 0; i < numCharacters; i++) {
-			characterCoins[i] = thePlayers.get(i).getCoins();
-		}
 		
 		//Create all four character sprites
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
@@ -329,7 +319,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 			SpriteCoordinate coord = textStrokeCoordinates[i];
 			textStrokes[i] = new Text(coord.getX(), coord.getY(), this.mStrokeFont,
 					thePlayers.get(i).getName()   +"\nCredits: " + thePlayers.get(i).getCredits()
-				    + "\nCoins: " + characterCoins[i], vertexBufferObjectManager); 
+				    + "\nCoins: " + thePlayers.get(i).getCoins(), vertexBufferObjectManager); 
 		}
 		final Text textStroke5 = new Text(180, 20, this.mStrokeFont,
                 " " + diceRoll, vertexBufferObjectManager);
@@ -959,7 +949,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		thePlayers.get(character).addCredits(creditsToAdd);
 		textStrokes[character].setText(thePlayers.get(character).getName()
 				+ "\nCredits: " + thePlayers.get(character).getCredits()
-				+ "\nCoins: " + characterCoins[currentCharacter]);
+				+ "\nCoins: " + thePlayers.get(character).getCoins());
 	}
 	
 	// Get the character names and credits for game over screen
@@ -982,10 +972,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	}
 	
 	private void addCoins(int character, int coinsToAdd) {
-		characterCoins[currentCharacter] += coinsToAdd;
+		thePlayers.get(character).addCoins(coinsToAdd);
 		textStrokes[character].setText(thePlayers.get(character).getName()
 				+ "\nCredits: " + thePlayers.get(character).getCredits()
-				+ "\nCoins: " + characterCoins[currentCharacter]);
+				+ "\nCoins: " + thePlayers.get(character).getCoins());
 	}
 	
 	

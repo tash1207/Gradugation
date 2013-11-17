@@ -138,7 +138,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	private final MapCoordinate centerMap = new MapCoordinate(7,7);
 	private final SpriteCoordinate centerSprite = centerMap.mapToSprite();
 
-	private SpriteCoordinate[] characterCoordinates; 
 	private int[] characterCredits;
 	private String[] characterNames;
 	private int[] characterCoins;
@@ -205,7 +204,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		thePlayers = (ArrayList<Character>) bundle.getSerializable(ChooseCharacterActivity.THE_PLAYERS);
 		numCharacters = thePlayers.size();
 		
-		characterCoordinates = new SpriteCoordinate[numCharacters];
 		characterCredits = new int[numCharacters];
 		characterNames = new String[numCharacters];
 		characterCoins = new int[numCharacters];
@@ -636,23 +634,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		this.mCamera.setBoundsEnabled(true);
 
 		
-		for (int i = 0; i < numCharacters; i++) {
-//			SpriteCoordinate offset = new SpriteCoordinate();
-//			if (i == 2 || i == 3) {
-//				offset.setY(32f);
-//			}
-//			if (i % 2 == 1) {
-//				offset.setX(32f);
-//			}
-
-			characterCoordinates[i] = thePlayers.get(i).getSpriteLocation();
-
-		}
-		
 		final Sprite[] spriteList = new Sprite[numCharacters];
 		
 		for (int i = 0; i < numCharacters; i++) {
-			SpriteCoordinate loc = characterCoordinates[i];
+			SpriteCoordinate loc = thePlayers.get(i).getSpriteLocation();
 			spriteList[i] = new Sprite(loc.getX(), loc.getY(), character[i], 
 					this.getVertexBufferObjectManager());
 		}
@@ -812,12 +797,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 			moving = true;
 
-			SpriteCoordinate finalPosition = new SpriteCoordinate(offset.getX()*ranNumb, offset.getY()*ranNumb);
-			SpriteCoordinate newPosition = offset.add(characterCoordinates[currentCharacter]);
+			SpriteCoordinate characterLocation = thePlayers.get(currentCharacter).getSpriteLocation();
+			SpriteCoordinate newPosition = offset.add(characterLocation);
 			
-			newPosition = this.mainMapEvent.checkBoundaries(characterCoordinates[currentCharacter], newPosition);
-				
-			finalPosition = characterCoordinates[currentCharacter].add(finalPosition);
+			newPosition = this.mainMapEvent.checkBoundaries(characterLocation, newPosition);
 			
 			moveSprite(ranNumb-1, newPosition, offset, mySprite);		
 		}
@@ -825,9 +808,11 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	
 	public void moveSprite(final int moves, final SpriteCoordinate newPosition,
 			final SpriteCoordinate offset, final Sprite mySprite) {
-
+		
+		SpriteCoordinate characterLocation = thePlayers.get(currentCharacter).getSpriteLocation();
+		
 			mySprite.registerEntityModifier(new MoveModifier(0.5f,
-					characterCoordinates[currentCharacter].getX(), characterCoordinates[currentCharacter].getY(),
+					characterLocation.getX(), characterLocation.getY(),
 					newPosition.getX(), newPosition.getY()) {
 				
 				@Override
@@ -840,8 +825,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				
 				@Override
 				protected void onModifierFinished(IEntity pItem) {
-					characterCoordinates[currentCharacter].setX(mySprite.getX());
-					characterCoordinates[currentCharacter].setY(mySprite.getY());
+					thePlayers.get(currentCharacter).setLocation(mySprite.getX(), mySprite.getY());
 					super.onModifierFinished(pItem);
 					
 					if (moves == 0) {
@@ -849,9 +833,9 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 						swipeDone = false;
 						turnDone = true;
 						moving = false;
-					} else if (characterCoordinates[currentCharacter].compareTo(newPosition) == 0) {
+					} else if (thePlayers.get(currentCharacter).getSpriteLocation().compareTo(newPosition) == 0) {
 						SpriteCoordinate newPos = newPosition.add(offset);
-						newPos = mainMapEvent.checkBoundaries(characterCoordinates[currentCharacter], newPos);
+						newPos = mainMapEvent.checkBoundaries(thePlayers.get(currentCharacter).getSpriteLocation(), newPos);
 						int numMoves = moves - 1;
 						// if not a valid move, newPos = newPosition, and we need to show options
 						if (newPos.compareTo(newPosition) == 0) {
@@ -898,7 +882,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
 						SpriteCoordinate offset = Event.getPositionFromDirection(dialogChoices[which]);
-						SpriteCoordinate newPos = offset.add(characterCoordinates[currentCharacter]);
+						SpriteCoordinate newPos = offset.add(thePlayers.get(currentCharacter).getSpriteLocation());
 						moveSprite(moves, newPos, offset, mySprite);
 					}
 				});
@@ -917,7 +901,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	}
 	// Checks the hot spots for the minigames
 	protected void checkMiniGameHotSpots(int current) {
-		Event.getEvent(characterCoordinates[current], this, characterNames[current]);
+		Event.getEvent(thePlayers.get(current).getSpriteLocation(), this, characterNames[current]);
 		
 		if (!(move || gameDone)) {
 			gameDone = true;

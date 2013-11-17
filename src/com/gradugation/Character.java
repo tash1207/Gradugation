@@ -144,8 +144,21 @@ public class Character implements Serializable {
                 return coins;
         }
         
+        /**
+         * This is used for setting x,y in reference to screen size.
+         * @param x
+         * @param y
+         */
+        public void setLocation(float x, float y) {
+        	this.location = new SpriteCoordinate(x,y);
+        }
+
         public void setLocation(SpriteCoordinate location){
                 this.location = location;
+        }
+        
+        public void setLocation(MapCoordinate location) {
+        	this.location = location.mapToSprite();
         }
 
         public SpriteCoordinate getSpriteLocation() {

@@ -23,6 +23,11 @@ public class DbHelper extends SQLiteOpenHelper {
         public static final String NUM_OF_PLAYERS = "num_of_players";
         public static final String CURRENT_PLAYER = "current_player";
         
+        public static final int GAME_TABLE_ID = 1;
+        public static final int CHARACTER_TABLE_ID = 2;
+        public static final int ITEM_TABLE_ID = 3;
+        public static final int MINIGAME_TABLE_ID = 4;
+        
         public static final String[] GAME_TABLE = {G_ID, CHAR_BASE_ID, NUM_OF_PLAYERS, CURRENT_PLAYER};
         
         
@@ -146,14 +151,14 @@ public class DbHelper extends SQLiteOpenHelper {
                 String tableName = null;
                 
                 switch(tableNum){
-                        case 1: 
+                        case GAME_TABLE_ID: 
                                 tableName = GAMES;
                                 values.put(G_ID, tableValues[0]);
                                 values.put(CHAR_BASE_ID, tableValues[1]);
                                 values.put(NUM_OF_PLAYERS, tableValues[2]);
                                 values.put(CURRENT_PLAYER, tableValues[3]);
                                 break;
-                        case 2: 
+                        case CHARACTER_TABLE_ID: 
                                 tableName = CHARACTER;
                                 values.put(CHARACTER_ID, tableValues[0]);
                                 values.put(CHARACTER_TYPE, tableValues[1]);
@@ -164,7 +169,7 @@ public class DbHelper extends SQLiteOpenHelper {
                                 values.put(COINS, tableValues[6]);
                                 values.put(PLAYER_ORDER, tableValues[7]);
                                 break;
-                        case 3: 
+                        case ITEM_TABLE_ID: 
                                 tableName = ITEMS;
                                 values.put(ITEM_ID, tableValues[0]);
                                 values.put(ITEM_NAME, tableValues[1]);
@@ -174,7 +179,7 @@ public class DbHelper extends SQLiteOpenHelper {
                                 values.put(ITEM_AMOUNT, tableValues[5]);
                                 values.put(ITEM_TXT, tableValues[6]);
                                 break;
-                        case 4: 
+                        case MINIGAME_TABLE_ID: 
                                 tableName = MINIGAME;
                                 values.put(MINIGAME_GAME_ID, tableValues[0]);
                                 values.put(MINIGAME_GID, tableValues[1]);
@@ -202,7 +207,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 ContentValues values = new ContentValues();                
                 String tableName = null;
                 switch(tableNum){
-                        case 1: 
+                        case GAME_TABLE_ID: 
                         		tableName = GAMES;
                             	values.put(G_ID, newValues[0]);
                             	values.put(CHAR_BASE_ID, newValues[1]);
@@ -210,7 +215,7 @@ public class DbHelper extends SQLiteOpenHelper {
                             	values.put(CURRENT_PLAYER, newValues[3]);
                                 db.update(tableName, values, G_ID + " = " + key[0], null);
                                 break;
-                        case 2: 
+                        case CHARACTER_TABLE_ID: 
 	                        	tableName = CHARACTER;
 	                            values.put(CHARACTER_ID, newValues[0]);
 	                            values.put(CHARACTER_TYPE, newValues[1]);
@@ -222,7 +227,7 @@ public class DbHelper extends SQLiteOpenHelper {
 	                            values.put(PLAYER_ORDER, newValues[7]);
                                 db.update(tableName, values, CHARACTER_ID + " = " + key[0], null);
                                 break;
-                        case 3: 
+                        case ITEM_TABLE_ID: 
                                 tableName = ITEMS;
                                 values.put(ITEM_ID, newValues[0]);
                                 values.put(ITEM_NAME, newValues[1]);
@@ -233,7 +238,7 @@ public class DbHelper extends SQLiteOpenHelper {
                                 values.put(ITEM_TXT, newValues[6]);
                                 db.update(tableName, values, ITEM_ID + " = " + key[0], null);
                                 break;
-                        case 4: 
+                        case MINIGAME_TABLE_ID: 
 	                        	tableName = MINIGAME;
 	                            values.put(MINIGAME_GAME_ID, newValues[0]);
 	                            values.put(MINIGAME_GID, newValues[1]);
@@ -255,19 +260,19 @@ public class DbHelper extends SQLiteOpenHelper {
                 String tableName = null;
                 
                 switch (tableNum){
-                        case 1: 
+                        case GAME_TABLE_ID: 
                                 tableName = GAMES;
                                 db.delete(tableName, G_ID + " = " + key[0], null);
                                 break;
-                        case 2: 
+                        case CHARACTER_TABLE_ID: 
                                 tableName = CHARACTER;
                                 db.delete(tableName, CHARACTER_ID + " = " + key[0], null);
                                 break;
-                        case 3: 
+                        case ITEM_TABLE_ID: 
                                 tableName = ITEMS;
                                 db.delete(tableName, ITEM_ID + " = " + key[0], null);
                                 break;
-                        case 4: 
+                        case MINIGAME_TABLE_ID: 
                                 tableName = MINIGAME;
                                 db.delete(tableName, MINIGAME_GAME_ID + " = " + key[0] + 
                                                 " AND " + MINIGAME_GID + " = " + key[1], null);
@@ -287,7 +292,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 String tableName = null;
                 
                 switch (tableNum){
-                        case 1: 
+                        case GAME_TABLE_ID: 
                                 tableName = GAMES;
                                 cursor = db.query
                         				(
@@ -310,7 +315,7 @@ public class DbHelper extends SQLiteOpenHelper {
                         		}
                         		cursor.close();
                                 break;
-                        case 2: 
+                        case CHARACTER_TABLE_ID: 
                                 tableName = CHARACTER;
                                 cursor = db.query
                         				(
@@ -337,7 +342,7 @@ public class DbHelper extends SQLiteOpenHelper {
                         		}
                         		cursor.close();
                                 break;
-                        case 3: 
+                        case ITEM_TABLE_ID: 
                                 tableName = ITEMS;
                                 cursor = db.query
                         				(
@@ -363,7 +368,7 @@ public class DbHelper extends SQLiteOpenHelper {
                         		}
                         		cursor.close();
                                 break;
-                        case 4: 
+                        case MINIGAME_TABLE_ID: 
                                 tableName = MINIGAME;
                                 cursor = db.query
                         				(

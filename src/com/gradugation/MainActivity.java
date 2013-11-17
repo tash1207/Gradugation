@@ -48,14 +48,14 @@ public class MainActivity extends BaseActivity {
         String[] minigameKey = {"1","6"};
         
         //Insert Row method
-       
+        /*
         dbhelper.insertRow(1, game);
         dbhelper.insertRow(2, character1);
         dbhelper.insertRow(2, character2);
         dbhelper.insertRow(2, character3);
         dbhelper.insertRow(3, item);
         dbhelper.insertRow(4, minigame);
-      
+        */
         
         //Update Row Method
         
@@ -93,6 +93,10 @@ public class MainActivity extends BaseActivity {
 //        for(int i = 0; i < minigameList.size(); i++){
 //        	Log.d("getRow Minigame",(String)minigameList.get(i));
 //        }
+        
+        //getGameCount
+        Log.d("getGameCount", Integer.toString(dbhelper.getGameCount()));
+        
         
         
     }

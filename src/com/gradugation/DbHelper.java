@@ -415,12 +415,14 @@ public class DbHelper extends SQLiteOpenHelper {
         }
         
         public int getGameCount() {
-            Cursor c = db.rawQuery("select count(*) from " + GAMES, null);
+        	
+            Cursor c = db.rawQuery("select count(*) from games", null);
             int count = 0;
             if (c.moveToNext()) {
                 count = c.getInt(c.getColumnIndex("count(*)"));
             }
             c.close();
+            
             return count;
          }
 

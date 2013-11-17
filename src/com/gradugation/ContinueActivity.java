@@ -117,7 +117,7 @@ public class ContinueActivity extends Activity {
 				int coins = Integer.valueOf((String) characterList.get(6));
 				
 				/// grab gameid
-				int gameId = 0;
+				int gameId = dbhelper.getGameCount();
 				
 				Log.d("characterstype", type);
 				Character thePlayer = new Character(type.toUpperCase(), name, location.mapToSprite(), (id << 2) + i, gameId, credits, coins);

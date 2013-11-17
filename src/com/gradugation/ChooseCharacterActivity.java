@@ -86,8 +86,8 @@ public class ChooseCharacterActivity extends BaseActivity {
         }
         
         public void btnContinueClicked(View view) {
-        	
-            
+        	dbhelper = new DbHelper(this);
+            SQLiteDatabase db = dbhelper.openDB();
             
             if (playersChosen > numPlayers-1) {                                        
                     startGame();
@@ -100,7 +100,7 @@ public class ChooseCharacterActivity extends BaseActivity {
                     
                     String type = (String)radioGroup1Button.getText();
                     // need to grab game id from database when we are saving this
-                    int gameID = 0;
+                    int gameID = dbhelper.getGameCount();
                     Character thePlayer = new Character(type.toUpperCase(), type, defaultLocation[playersChosen].mapToSprite(), playersChosen, gameID, 0, 0);
                     thePlayers.add(thePlayer);
                     
@@ -119,7 +119,7 @@ public class ChooseCharacterActivity extends BaseActivity {
                     
                     String type = (String)radioGroup1Button.getText();
                     // need to grab game id from database when we are saving this
-                    int gameID = 0;
+                    int gameID = dbhelper.getGameCount();
                     Character thePlayer = new Character(type.toUpperCase(), type, defaultLocation[playersChosen].mapToSprite(), playersChosen, gameID, 0, 0);
 
                     thePlayers.add(thePlayer);
@@ -129,6 +129,7 @@ public class ChooseCharacterActivity extends BaseActivity {
                     		thePlayers.get(playersChosen).getName(), Toast.LENGTH_SHORT).show();
                     playersChosen++;
             }
+            dbhelper.close();
         }
         
         public void startGame() {        	
@@ -139,28 +140,31 @@ public class ChooseCharacterActivity extends BaseActivity {
         	// characterLocation is default position
         	// need credits/coints = 0 for each player
         	// need to generate gameId for use in db
-
+        	
+        	
+        	
         	
         	dbhelper = new DbHelper(this);
             SQLiteDatabase db = dbhelper.openDB();
             
+            int gameId = dbhelper.getGameCount();
             //Game Table
-            String[] game = {Integer.toString(dbhelper.getGameCount()),"0",Integer.toString(playersChosen),"0"};
+            String[] game = {Integer.toString(gameId),"0",Integer.toString(playersChosen),"0"};
         	dbhelper.insertRow(1, game);
         	
         	//Item Table
-            String[] item = {"0",null,"0",null,null,"0",null};
+            String[] item = {Integer.toString(gameId),null,"0",null,null,"0",null};
         	dbhelper.insertRow(3, item);
         	
         	//For loop assigning each minigame ID to each minigame row
         	//Minigame Table
         	event = new Event();
-	        String[] minigame1 = {Integer.toString(dbhelper.getGameCount()),Integer.toString(event.BENCH_PRESS_REQUEST_CODE),"0","0","0","0"};
-	        String[] minigame2 = {Integer.toString(dbhelper.getGameCount()),Integer.toString(event.WIRES_REQUEST_CODE),"0","0","0","0"};
-	        String[] minigame3 = {Integer.toString(dbhelper.getGameCount()),Integer.toString(event.WAIT_IN_LINE_REQUEST_CODE),"0","0","0","0"};
-	        String[] minigame4 = {Integer.toString(dbhelper.getGameCount()),Integer.toString(event.WHACK_AFLYER_REQUEST_CODE),"0","0","0","0"};
-	        String[] minigame5 = {Integer.toString(dbhelper.getGameCount()),Integer.toString(event.COLOR_REQUEST_CODE),"0","0","0","0"};
-	        String[] minigame6 = {Integer.toString(dbhelper.getGameCount()),Integer.toString(event.GRADUATION_REQUEST_CODE),"0","0","0","0"};
+	        String[] minigame1 = {Integer.toString(gameId),Integer.toString(event.BENCH_PRESS_REQUEST_CODE),"0","0","0","0"};
+	        String[] minigame2 = {Integer.toString(gameId),Integer.toString(event.WIRES_REQUEST_CODE),"0","0","0","0"};
+	        String[] minigame3 = {Integer.toString(gameId),Integer.toString(event.WAIT_IN_LINE_REQUEST_CODE),"0","0","0","0"};
+	        String[] minigame4 = {Integer.toString(gameId),Integer.toString(event.WHACK_AFLYER_REQUEST_CODE),"0","0","0","0"};
+	        String[] minigame5 = {Integer.toString(gameId),Integer.toString(event.COLOR_REQUEST_CODE),"0","0","0","0"};
+	        String[] minigame6 = {Integer.toString(gameId),Integer.toString(event.GRADUATION_REQUEST_CODE),"0","0","0","0"};
 	        dbhelper.insertRow(4, minigame1);
 	        dbhelper.insertRow(4, minigame2);
 	        dbhelper.insertRow(4, minigame3);
@@ -171,7 +175,10 @@ public class ChooseCharacterActivity extends BaseActivity {
 	        //Character Table
             for (int i = 0; i < playersChosen; i++){
             	//Convert variable i to string
-	            String[] character = {Integer.toString(i),null,null,"0","0","0","0",Integer.toString(i+1)};	
+            	String charName = thePlayers.get(i).getName();
+            	float charX = thePlayers.get(i).getMapLocation().getX();
+            	float charY = thePlayers.get(i).getMapLocation().getY();
+	            String[] character = {Integer.toString((gameId << 2) + i),charName,charName,Float.toString(charX),Float.toString(charY),"0","0",Integer.toString(i+1)};	
             	dbhelper.insertRow(2, character);
             }
             Log.d("# of Games", Integer.toString(dbhelper.getGameCount()));

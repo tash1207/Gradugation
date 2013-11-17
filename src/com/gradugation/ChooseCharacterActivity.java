@@ -15,6 +15,9 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.coordinates.MapCoordinate;
+import com.coordinates.SpriteCoordinate;
+
 public class ChooseCharacterActivity extends BaseActivity {
 		private DbHelper dbhelper;
 		private Event event;
@@ -25,13 +28,33 @@ public class ChooseCharacterActivity extends BaseActivity {
         
         private ImageView characterImage;
         private TextView characterAttributes;
+    	private final MapCoordinate centerMap = new MapCoordinate(7,7);
+    	private int numPlayers;
+
+        private static MapCoordinate[] defaultLocation;
         
+
         ArrayList<Character> thePlayers = new ArrayList<Character>();
         int playersChosen = 0;
         @Override
         protected void onCreate(Bundle savedInstanceState) {
                 super.onCreate(savedInstanceState);
                 setContentView(R.layout.activity_choose_character);
+                
+                Intent intent = getIntent();
+                numPlayers = intent.getIntExtra(NewGameActivity.NUMBER_OF_PLAYERS, 1);
+                defaultLocation = new MapCoordinate[numPlayers];
+                
+                for (int i = 0; i < numPlayers; i++) {
+                	MapCoordinate offset = new MapCoordinate();
+        			if (i == 2 || i == 3) {
+        				offset.setY(1);
+        			}
+        			if (i % 2 == 1) {
+        				offset.setX(1);
+        			}
+        			defaultLocation[i] = offset.add(centerMap);
+                }
                 
                 radioGroup = (RadioGroup) findViewById(R.id.radioGroup1);
                 characterImage = (ImageView) findViewById(R.id.character_image);
@@ -63,8 +86,9 @@ public class ChooseCharacterActivity extends BaseActivity {
         }
         
         public void btnContinueClicked(View view) {
-        	Intent intent = getIntent();
-            int numPlayers = intent.getIntExtra(NewGameActivity.NUMBER_OF_PLAYERS, 1);
+        	
+            
+            
             if (playersChosen > numPlayers-1) {                                        
                     startGame();
             }
@@ -74,8 +98,10 @@ public class ChooseCharacterActivity extends BaseActivity {
                     //find the radiobutton by returned id
                     radioGroup1Button = (RadioButton) findViewById(selectedId);
                     
-                    Character thePlayer = new Character((String)radioGroup1Button.getText());
-                    thePlayer.setName((String)radioGroup1Button.getText());
+                    String type = (String)radioGroup1Button.getText();
+                    // need to grab game id from database when we are saving this
+                    int gameID = 0;
+                    Character thePlayer = new Character(type.toUpperCase(), type, defaultLocation[playersChosen].mapToSprite(), playersChosen, gameID, 0, 0);
                     thePlayers.add(thePlayer);
                     
                     
@@ -91,8 +117,11 @@ public class ChooseCharacterActivity extends BaseActivity {
                     //find the radiobutton by returned id
                     radioGroup1Button = (RadioButton) findViewById(selectedId);
                     
-                    Character thePlayer = new Character((String)radioGroup1Button.getText());
-                    thePlayer.setName((String)radioGroup1Button.getText());
+                    String type = (String)radioGroup1Button.getText();
+                    // need to grab game id from database when we are saving this
+                    int gameID = 0;
+                    Character thePlayer = new Character(type.toUpperCase(), type, defaultLocation[playersChosen].mapToSprite(), playersChosen, gameID, 0, 0);
+
                     thePlayers.add(thePlayer);
                     
                     Toast.makeText(ChooseCharacterActivity.this,  
@@ -102,14 +131,15 @@ public class ChooseCharacterActivity extends BaseActivity {
             }
         }
         
-public void startGame() {
-        	
+        public void startGame() {        	
+
         	// need to have as many character objects as characters to pass to main game screen
         	// character needs: SpriteCoordiate location, credits, coins, id for use in db, id for use in game
         	// game id, characterNames, characterTypes, function to get the image for the character based on their names
         	// characterLocation is default position
         	// need credits/coints = 0 for each player
         	// need to generate gameId for use in db
+
         	
         	dbhelper = new DbHelper(this);
             SQLiteDatabase db = dbhelper.openDB();

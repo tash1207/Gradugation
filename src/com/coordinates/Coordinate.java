@@ -21,6 +21,10 @@ public abstract class Coordinate {
 		this.y = y;
 	}
 	
+	public String toString() {
+		return this.x + "," + this.y;
+	}
+	
 	abstract Coordinate add(Coordinate toAdd);
 	
 	abstract int compareTo(Coordinate toCompare);

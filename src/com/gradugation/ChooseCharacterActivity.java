@@ -17,7 +17,7 @@ import android.widget.Toast;
 public class ChooseCharacterActivity extends BaseActivity {
 		private DbHelper dbhelper;
 		private Event event;
-	
+		
         public static final String THE_PLAYERS = "com.gradugation.the_players";
         private RadioGroup radioGroup;
         private RadioButton radioGroup1Button;
@@ -101,7 +101,7 @@ public class ChooseCharacterActivity extends BaseActivity {
             }
         }
         
-        public void startGame() {
+public void startGame() {
         	
         	// need to have as many character objects as characters to pass to main game screen
         	// character needs: SpriteCoordiate location, credits, coins, id for use in db, id for use in game

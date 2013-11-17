@@ -205,61 +205,66 @@ public class DbHelper extends SQLiteOpenHelper {
         }
         
         public void updateRow(int tableNum, String[] key, String[] newValues){
-                ContentValues values = new ContentValues();                
-                String tableName = null;
-                switch(tableNum){
-                        case GAME_TABLE_ID: 
-                        		tableName = GAMES;
-                            	values.put(G_ID, newValues[0]);
-                            	values.put(CHAR_BASE_ID, newValues[1]);
-                            	values.put(NUM_OF_PLAYERS, newValues[2]);
-                            	values.put(CURRENT_PLAYER, newValues[3]);
-                                db.update(tableName, values, G_ID + " = " + key[0], null);
-                                break;
-                        case CHARACTER_TABLE_ID: 
-	                        	tableName = CHARACTER;
-	                            values.put(CHARACTER_ID, newValues[0]);
-	                            values.put(CHARACTER_TYPE, newValues[1]);
-	                            values.put(CHARACTER_NAME, newValues[2]);
-	                            values.put(X_COORD, newValues[3]);
-	                            values.put(Y_COORD, newValues[4]);
-	                            values.put(CREDITS, newValues[5]);
-	                            values.put(COINS, newValues[6]);
-	                            values.put(PLAYER_ORDER, newValues[7]);
-                                db.update(tableName, values, CHARACTER_ID + " = " + key[0], null);
-                                break;
-                        case ITEM_TABLE_ID: 
-                                tableName = ITEMS;
-                                values.put(ITEM_ID, newValues[0]);
-                                values.put(ITEM_NAME, newValues[1]);
-                                values.put(COST, newValues[2]);
-                                values.put(ITEM_TYPE, newValues[3]);
-                                values.put(ITEM_AFFECTS, newValues[4]);
-                                values.put(ITEM_AMOUNT, newValues[5]);
-                                values.put(ITEM_TXT, newValues[6]);
-                                db.update(tableName, values, ITEM_ID + " = " + key[0], null);
-                                break;
-                        case MINIGAME_TABLE_ID: 
-	                        	tableName = MINIGAME;
-	                            values.put(MINIGAME_GAME_ID, newValues[0]);
-	                            values.put(MINIGAME_GID, newValues[1]);
-	                            values.put(CHAR_ID1, newValues[2]);
-	                            values.put(CHAR_ID2, newValues[3]);
-	                            values.put(CHAR_ID3, newValues[4]);
-	                            values.put(CHAR_ID4, newValues[5]);
-                                db.update(tableName, values, MINIGAME_GAME_ID + " = " + key[0] + 
-                                                " AND " + MINIGAME_GID + " = " + key[1], null);
-                                break;
-                        default: 
-                                Log.e("updateRow Error", "Not valid table number");
-                                break;        
-                }
+                ContentValues values = new ContentValues();
+                try{
+	                String tableName = null;
+	                switch(tableNum){
+	                        case GAME_TABLE_ID: 
+	                        		tableName = GAMES;
+	                            	values.put(G_ID, newValues[0]);
+	                            	values.put(CHAR_BASE_ID, newValues[1]);
+	                            	values.put(NUM_OF_PLAYERS, newValues[2]);
+	                            	values.put(CURRENT_PLAYER, newValues[3]);
+	                                db.update(tableName, values, G_ID + " = " + key[0], null);
+	                                break;
+	                        case CHARACTER_TABLE_ID: 
+		                        	tableName = CHARACTER;
+		                            values.put(CHARACTER_ID, newValues[0]);
+		                            values.put(CHARACTER_TYPE, newValues[1]);
+		                            values.put(CHARACTER_NAME, newValues[2]);
+		                            values.put(X_COORD, newValues[3]);
+		                            values.put(Y_COORD, newValues[4]);
+		                            values.put(CREDITS, newValues[5]);
+		                            values.put(COINS, newValues[6]);
+		                            values.put(PLAYER_ORDER, newValues[7]);
+	                                db.update(tableName, values, CHARACTER_ID + " = " + key[0], null);
+	                                break;
+	                        case ITEM_TABLE_ID: 
+	                                tableName = ITEMS;
+	                                values.put(ITEM_ID, newValues[0]);
+	                                values.put(ITEM_NAME, newValues[1]);
+	                                values.put(COST, newValues[2]);
+	                                values.put(ITEM_TYPE, newValues[3]);
+	                                values.put(ITEM_AFFECTS, newValues[4]);
+	                                values.put(ITEM_AMOUNT, newValues[5]);
+	                                values.put(ITEM_TXT, newValues[6]);
+	                                db.update(tableName, values, ITEM_ID + " = " + key[0], null);
+	                                break;
+	                        case MINIGAME_TABLE_ID: 
+		                        	tableName = MINIGAME;
+		                            values.put(MINIGAME_GAME_ID, newValues[0]);
+		                            values.put(MINIGAME_GID, newValues[1]);
+		                            values.put(CHAR_ID1, newValues[2]);
+		                            values.put(CHAR_ID2, newValues[3]);
+		                            values.put(CHAR_ID3, newValues[4]);
+		                            values.put(CHAR_ID4, newValues[5]);
+	                                db.update(tableName, values, MINIGAME_GAME_ID + " = " + key[0] + 
+	                                                " AND " + MINIGAME_GID + " = " + key[1], null);
+	                                break;
+	                        default: 
+	                                Log.e("updateRow Error", "Not valid table number");
+	                                break;        
+	                }
+                }catch (SQLException e) {
+            		Log.e("DB ERROR", e.toString());
+            		e.printStackTrace();
+            	}
                 
         }
         
         public void deleteRow(int tableNum, String[] key){
+        	try{
                 String tableName = null;
-                
                 switch (tableNum){
                         case GAME_TABLE_ID: 
                                 tableName = GAMES;
@@ -282,6 +287,10 @@ public class DbHelper extends SQLiteOpenHelper {
                                 Log.e("deleteRow Error", "Not valid table number");
                                 break;
                 }
+        	}catch (SQLException e) {
+        		Log.e("DB ERROR", e.toString());
+        		e.printStackTrace();
+        	}
                 
         }
         

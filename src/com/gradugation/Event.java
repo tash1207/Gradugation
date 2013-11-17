@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.util.Random;
 import java.util.Scanner;
 
 import android.app.Activity;
@@ -209,6 +210,32 @@ public class Event {
 			context.startActivityForResult(intent, FOOD_REQUEST_CODE);
 		} else {
 			// generate random event
+			int[] eventArray = new int[10];
+            Random r = new Random();
+            int eventIndex;
+            
+            String[] event = {"Learn from yesterday", "Live for today", "Hope for tomorrow"};
+            int eventMessage;
+            
+            for (int i = 0; i < eventArray.length; i++){
+                    eventIndex = r.nextInt(2);
+                    eventArray[i] = eventIndex;
+                    if (eventArray[i] == 1){
+                            eventMessage = r.nextInt(3);
+                            Log.d("Event message", event[eventMessage]);
+                            //Create Message for random event
+                            /*
+                            Context toastContext = context;
+                            CharSequence text = event[eventMessage];
+                            int duration = Toast.LENGTH_SHORT;
+
+                            Toast toast = Toast.makeText(toastContext, text, duration);
+                            toast.show();
+                            */
+                            
+                    }
+                    break;
+            }
 		}
 	}
 }

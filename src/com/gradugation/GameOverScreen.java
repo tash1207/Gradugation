@@ -1,6 +1,7 @@
 package com.gradugation;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.options.EngineOptions;
@@ -24,10 +25,15 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TextureRegionFactory;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
+import org.andengine.util.adt.array.ArrayUtils;
 
+import com.coordinates.SpriteCoordinate;
+
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.view.View;
 
 public class GameOverScreen extends SimpleBaseGameActivity {
@@ -44,9 +50,15 @@ public class GameOverScreen extends SimpleBaseGameActivity {
 	// Fields
 	// ===========================================================
 
-	private StrokeFont mCongratsFont, mScoreFont;
+	private static StrokeFont mCongratsFont;
+	private StrokeFont mScoreFont;
 	private AssetBitmapTexture continueTexture;
 	private ITextureRegion continueTextureRegion;
+	private static String winner;
+	private static int credits;
+	private static String[] playerNames;
+	private static int[] playerCredits;
+	
 
 	// ===========================================================
 	// Constructors
@@ -116,28 +128,16 @@ public class GameOverScreen extends SimpleBaseGameActivity {
 
 		final VertexBufferObjectManager vertexBufferObjectManager = this
 				.getVertexBufferObjectManager();
-		
-		//Sort this array by maximum number of credits
-		ArrayList<Character> thePlayers = MainGameScreen.getPlayers();
-		
+				
 		// Output
 		final Text congratsText = new Text(CAMERA_WIDTH / 2, CAMERA_HEIGHT
 				- (CAMERA_HEIGHT / 6), this.mCongratsFont,
 				"Congratulations for Gradugating!", vertexBufferObjectManager);
-		final Text winnerText = new Text(CAMERA_WIDTH / 2, CAMERA_HEIGHT
-				- (CAMERA_HEIGHT / 4), this.mCongratsFont,
-				"Our winner and esteemed valedictorian is [Player1]",
-				vertexBufferObjectManager);
-
-		final Text playerOneText = new Text(CAMERA_WIDTH / 2, CAMERA_HEIGHT
-				- (CAMERA_HEIGHT / 2), this.mCongratsFont,
-				"[Player1] : [Credits1]\n[Player2] : [Credits2]\n[Player3] : [Credits3]\n[Player4] : [Credits4]",
-				vertexBufferObjectManager);
+		displayWinner();
+		displayScoreboard();
 
 		scene.attachChild(congratsText);
-		scene.attachChild(winnerText);
-		scene.attachChild(playerOneText);
-		
+				
 		final Sprite continueButton = new Sprite(CAMERA_WIDTH/2, CAMERA_HEIGHT/2-(CAMERA_HEIGHT/3), continueTextureRegion,
 				this.getVertexBufferObjectManager()) {
 			@Override
@@ -171,6 +171,40 @@ public class GameOverScreen extends SimpleBaseGameActivity {
 		Intent intent = new Intent(this, MainActivity.class);
 		startActivity(intent);
 	}
+	
+	public void displayWinner() {
+		final VertexBufferObjectManager vertexBufferObjectManager = this
+				.getVertexBufferObjectManager();
+		final Text winnerText = new Text(CAMERA_WIDTH / 2, CAMERA_HEIGHT
+				- (CAMERA_HEIGHT / 4), this.mCongratsFont,
+				"Our winner is " + winner + "  with " + credits + " credits!",
+				vertexBufferObjectManager);
+		scene.attachChild(winnerText);
+	}
+	
+	public static void setWinner(String s, int c) {
+		winner = s; 
+		credits = c;
+	}
+	
+	public static void setPlayers(String[] names, int[] credits) {
+		playerNames = names;
+		playerCredits = credits;
+	}
+	
+	public void displayScoreboard() {
+			final VertexBufferObjectManager vertexBufferObjectManager = this
+					.getVertexBufferObjectManager();
+			if  (playerNames != null && playerCredits != null) {
+			Text[] scoreboardText = new Text[playerNames.length];
+			for (int i = 0; i < playerNames.length; i++) {
+				scoreboardText[i] = new Text(CAMERA_WIDTH/2, CAMERA_HEIGHT/2 + (i + (CAMERA_HEIGHT/6)), this.mCongratsFont,
+						playerNames[i]   +"Credits: " + playerCredits[i] + "\n", vertexBufferObjectManager); 
+				scene.attachChild(scoreboardText[i]);
+			}
+			}
+	}
+	
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================

@@ -88,13 +88,5 @@ public class Character implements Serializable{
                 return y;
         }
         
-        protected void setGraduation() {
-        	hasGraduated = true;
-        }
-        
-        protected boolean getGraduation() {
-        	return hasGraduated;
-        }
-        
       
 }        

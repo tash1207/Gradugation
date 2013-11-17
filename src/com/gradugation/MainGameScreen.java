@@ -53,11 +53,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
-<<<<<<< HEAD
 import android.os.CountDownTimer;
-=======
 import android.os.Handler;
->>>>>>> c7a18eaa3103a8c23920087e7159da835f3c022d
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -154,19 +151,24 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	private boolean moving;
 	public int turnNum;
 	public int currentCharacter;
+	public int currentCharacterYear;
 	public int ranNumb;
 	private int numCharacters;
 	private int movementCount;
 
 	private Random random;
     private int diceRoll = 0;
+    private int maxRoll;
     
 	private boolean gameDone = false;
+	private boolean hasGraduated = false;
 
 	float initX;
 	float initY;
 	float finalX;
 	float finalY;
+	
+	float variable;
 	
 	private boolean finishTurn = false; 
 	private boolean diceDone = false;
@@ -189,15 +191,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
         final EngineOptions engineOptions = new EngineOptions(true, ScreenOrientation.LANDSCAPE_SENSOR, new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT), this.mCamera);
         engineOptions.getAudioOptions().setNeedsMusic(true);
 
-<<<<<<< HEAD
 		return engineOptions;
-=======
-		return new EngineOptions(true, ScreenOrientation.LANDSCAPE_SENSOR,
-				new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT),
-				this.mCamera);
-		
-		
->>>>>>> c7a18eaa3103a8c23920087e7159da835f3c022d
 	}
 
 	@Override
@@ -350,7 +344,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				    + "\nCoins: " + characterCoins[i], vertexBufferObjectManager); 
 		}
 		final Text textStroke5 = new Text(400, 100, this.mStrokeFont,
-                "You rolled " + diceRoll, vertexBufferObjectManager);
+                characterNames[0] + " rolled " + diceRoll, vertexBufferObjectManager);
 
 		mHUD = new HUD();
 		mHUD.attachChild(scene);
@@ -370,13 +364,24 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	                 * button is being pressed.
 	                 */
 	                //generate random number [1,3]
+	        	currentCharacterYear = (characterCredits[currentCharacter]%CREDITS_NEEDED_GRADUATE) + 1;
+	        	switch(currentCharacterYear) {
+	        	case 1: maxRoll = 3;
+	        			break;
+	        	case 2: maxRoll = 4;
+	        			break;
+	        	case 3: maxRoll = 5;
+	        			break;
+	        	case 4: maxRoll = 6;
+	        			break;
+	        	}
 	                random = new Random();
-	                diceRoll = random.nextInt(3) + 1;
+	                diceRoll = random.nextInt(maxRoll) + 1;
 	                if (diceDone == false) {
 	                	swipeDone = false;
 	                	if (touchEvent.isActionUp()) {
 	                		this.setColor(Color.GRAY);
-	                		textStroke5.setText("You rolled: " + diceRoll);
+	                		textStroke5.setText(characterNames[currentCharacter] + " rolled: " + diceRoll);
 	                		diceDone = true;
 	                		
 	                	}
@@ -393,14 +398,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
                 this.getVertexBufferObjectManager()) {
 
 	        public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
-	                /*
-	                 * Here, you can update the randomizer when the user presses the
-	                 * button. Disregard the effect, just lets me know that the
-	                 * button is being pressed.
-	                 */
-	                //generate random number [1,3]
-	                random = new Random();
-	                diceRoll = random.nextInt(3) + 1;
 	                
 	                if (touchEvent.isActionUp()) {
 	                        this.setColor(Color.GRAY);
@@ -712,13 +709,9 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 							.setChaseEntity(spriteList[currentCharacter]);
 					finishTurn = false;
 					diceButton.setColor(Color.WHITE);
-					finishTurnButton.setColor(Color.GRAY);
-<<<<<<< HEAD
-					
+					finishTurnButton.setColor(Color.GRAY);					
 					checkCredits(currentCharacter);					
 
-=======
->>>>>>> c7a18eaa3103a8c23920087e7159da835f3c022d
 				}
 				
 				
@@ -865,7 +858,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	}
 	// Checks the hot spots for the minigames
 	protected void checkMiniGameHotSpots(int current) {
-		Event.getEvent(characterCoordinates[current], this, characterNames[current]);
+		Event.getEvent(characterCoordinates[current], this, characterNames[current], hasGraduated);
 		
 		if (!(move || gameDone)) {
 			gameDone = true;
@@ -955,9 +948,13 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 			runOnUiThread(new Runnable() {                  
 	            @Override
 	            public void run() {
+	            	hasGraduated = true;
 	            	Toast.makeText(getApplicationContext(), R.string.ready_to_graduate,
 	            			   Toast.LENGTH_LONG).show();
+	            	GameOverScreen.setWinner(characterNames[currentCharacter], characterCredits[currentCharacter]);
+	            	GameOverScreen.setPlayers(characterNames, characterCredits);
 	                }                  
+	            	            	
 	            });
 			
 			

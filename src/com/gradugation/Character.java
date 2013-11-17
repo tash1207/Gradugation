@@ -10,9 +10,10 @@ public class Character implements Serializable{
         String Charactertype; //need to enumerate this data type
         String name;
         
+        boolean hasGraduated;
+        
         int id; //this  will  be  between  1  and  4  to  designate  turn  order
         int credits; //year=credits/30+1.
-        static final int maxCredits = 0; 
         
         int coins;
         float x;
@@ -87,11 +88,13 @@ public class Character implements Serializable{
                 return y;
         }
         
-        public boolean isGameOver() {
-        	if (credits == maxCredits) {
-        		return true;
-        	} else {
-        		return false;
-        	}
+        protected void setGraduation() {
+        	hasGraduated = true;
         }
+        
+        protected boolean getGraduation() {
+        	return hasGraduated;
+        }
+        
+      
 }        

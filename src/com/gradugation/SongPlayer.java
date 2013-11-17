@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.os.Handler;
 
 public class SongPlayer {
-	private static SongPlayer instance;
+	protected static SongPlayer instance;
 	private Intent backgroundMusicServiceIntent;
 	private Context context;
 	private boolean isPlaying;

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
+import org.andengine.audio.music.Music;
+import org.andengine.audio.music.MusicFactory;
 import org.andengine.engine.camera.BoundCamera;
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.engine.camera.hud.HUD;
@@ -51,6 +53,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -109,6 +112,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	private TextureRegion diceTextureRegion;
 	private BitmapTextureAtlas finishTurnTextureAtlas;
 	private TextureRegion finishTurnTextureRegion;
+	private BitmapTextureAtlas musicTextureAtlas;
+	private ITextureRegion mMusicTextureRegion;
 	
 	private ITexture mFaceTexture;
 	private ITextureRegion mFaceTextureRegion;
@@ -125,6 +130,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	private Font mFont;
 	private StrokeFont mStrokeFont, mStrokeFontLarge;
 	
+	private Music mMusic;
+	
 	private final MapCoordinate centerMap = new MapCoordinate(7,7);
 	private final SpriteCoordinate centerSprite = centerMap.mapToSprite();
 
@@ -132,7 +139,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	private int[] characterCredits;
 	private String[] characterNames;
 	private int[] characterCoins;
-	ArrayList<Character> thePlayers;
+	static ArrayList<Character> thePlayers;
 	
 	private Text[] textStrokes;
 	final private SpriteCoordinate[] textStrokeCoordinates = {
@@ -158,6 +165,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	float finalX;
 	float finalY;
 	
+	float variable;
+	
 	private boolean finishTurn = false; 
 	private boolean diceDone = false;
 
@@ -175,12 +184,11 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		this.mCamera = new SmoothCamera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT,
 				maxVelocityX, maxVelocityY, maxZoomFactorChange);
 		this.mCamera.setBoundsEnabled(false);
+		
+        final EngineOptions engineOptions = new EngineOptions(true, ScreenOrientation.LANDSCAPE_SENSOR, new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT), this.mCamera);
+        engineOptions.getAudioOptions().setNeedsMusic(true);
 
-		return new EngineOptions(true, ScreenOrientation.LANDSCAPE_SENSOR,
-				new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT),
-				this.mCamera);
-		
-		
+		return engineOptions;
 	}
 
 	@Override
@@ -277,6 +285,18 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				strokeFontTexture, Typeface.create(Typeface.DEFAULT,
 						Typeface.BOLD), 32, true, Color.WHITE, 1, Color.BLACK);
 		this.mStrokeFontLarge.load();
+		
+		this.musicTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 128, 128, TextureOptions.BILINEAR);
+        this.mMusicTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.musicTextureAtlas, this, "notes.png", 0, 0);
+        this.musicTextureAtlas.load();
+        
+		MusicFactory.setAssetBasePath("mfx/");
+        try {
+                this.mMusic = MusicFactory.createMusicFromAsset(this.mEngine.getMusicManager(), this, "wagner_the_ride_of_the_valkyries.ogg");
+                this.mMusic.setLooping(true);
+        } catch (final IOException e) {
+                Debug.e(e);
+        }
 
 	}
 	
@@ -392,6 +412,33 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				/ 2 + (this.mPausedTextureRegion.getWidth() / 3);
 		final float cY = (CAMERA_HEIGHT - this.mPausedTextureRegion.getHeight()) / 5;
 
+		// Music Button
+		// Default - Music on.
+		mMusic.play();
+		
+        final Sprite musicButton = new Sprite(CAMERA_WIDTH / 12, cY - (CAMERA_HEIGHT / 13), this.mMusicTextureRegion,
+				this.getVertexBufferObjectManager()) {
+			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
+				switch (touchEvent.getAction()) {
+				case TouchEvent.ACTION_DOWN:
+					if (mMusic.isPlaying()) {
+						mMusic.pause();
+					} else {
+						mMusic.play();
+					}
+					break;
+				case TouchEvent.ACTION_MOVE:
+					break;
+				case TouchEvent.ACTION_UP:
+					break;
+				}
+				return true;
+			};
+		};
+        
+        this.mPauseScene.registerTouchArea(musicButton);
+		this.mPauseScene.attachChild(musicButton);
+        
 		// Resume Button
 
 		final Sprite resumeButton = new Sprite(cX + (CAMERA_WIDTH / 10), cY
@@ -656,8 +703,12 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 							.setChaseEntity(spriteList[currentCharacter]);
 					finishTurn = false;
 					diceButton.setColor(Color.WHITE);
-					finishTurnButton.setColor(Color.GRAY);
+					finishTurnButton.setColor(Color.GRAY);					
+					checkCredits(currentCharacter);					
+
 				}
+				
+				
 
 				if (swipeDone == false) {
 					//ranNumb = (1 + (int) (Math.random() * ((MAX_CHARACTER_MOVEMENT - 1) + 1))) * CHARACTER_WIDTH;
@@ -844,6 +895,18 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 			super.onResumeGame();
 	}
 
+	/*void gameOver(){
+        runOnUiThread(new Runnable() {                  
+            @Override
+            public void run() {
+            	Toast.makeText(getApplicationContext(), "You have won! Please head to the O'Connoll Center for gradugation.",
+            			   Toast.LENGTH_LONG).show();
+                }                  
+            });
+                }*/
+	// ===========================================================
+	// Methods
+	// ===========================================================
 	public void onActivityResult (int requestCode, int resultCode, Intent data) {
 		if (!(move || gameDone)) {
 			gameDone = true;
@@ -869,10 +932,22 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				+ "\nCoins: " + characterCoins[currentCharacter]);
 	}
 	
+	// Get the character names and credits for game over screen
+	public static ArrayList<Character> getPlayers() {
+		return thePlayers;
+	}
+	
 	private void checkCredits(int character) {
 		if (characterCredits[currentCharacter] >= CREDITS_NEEDED_GRADUATE) {
-			Toast.makeText(this, getString(R.string.ready_to_graduate, currentCharacter,
-					characterCredits[currentCharacter]), Toast.LENGTH_LONG).show();
+			runOnUiThread(new Runnable() {                  
+	            @Override
+	            public void run() {
+	            	Toast.makeText(getApplicationContext(), R.string.ready_to_graduate,
+	            			   Toast.LENGTH_LONG).show();
+	                }                  
+	            });
+			
+			
 		}
 	}
 	
@@ -882,6 +957,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				+ "\nCredits: " + characterCredits[currentCharacter]
 				+ "\nCoins: " + characterCoins[currentCharacter]);
 	}
+	
+	
 }
 
 

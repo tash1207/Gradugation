@@ -10,6 +10,8 @@ public class Character implements Serializable{
         String Charactertype; //need to enumerate this data type
         String name;
         
+        boolean hasGraduated;
+        
         int id; //this  will  be  between  1  and  4  to  designate  turn  order
         int credits; //year=credits/30+1.
         
@@ -85,4 +87,14 @@ public class Character implements Serializable{
         public float getY(){
                 return y;
         }
+        
+        protected void setGraduation() {
+        	hasGraduated = true;
+        }
+        
+        protected boolean getGraduation() {
+        	return hasGraduated;
+        }
+        
+      
 }        

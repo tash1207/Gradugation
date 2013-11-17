@@ -225,11 +225,10 @@ public class Event {
 					Log.d("Event message", event[eventMessage]);
 					//Create Message for random event
 					/*
-					Context toastContext = context;
 					CharSequence text = event[eventMessage];
 					int duration = Toast.LENGTH_SHORT;
 
-					Toast toast = Toast.makeText(toastContext, text, duration);
+					Toast toast = Toast.makeText(context, text, duration);
 					toast.show();
 					*/
 					

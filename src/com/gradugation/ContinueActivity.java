@@ -104,7 +104,7 @@ public class ContinueActivity extends Activity {
 
 			// Grab each character info
 			for (int i = 0; i < (numCharacters); i++) {
-				String[] tempStringArray = { "" + (id << 2) + i };
+				String[] tempStringArray = { "" + (id << 2) + i }; // Game ID | Char ID = Char Index 
 				characterList = dbhelper.getRow(2, tempStringArray);
 				
 				String type = (String) characterList.get(1);

@@ -103,16 +103,17 @@ public class Event {
 				eventArray[i] = eventIndex;
 				if (eventArray[i] == 1){
 					eventMessage = r.nextInt(3);
-					
+					Log.d("Event message", event[eventMessage]);
 					//Create Message for random event
 					/*
-					Context toastContext = getApplicationContext();
+					Context toastContext = context;
 					CharSequence text = event[eventMessage];
 					int duration = Toast.LENGTH_SHORT;
 
 					Toast toast = Toast.makeText(toastContext, text, duration);
 					toast.show();
 					*/
+					
 				}
 				break;
 			}

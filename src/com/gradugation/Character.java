@@ -26,7 +26,7 @@ public class Character implements Serializable {
         
         boolean hasGraduated;
         
-        int id, credits, coins;
+        int charId, credits, coins, gameId;
         SpriteCoordinate location;
         
         /**
@@ -35,15 +35,17 @@ public class Character implements Serializable {
          * @param name
          * @param location
          * @param charID
+         * @param gameID
          * @param credits
          * @param coins
          */
         public Character(String characterType, String name, SpriteCoordinate location,
-        		int charID, int credits, int coins) {
+        		int charID, int gameID, int credits, int coins) {
         	this.character = CHARACTERTYPE.valueOf(characterType);
         	this.name = name;
         	this.location = location;
-        	this.id = charID;
+        	this.charId = charID;
+        	this.gameId = gameID;
         	this.credits = credits;
         	this.coins = coins;
         }
@@ -53,9 +55,10 @@ public class Character implements Serializable {
          * @param characterType
          * @param coordinate SpriteCoordinate Where the sprite is in terms of screen size.
          * @param charID
+         * @param gameID
          */
-        public Character(String characterType, SpriteCoordinate coordinate, int charID) {
-        	this(characterType, "", coordinate, charID, 0, 0);
+        public Character(String characterType, SpriteCoordinate coordinate, int charID, int gameID) {
+        	this(characterType, "", coordinate, charID, gameID, 0, 0);
         	
         }
         
@@ -64,9 +67,10 @@ public class Character implements Serializable {
          * @param characterType
          * @param coordinate MapCoordinate Where the sprite is in terms of the tile map.
          * @param charID
+         * @param gameID
          */
-        public Character(String characterType, MapCoordinate coordinate, int charID) {
-        	this(characterType, "", coordinate.mapToSprite(), charID, 0, 0);
+        public Character(String characterType, MapCoordinate coordinate, int charID, int gameID) {
+        	this(characterType, "", coordinate.mapToSprite(), charID, gameID, 0, 0);
         }
         
         /**
@@ -75,9 +79,10 @@ public class Character implements Serializable {
          * @param x float Where character is in terms of screen size x
          * @param y float Where character is in terms of screen size y
          * @param charID
+         * @param gameID
          */
-        public Character(String characterType, float x, float y, int charID) {
-        	this(characterType, "", new SpriteCoordinate(x,y), charID, 0, 0);
+        public Character(String characterType, float x, float y, int charID, int gameID) {
+        	this(characterType, "", new SpriteCoordinate(x,y), charID, gameID, 0, 0);
         }
         
         /**
@@ -86,16 +91,17 @@ public class Character implements Serializable {
          * @param x int Where character is in terms of tile map x
          * @param y int Where character is in terms of tile map y
          * @param charID
+         * @param gameID
          */
-        public Character(String characterType, int x, int y, int charID) {
-        	this(characterType, "", new MapCoordinate(x,y).mapToSprite(), charID, 0, 0);
+        public Character(String characterType, int x, int y, int charID, int gameID) {
+        	this(characterType, "", new MapCoordinate(x,y).mapToSprite(), charID, gameID, 0, 0);
         }
         
         /**
          * Sets everything to 0, and no string for name.
          */
         public Character() {
-            this("", "", new SpriteCoordinate(), 0, 0, 0);
+            this("", "", new SpriteCoordinate(), 0, 0, 0, 0);
         }
         
         public void setName(String name){
@@ -107,11 +113,11 @@ public class Character implements Serializable {
         }
 
         public void setId(int id){
-                this.id = id;
+                this.charId = id;
         }
         
         public int getId(){
-                return id;
+                return charId;
         }
         
         public void addCredits(int credits){

@@ -95,8 +95,9 @@ public class ChooseCharacterActivity extends BaseActivity {
                     radioGroup1Button = (RadioButton) findViewById(selectedId);
                     
                     String type = (String)radioGroup1Button.getText();
-                    Character thePlayer = new Character(type.toUpperCase(), type, defaultLocation[playersChosen].mapToSprite(), playersChosen, 0, 0);
-                    thePlayer.setName((String)radioGroup1Button.getText());
+                    // need to grab game id from database when we are saving this
+                    int gameID = 0;
+                    Character thePlayer = new Character(type.toUpperCase(), type, defaultLocation[playersChosen].mapToSprite(), playersChosen, gameID, 0, 0);
                     thePlayers.add(thePlayer);
                     
                     
@@ -113,7 +114,9 @@ public class ChooseCharacterActivity extends BaseActivity {
                     radioGroup1Button = (RadioButton) findViewById(selectedId);
                     
                     String type = (String)radioGroup1Button.getText();
-                    Character thePlayer = new Character(type.toUpperCase(), type, defaultLocation[playersChosen].mapToSprite(), playersChosen, 0, 0);
+                    // need to grab game id from database when we are saving this
+                    int gameID = 0;
+                    Character thePlayer = new Character(type.toUpperCase(), type, defaultLocation[playersChosen].mapToSprite(), playersChosen, gameID, 0, 0);
 
                     thePlayers.add(thePlayer);
                     

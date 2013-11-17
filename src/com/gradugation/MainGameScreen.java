@@ -138,7 +138,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	private final MapCoordinate centerMap = new MapCoordinate(7,7);
 	private final SpriteCoordinate centerSprite = centerMap.mapToSprite();
 
-	private String[] characterNames;
 	private int[] characterCoins;
 	static ArrayList<Character> thePlayers;
 	
@@ -203,11 +202,9 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		thePlayers = (ArrayList<Character>) bundle.getSerializable(ChooseCharacterActivity.THE_PLAYERS);
 		numCharacters = thePlayers.size();
 		
-		characterNames = new String[numCharacters];
 		characterCoins = new int[numCharacters];
 		
 		for (int i = 0; i < numCharacters; i++) {
-			characterNames[i] = thePlayers.get(i).getName();
 			characterCoins[i] = thePlayers.get(i).getCoins();
 		}
 		
@@ -305,19 +302,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
         }
 
 	}
-	
-	public String NameToImageName(String name) {
-		
-		if (name.compareTo("Athlete") == 0) {
-			return "athlete.png";
-		} else if (name.compareTo("Engineer") == 0) {
-			return "engineer.png";
-		} else if (name.compareTo("Gradugator") == 0) {
-			return "splash2.png";
-		} else {
-			return "";
-		}
-	}
 
 	@Override
 	public Scene onCreateScene() {
@@ -344,7 +328,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		for (int i = 0; i < numCharacters; i++) {
 			SpriteCoordinate coord = textStrokeCoordinates[i];
 			textStrokes[i] = new Text(coord.getX(), coord.getY(), this.mStrokeFont,
-					characterNames[i]   +"\nCredits: " + thePlayers.get(i).getCredits()
+					thePlayers.get(i).getName()   +"\nCredits: " + thePlayers.get(i).getCredits()
 				    + "\nCoins: " + characterCoins[i], vertexBufferObjectManager); 
 		}
 		final Text textStroke5 = new Text(180, 20, this.mStrokeFont,
@@ -898,7 +882,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	}
 	// Checks the hot spots for the minigames
 	protected void checkMiniGameHotSpots(int current) {
-		Event.getEvent(thePlayers.get(current).getSpriteLocation(), this, characterNames[current]);
+		Event.getEvent(thePlayers.get(current).getSpriteLocation(), this, thePlayers.get(current).getName());
 		
 		if (!(move || gameDone)) {
 			gameDone = true;
@@ -973,7 +957,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	
 	private void addCredits(int character, int creditsToAdd) {
 		thePlayers.get(character).addCredits(creditsToAdd);
-		textStrokes[character].setText(characterNames[character]
+		textStrokes[character].setText(thePlayers.get(character).getName()
 				+ "\nCredits: " + thePlayers.get(character).getCredits()
 				+ "\nCoins: " + characterCoins[currentCharacter]);
 	}
@@ -999,7 +983,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	
 	private void addCoins(int character, int coinsToAdd) {
 		characterCoins[currentCharacter] += coinsToAdd;
-		textStrokes[character].setText(characterNames[character]
+		textStrokes[character].setText(thePlayers.get(character).getName()
 				+ "\nCredits: " + thePlayers.get(character).getCredits()
 				+ "\nCoins: " + characterCoins[currentCharacter]);
 	}

@@ -77,6 +77,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 this.context = context;
         }
         
+
     public SQLiteDatabase openDB() {
         db = this.getWritableDatabase();
         Log.d("openDB", "Database Opened");
@@ -407,3 +408,4 @@ public class DbHelper extends SQLiteOpenHelper {
 }
 
                 
+

@@ -790,7 +790,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 	protected void movementFunction(Sprite mySprite) {
 		if (!moving && swipeDone) {
-			int thisCurrent = currentCharacter;
+			//int thisCurrent = currentCharacter;
 			SpriteCoordinate offset = new SpriteCoordinate();
 
 			if (finalY - initY > 40) {
@@ -808,21 +808,21 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 			moving = true;
 
 			SpriteCoordinate finalPosition = new SpriteCoordinate(offset.getX()*ranNumb, offset.getY()*ranNumb);
-			SpriteCoordinate newPosition = offset.add(characterCoordinates[thisCurrent]);
+			SpriteCoordinate newPosition = offset.add(characterCoordinates[currentCharacter]);
 			
-			newPosition = this.mainMapEvent.checkBoundaries(characterCoordinates[thisCurrent], newPosition);
+			newPosition = this.mainMapEvent.checkBoundaries(characterCoordinates[currentCharacter], newPosition);
 				
-			finalPosition = characterCoordinates[thisCurrent].add(finalPosition);
+			finalPosition = characterCoordinates[currentCharacter].add(finalPosition);
 			
-			moveSprite(ranNumb-1, newPosition, offset, thisCurrent, mySprite);		
+			moveSprite(ranNumb-1, newPosition, offset, mySprite);		
 		}
 	}
 	
 	public void moveSprite(final int moves, final SpriteCoordinate newPosition,
-			final SpriteCoordinate offset, final int thisCurrent, final Sprite mySprite) {
+			final SpriteCoordinate offset, final Sprite mySprite) {
 
 			mySprite.registerEntityModifier(new MoveModifier(0.5f,
-					characterCoordinates[thisCurrent].getX(), characterCoordinates[thisCurrent].getY(),
+					characterCoordinates[currentCharacter].getX(), characterCoordinates[currentCharacter].getY(),
 					newPosition.getX(), newPosition.getY()) {
 				
 				@Override
@@ -835,33 +835,33 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				
 				@Override
 				protected void onModifierFinished(IEntity pItem) {
-					characterCoordinates[thisCurrent].setX(mySprite.getX());
-					characterCoordinates[thisCurrent].setY(mySprite.getY());
+					characterCoordinates[currentCharacter].setX(mySprite.getX());
+					characterCoordinates[currentCharacter].setY(mySprite.getY());
 					super.onModifierFinished(pItem);
 					
 					if (moves == 0) {
-						checkMiniGameHotSpots(thisCurrent);
+						checkMiniGameHotSpots(currentCharacter);
 						swipeDone = false;
 						turnDone = true;
 						moving = false;
-					} else if (characterCoordinates[thisCurrent].compareTo(newPosition) == 0) {
+					} else if (characterCoordinates[currentCharacter].compareTo(newPosition) == 0) {
 						SpriteCoordinate newPos = newPosition.add(offset);
-						newPos = mainMapEvent.checkBoundaries(characterCoordinates[thisCurrent], newPos);
+						newPos = mainMapEvent.checkBoundaries(characterCoordinates[currentCharacter], newPos);
 						int numMoves = moves - 1;
 						// if not a valid move, newPos = newPosition, and we need to show options
 						if (newPos.compareTo(newPosition) == 0) {
-							getNewMove(mainMapEvent.getPossiblePath(newPos), numMoves, thisCurrent, mySprite);
+							getNewMove(mainMapEvent.getPossiblePath(newPos), numMoves, mySprite);
 							return;
 						}
 						
-						moveSprite(numMoves, newPos, offset, thisCurrent, mySprite);
+						moveSprite(numMoves, newPos, offset, mySprite);
 					}
 				}
 			});
 	}
 
-	private void getNewMove(SpriteCoordinate[] pathOptions, final int moves,
-			final int thisCurrent, final Sprite mySprite) {
+	private void getNewMove(SpriteCoordinate[] pathOptions, final int moves, 
+			final Sprite mySprite) {
 		StringBuilder options = new StringBuilder();
 		StringBuilder choices = new StringBuilder();
 		
@@ -893,8 +893,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
 						SpriteCoordinate offset = Event.getPositionFromDirection(dialogChoices[which]);
-						SpriteCoordinate newPos = offset.add(characterCoordinates[thisCurrent]);
-						moveSprite(moves, newPos, offset, thisCurrent, mySprite);
+						SpriteCoordinate newPos = offset.add(characterCoordinates[currentCharacter]);
+						moveSprite(moves, newPos, offset, mySprite);
 					}
 				});
 

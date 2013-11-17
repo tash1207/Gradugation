@@ -53,11 +53,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
-<<<<<<< HEAD
 import android.os.CountDownTimer;
-=======
 import android.os.Handler;
->>>>>>> c7a18eaa3103a8c23920087e7159da835f3c022d
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -189,15 +186,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
         final EngineOptions engineOptions = new EngineOptions(true, ScreenOrientation.LANDSCAPE_SENSOR, new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT), this.mCamera);
         engineOptions.getAudioOptions().setNeedsMusic(true);
 
-<<<<<<< HEAD
 		return engineOptions;
-=======
-		return new EngineOptions(true, ScreenOrientation.LANDSCAPE_SENSOR,
-				new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT),
-				this.mCamera);
-		
-		
->>>>>>> c7a18eaa3103a8c23920087e7159da835f3c022d
 	}
 
 	@Override
@@ -712,13 +701,9 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 							.setChaseEntity(spriteList[currentCharacter]);
 					finishTurn = false;
 					diceButton.setColor(Color.WHITE);
-					finishTurnButton.setColor(Color.GRAY);
-<<<<<<< HEAD
-					
+					finishTurnButton.setColor(Color.GRAY);					
 					checkCredits(currentCharacter);					
 
-=======
->>>>>>> c7a18eaa3103a8c23920087e7159da835f3c022d
 				}
 				
 				

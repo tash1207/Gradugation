@@ -3,9 +3,9 @@ package com.gradugation;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -55,15 +55,20 @@ public class BenchPressMinigame extends Activity {
 				seconds_text.setText("Time Left: 0 secs");
 				game_finished = true;
 				
+				Intent output = new Intent();
 				if (reps >= REPS_REQUIRED) {
 					Toast.makeText(BenchPressMinigame.this, getString(R.string.bench_press_success, reps, 
 							CREDITS_EARNED), Toast.LENGTH_LONG).show();
 					// Code to add CREDITS_EARNED number of credits to the character
+					
+					output.putExtra(Event.BENCH_PRESS_REQUEST_CODE+"", CREDITS_EARNED);	
 				}
 				else {
 					Toast.makeText(BenchPressMinigame.this, getString(R.string.bench_press_failure, reps), 
 							Toast.LENGTH_LONG).show();
+					output.putExtra(Event.BENCH_PRESS_REQUEST_CODE+"", 0);	
 				}
+				setResult(RESULT_OK, output);
 				// Code to make continue button no longer disabled
 			}
 			

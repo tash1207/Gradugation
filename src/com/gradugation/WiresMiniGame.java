@@ -3,6 +3,7 @@ package com.gradugation;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -92,6 +93,9 @@ public class WiresMiniGame extends Activity {
 
 	public void win() {
 		//update the player's credits
+		Intent output = new Intent();
+		output.putExtra(Event.WIRES_REQUEST_CODE+"", CREDITS_EARNED);
+		setResult(RESULT_OK, output);
 		alertDialogBuilder = new AlertDialog.Builder(this);
 
 		// set title and message
@@ -115,6 +119,9 @@ public class WiresMiniGame extends Activity {
 	}
 
 	public void lose() {
+		Intent output = new Intent();
+		output.putExtra(Event.WIRES_REQUEST_CODE+"", 0);
+		setResult(RESULT_OK, output);
 		alertDialogBuilder = new AlertDialog.Builder(this);
 
 		// set title and message

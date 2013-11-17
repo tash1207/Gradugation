@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.coordinates.MapCoordinate;
+import com.coordinates.SpriteCoordinate;
 
 public class ChooseCharacterActivity extends BaseActivity {
 
@@ -23,8 +24,10 @@ public class ChooseCharacterActivity extends BaseActivity {
         
         private ImageView characterImage;
         private TextView characterAttributes;
-        
-        private static final MapCoordinate defaultLocation = new MapCoordinate(7,7);
+    	private final MapCoordinate centerMap = new MapCoordinate(7,7);
+    	private int numPlayers;
+
+        private static MapCoordinate[] defaultLocation;
         
 
         ArrayList<Character> thePlayers = new ArrayList<Character>();
@@ -33,6 +36,21 @@ public class ChooseCharacterActivity extends BaseActivity {
         protected void onCreate(Bundle savedInstanceState) {
                 super.onCreate(savedInstanceState);
                 setContentView(R.layout.activity_choose_character);
+                
+                Intent intent = getIntent();
+                numPlayers = intent.getIntExtra(NewGameActivity.NUMBER_OF_PLAYERS, 1);
+                defaultLocation = new MapCoordinate[numPlayers];
+                
+                for (int i = 0; i < numPlayers; i++) {
+                	MapCoordinate offset = new MapCoordinate();
+        			if (i == 2 || i == 3) {
+        				offset.setY(1);
+        			}
+        			if (i % 2 == 1) {
+        				offset.setX(1);
+        			}
+        			defaultLocation[i] = offset.add(centerMap);
+                }
                 
                 radioGroup = (RadioGroup) findViewById(R.id.radioGroup1);
                 characterImage = (ImageView) findViewById(R.id.character_image);
@@ -64,8 +82,9 @@ public class ChooseCharacterActivity extends BaseActivity {
         }
         
         public void btnContinueClicked(View view) {
-        	Intent intent = getIntent();
-            int numPlayers = intent.getIntExtra(NewGameActivity.NUMBER_OF_PLAYERS, 1);
+        	
+            
+            
             if (playersChosen > numPlayers-1) {                                        
                     startGame();
             }
@@ -76,7 +95,7 @@ public class ChooseCharacterActivity extends BaseActivity {
                     radioGroup1Button = (RadioButton) findViewById(selectedId);
                     
                     String name = (String)radioGroup1Button.getText();
-                    Character thePlayer = new Character(name, name, defaultLocation.mapToSprite(), playersChosen, 0, 0);
+                    Character thePlayer = new Character(name, name, defaultLocation[playersChosen].mapToSprite(), playersChosen, 0, 0);
                     thePlayer.setName((String)radioGroup1Button.getText());
                     thePlayers.add(thePlayer);
                     
@@ -94,7 +113,7 @@ public class ChooseCharacterActivity extends BaseActivity {
                     radioGroup1Button = (RadioButton) findViewById(selectedId);
                     
                     String name = (String)radioGroup1Button.getText();
-                    Character thePlayer = new Character(name, name, defaultLocation.mapToSprite(), playersChosen, 0, 0);
+                    Character thePlayer = new Character(name, name, defaultLocation[playersChosen].mapToSprite(), playersChosen, 0, 0);
 
                     thePlayers.add(thePlayer);
                     

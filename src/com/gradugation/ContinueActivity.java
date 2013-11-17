@@ -72,12 +72,6 @@ public class ContinueActivity extends Activity {
 			public void onItemClick(AdapterView<?> parent, View viewClicked,
 					int position, long id) {
 				LoadSavedGame(position);
-//				for(int i=0;i<numberSavedGames-1;i++){
-//					if(position == i){
-//						String message = "Unable to retrieve saved game. No saved games to retrieve at this time. " + "position:" + position + "id:" + id;
-//						Toast.makeText(ContinueActivity.this, message, Toast.LENGTH_SHORT).show();
-//					}
-//				}		
 			}
 		});
 	}
@@ -113,7 +107,8 @@ public class ContinueActivity extends Activity {
 				String[] tempStringArray = { "" + (id << 2) + i };
 				characterList = dbhelper.getRow(2, tempStringArray);
 				
-				String name = (String) characterList.get(1);
+				String type = (String) characterList.get(1);
+				String name = (String) characterList.get(2);
 				// being loaded as map coordinates
 				int x = Integer.valueOf((String) characterList.get(3));
 				int y = Integer.valueOf((String) characterList.get(4));
@@ -121,7 +116,8 @@ public class ContinueActivity extends Activity {
 				int credits = Integer.valueOf((String) characterList.get(5));
 				int coins = Integer.valueOf((String) characterList.get(6));
 				
-				Character thePlayer = new Character(name, name, location.mapToSprite(), i, credits, coins);
+				Log.d("characterstype", type);
+				Character thePlayer = new Character(type.toUpperCase(), name, location.mapToSprite(), (id << 2) + i, credits, coins);
 				thePlayers.add(thePlayer);
 			}
 			// Close database

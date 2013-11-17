@@ -146,8 +146,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	
 	private Text[] textStrokes;
 	final private SpriteCoordinate[] textStrokeCoordinates = {
-	        new SpriteCoordinate(80,300), new SpriteCoordinate(400,300), 
-	        new SpriteCoordinate(80,20), new SpriteCoordinate(400,20) };
+	        new SpriteCoordinate(60,280), new SpriteCoordinate(420,280), 
+	        new SpriteCoordinate(60,40), new SpriteCoordinate(420,40) };
 
 	private boolean turnDone;
 	private boolean eventCompleted;
@@ -631,15 +631,16 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 		
 		for (int i = 0; i < numCharacters; i++) {
-			SpriteCoordinate offset = new SpriteCoordinate();
-			if (i == 2 || i == 3) {
-				offset.setY(32f);
-			}
-			if (i % 2 == 1) {
-				offset.setX(32f);
-			}
+//			SpriteCoordinate offset = new SpriteCoordinate();
+//			if (i == 2 || i == 3) {
+//				offset.setY(32f);
+//			}
+//			if (i % 2 == 1) {
+//				offset.setX(32f);
+//			}
 
-			characterCoordinates[i] = offset.add(centerSprite);
+			characterCoordinates[i] = thePlayers.get(i).getSpriteLocation();
+
 		}
 		
 		final Sprite[] spriteList = new Sprite[numCharacters];
@@ -776,7 +777,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 			}
 		});
 		
-		for (int i = 0; i < numCharacters; i++) {
+		for (int i = (numCharacters-1); i>=0 ; i--) {
 			spriteList[i].setScale(.1f);
 			scene.attachChild(spriteList[i]);
 		}

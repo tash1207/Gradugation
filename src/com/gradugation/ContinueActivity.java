@@ -4,8 +4,15 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -15,16 +22,25 @@ import android.widget.Toast;
 
 public class ContinueActivity extends Activity {
 
+	private DbHelper dbhelper;
+	public int numberSavedGames=4;
+	private ArrayList<Character> thePlayers = new ArrayList<Character>();
+    public static final String THE_PLAYERS = "com.gradugation.the_players";
+
 	private List<SavedGame> mySavedGames = new ArrayList<SavedGame>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_continue);
+		
+		
 
 		populateSavedGameList();
 		populateListView();
 		registerClickCallback();
+		
 	}
 
 	/*
@@ -33,12 +49,10 @@ public class ContinueActivity extends Activity {
 	 * at moment of save
 	 */
 	private void populateSavedGameList() {
-		mySavedGames.add(new SavedGame("saved game1", R.drawable.ic_launcher,
-				"Last saved mm/dd 00:00"));
-		mySavedGames.add(new SavedGame("saved game2", R.drawable.ic_launcher,
-				"Last saved mm/dd 00:00"));
-		mySavedGames.add(new SavedGame("saved game3", R.drawable.ic_launcher,
-				"Last saved mm/dd 00:00"));
+		for(int i=0;i<numberSavedGames-1;i++){
+			mySavedGames.add(new SavedGame("saved game"+ i, R.drawable.ic_launcher,
+					"Last saved mm/dd 00:00"));
+		}
 	}
 
 	private void populateListView() {
@@ -48,16 +62,79 @@ public class ContinueActivity extends Activity {
 	}
 
 	private void registerClickCallback() {
+		
+        
 		ListView list = (ListView) findViewById(R.id.savedGamesListView);
 		list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 			public void onItemClick(AdapterView<?> parent, View viewClicked,
 					int position, long id) {
-				String message = "Unable to retrieve saved game. No saved games to retrieve at this time. ";
-				Toast.makeText(ContinueActivity.this, message,
-						Toast.LENGTH_LONG).show();
+				LoadSavedGame(position);
+//				for(int i=0;i<numberSavedGames-1;i++){
+//					if(position == i){
+//						String message = "Unable to retrieve saved game. No saved games to retrieve at this time. " + "position:" + position + "id:" + id;
+//						Toast.makeText(ContinueActivity.this, message, Toast.LENGTH_SHORT).show();
+//					}
+//				}		
 			}
 		});
+	}
+	
+	private void LoadSavedGame(int id){
+		String[] gameKey = { Integer.toString(id) };
+		int numCharacters=0;
+		//Open Database
+        dbhelper = new DbHelper(this);
+        SQLiteDatabase db = dbhelper.openDB();
+        Log.d("TEST", "Database has been opened");
+		
+        //Grab Game info
+		ArrayList gameList = dbhelper.getRow(1, gameKey);
+		
+		if (gameList.size()>0){
+			numCharacters = Integer.valueOf((String)gameList.get(2));
+
+		}else{
+			String message = "Unable to retrieve saved game.";
+			Toast.makeText(ContinueActivity.this, message, Toast.LENGTH_SHORT).show();
+		}
+		
+		
+		
+		
+		ArrayList characterList;
+
+		if (numCharacters != 0) {
+
+			// Grab each character info
+			for (int i = 0; i < (numCharacters); i++) {
+				String[] tempStringArray = { "" + (id << 2) + i };
+				characterList = dbhelper.getRow(2, tempStringArray);
+				Character thePlayer = new Character((String) characterList.get(1));
+				thePlayer.setName((String) characterList.get(1));
+				thePlayer.setX((float) Integer.valueOf((String) characterList.get(3)));
+				thePlayer.setY((float) (Integer) Integer.valueOf((String) characterList.get(4)));
+				thePlayer.addCredits((Integer) Integer.valueOf((String) characterList.get(5)));
+				thePlayer.addCoins((Integer) Integer.valueOf((String) characterList.get(6)));
+				thePlayers.add(thePlayer);
+			}
+			// Close database
+			dbhelper.close();
+
+			// Go to main game screen
+			Intent intent = new Intent(this, MainGameScreen.class);
+			intent.putExtra(THE_PLAYERS, (Serializable) thePlayers);
+			startActivity(intent);
+
+		}
+		
+        //ArrayList itemList = dbhelper.getRow(3, itemKey);
+                
+		//Close database
+		dbhelper.close();
+		
+        
+       
 	}
 
 	private class MyListAdapter extends ArrayAdapter<SavedGame> {
@@ -92,5 +169,13 @@ public class ContinueActivity extends Activity {
 
 			return itemView;
 		}
+	}
+	
+	public void incrementNumSaveGames(){
+		numberSavedGames++;
+	}
+	
+	public int getNumSaveGames(){
+		return numberSavedGames;
 	}
 }

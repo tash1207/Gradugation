@@ -14,6 +14,8 @@
     <string name="title_activity_bench_press_minigame">BenchPressMinigame</string>
     <string name="title_activity_wires_mini_game">WiresMiniGame</string>
     <string name="title_activity_waitinline_minigame">WaitInLineMinigame</string>
+    <string name="title_activity_game_over_screen">GameOverScreen</string>
+    <string name="game_over_text">Game Over Screen</string>
 
     <!-- Main Activity -->
     <string name="new_game">New Game</string>

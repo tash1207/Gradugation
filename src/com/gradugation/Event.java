@@ -76,6 +76,7 @@ public class Event {
 	public final static int WHACK_AFLYER_REQUEST_CODE = 3;
 	public final static int COLOR_REQUEST_CODE = 4;
 	public final static int FOOD_REQUEST_CODE = 5;
+	public final static int GRADUATION_REQUEST_CODE = 6;
 	
 	
 	//public void method for each event, use switch case for each eventID
@@ -173,6 +174,10 @@ public class Event {
 
 		if (GRADUATION.isEqual(coordinate)) {
 			//graduate!
+			Intent intent = new Intent(context, GameOverScreen.class);
+			intent.putExtra("character_type", characterType);
+			context.startActivityForResult(intent, GRADUATION_REQUEST_CODE);
+		
 		} else if (BENCH_PRESS_MINI_GAME.isEqual(coordinate)) {
 			//call bench press game
 			Intent intent = new Intent(context, BenchPressMinigame.class);

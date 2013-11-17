@@ -165,6 +165,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	float finalX;
 	float finalY;
 	
+	float variable;
+	
 	private boolean finishTurn = false; 
 	private boolean diceDone = false;
 

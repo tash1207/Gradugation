@@ -160,37 +160,37 @@ public class Event {
 		return newPosition;
 	}
 	
-	public static void getEvent(SpriteCoordinate coordinate, boolean doneSwiping, 
-		boolean gameDone, boolean move, Activity context, String characterType) {
-		
-		if (GRADUATION.isEqual(coordinate) && !gameDone && !move) {
+	public static void getEvent(SpriteCoordinate coordinate, 
+			Activity context, String characterType) {
+
+		if (GRADUATION.isEqual(coordinate)) {
 			//graduate!
-		} else if (BENCH_PRESS_MINI_GAME.isEqual(coordinate) && !gameDone && !move) {
+		} else if (BENCH_PRESS_MINI_GAME.isEqual(coordinate)) {
 			//call bench press game
 			Intent intent = new Intent(context, BenchPressMinigame.class);
 			intent.putExtra("character_type", characterType);
 			context.startActivity(intent);
-		} else if (WIRES_MINI_GAME.isEqual(coordinate) && !gameDone && !move) {
+		} else if (WIRES_MINI_GAME.isEqual(coordinate)) {
 			//call wires mini game
 			Intent intent = new Intent(context, WiresMiniGame.class);
 			intent.putExtra("character_type", characterType);
 			context.startActivity(intent);
-		} else if (WAIT_IN_LINE_MINI_GAME.isEqual(coordinate) && !gameDone && !move) {
+		} else if (WAIT_IN_LINE_MINI_GAME.isEqual(coordinate)) {
 			// call wait in line
 			Intent intent = new Intent(context, WaitInLineMinigame.class);
 			intent.putExtra("character_type", characterType);
 			context.startActivity(intent);
-		} else if (WHACK_AFLYER_MINI_GAME.isEqual(coordinate) && !gameDone && !move) {
+		} else if (WHACK_AFLYER_MINI_GAME.isEqual(coordinate)) {
 			// call whack a flyer
 			Intent intent = new Intent(context, WhackAFlyerMiniGame.class);
 			intent.putExtra("character_type", characterType);
 			context.startActivity(intent);
-		} else if (COLOR_MINI_GAME.isEqual(coordinate) && !gameDone && !move) {
+		} else if (COLOR_MINI_GAME.isEqual(coordinate)) {
 			// call colors
 			Intent intent = new Intent(context, ColorMiniGame.class);
 			intent.putExtra("character_type", characterType);
 			context.startActivity(intent);
-		} else if (FOOD_MINI_GAME.isEqual(coordinate) && !gameDone && !move) {
+		} else if (FOOD_MINI_GAME.isEqual(coordinate)) {
 			Intent intent = new Intent(context, FoodMiniGame.class);
 			intent.putExtra("character_type", characterType);
 			context.startActivity(intent);

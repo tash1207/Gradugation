@@ -630,16 +630,15 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 							tmxLayer.getTileY(tmxTile.getTileRow()));
 				}
 
-if (move == true && turnDone == false && diceDone == true) {
+				if (move && !turnDone && diceDone) {
 					movementFunction(spriteList[currentCharacter]);
-					moving = true;
 					MainGameScreen.this.mCamera.updateChaseEntity();
 					finishTurnButton.setColor(Color.WHITE);
 				}
 				
 				
 
-				if (moving == true && turnDone == true  && finishTurn == true) { //&& swipeDone == false
+				if (turnDone && finishTurn) { //&& swipeDone == false
 					moving = false;
 					move = false;
 					turnDone = false;
@@ -672,7 +671,7 @@ if (move == true && turnDone == false && diceDone == true) {
 	boolean move = false;
 
 	protected void movementFunction(Sprite mySprite) {
-		if (swipeDone) {
+		if (!moving && swipeDone) {
 			int thisCurrent = currentCharacter;
 			SpriteCoordinate offset = new SpriteCoordinate();
 
@@ -684,8 +683,12 @@ if (move == true && turnDone == false && diceDone == true) {
 				offset.setX(CHARACTER_WIDTH);
 			} else if (finalX - initX < -40) {
 				offset.setX(-CHARACTER_WIDTH);
+			} else {
+				return;
 			}
-			
+
+			moving = true;
+
 			SpriteCoordinate finalPosition = new SpriteCoordinate(offset.getX()*ranNumb, offset.getY()*ranNumb);
 			SpriteCoordinate newPosition = offset.add(characterCoordinates[thisCurrent]);
 			
@@ -693,7 +696,7 @@ if (move == true && turnDone == false && diceDone == true) {
 				
 			finalPosition = characterCoordinates[thisCurrent].add(finalPosition);
 			
-			moveSprite(ranNumb, newPosition, offset, thisCurrent, mySprite);		
+			moveSprite(ranNumb-1, newPosition, offset, thisCurrent, mySprite);		
 		}
 	}
 	
@@ -703,7 +706,6 @@ if (move == true && turnDone == false && diceDone == true) {
 			mySprite.registerEntityModifier(new MoveModifier(0.5f,
 					characterCoordinates[thisCurrent].getX(), characterCoordinates[thisCurrent].getY(),
 					newPosition.getX(), newPosition.getY()) {
-				
 				
 				@Override
 				protected void onModifierStarted(IEntity pItem) {
@@ -720,10 +722,11 @@ if (move == true && turnDone == false && diceDone == true) {
 					super.onModifierFinished(pItem);
 					Log.d("character coords", characterCoordinates[thisCurrent].toString());
 					
-					if (moves == 1) {
+					if (moves == 0) {
 						checkMiniGameHotSpots(thisCurrent);
 						swipeDone = false;
 						turnDone = true;
+						moving = false;
 					} else if (characterCoordinates[thisCurrent].compareTo(newPosition) == 0) {
 						SpriteCoordinate newPos = newPosition.add(offset);
 						newPos = mainMapEvent.checkBoundaries(characterCoordinates[thisCurrent], newPos);
@@ -736,11 +739,8 @@ if (move == true && turnDone == false && diceDone == true) {
 						
 						moveSprite(numMoves, newPos, offset, thisCurrent, mySprite);
 					}
-					
-
 				}
 			});
-			
 	}
 
 	private void getNewMove(SpriteCoordinate[] pathOptions, final int moves,
@@ -796,7 +796,7 @@ if (move == true && turnDone == false && diceDone == true) {
 	// Checks the hot spots for the minigames
 	protected void checkMiniGameHotSpots(int current) {
 
-		Event.getEvent(characterCoordinates[current], true, gameDone, move, this, characterNames[current]);
+		Event.getEvent(characterCoordinates[current], this, characterNames[current]);
 		
 		if (!(move || gameDone)) {
 			gameDone = true;

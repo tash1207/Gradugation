@@ -320,7 +320,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	                 * button is being pressed.
 	                 */
 	                //generate random number [1,3]
-	        	currentCharacterYear = (characterCredits[currentCharacter]/3) + 1;
+	        	currentCharacterYear = (characterCredits[currentCharacter]%CREDITS_NEEDED_GRADUATE) + 1;
 	        	switch(currentCharacterYear) {
 	        	case 1: maxRoll = 3;
 	        			break;

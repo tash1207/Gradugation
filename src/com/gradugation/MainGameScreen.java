@@ -134,14 +134,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	private StrokeFont mStrokeFont, mStrokeFontLarge;
 	
 	private Music mMusic;
-	
-	private final MapCoordinate centerMap = new MapCoordinate(7,7);
-	private final SpriteCoordinate centerSprite = centerMap.mapToSprite();
 
-	private SpriteCoordinate[] characterCoordinates; 
-	private int[] characterCredits;
-	private String[] characterNames;
-	private int[] characterCoins;
 	static ArrayList<Character> thePlayers;
 	
 	private Text[] textStrokes;
@@ -204,17 +197,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
         Bundle bundle = intent.getExtras();
 		thePlayers = (ArrayList<Character>) bundle.getSerializable(ChooseCharacterActivity.THE_PLAYERS);
 		numCharacters = thePlayers.size();
-		
-		characterCoordinates = new SpriteCoordinate[numCharacters];
-		characterCredits = new int[numCharacters];
-		characterNames = new String[numCharacters];
-		characterCoins = new int[numCharacters];
-		
-		for (int i = 0; i < numCharacters; i++) {
-			characterNames[i] = thePlayers.get(i).getName();
-			characterCoins[i] = thePlayers.get(i).getCoins();
-			characterCredits[i] = thePlayers.get(i).getCredits();
-		}
 		
 		//Create all four character sprites
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
@@ -310,19 +292,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
         }
 
 	}
-	
-	public String NameToImageName(String name) {
-		
-		if (name.compareTo("Athlete") == 0) {
-			return "athlete.png";
-		} else if (name.compareTo("Engineer") == 0) {
-			return "engineer.png";
-		} else if (name.compareTo("Gradugator") == 0) {
-			return "splash2.png";
-		} else {
-			return "";
-		}
-	}
 
 	@Override
 	public Scene onCreateScene() {
@@ -349,8 +318,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		for (int i = 0; i < numCharacters; i++) {
 			SpriteCoordinate coord = textStrokeCoordinates[i];
 			textStrokes[i] = new Text(coord.getX(), coord.getY(), this.mStrokeFont,
-					characterNames[i]   +"\nCredits: " + characterCredits[i]
-				    + "\nCoins: " + characterCoins[i], vertexBufferObjectManager); 
+					thePlayers.get(i).getName()   +"\nCredits: " + thePlayers.get(i).getCredits()
+				    + "\nCoins: " + thePlayers.get(i).getCoins(), vertexBufferObjectManager); 
 		}
 		final Text textStroke5 = new Text(180, 20, this.mStrokeFont,
                 " " + diceRoll, vertexBufferObjectManager);
@@ -374,7 +343,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	                 * button is being pressed.
 	                 */
 	                //generate random number [1,3]
-	        	currentCharacterYear = (characterCredits[currentCharacter]%CREDITS_NEEDED_GRADUATE) + 1;
+	        	currentCharacterYear = (thePlayers.get(currentCharacter).getCredits()%CREDITS_NEEDED_GRADUATE) + 1;
 	        	switch(currentCharacterYear) {
 	        	case 1: maxRoll = 3;
 	        			break;
@@ -636,23 +605,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		this.mCamera.setBoundsEnabled(true);
 
 		
-		for (int i = 0; i < numCharacters; i++) {
-//			SpriteCoordinate offset = new SpriteCoordinate();
-//			if (i == 2 || i == 3) {
-//				offset.setY(32f);
-//			}
-//			if (i % 2 == 1) {
-//				offset.setX(32f);
-//			}
-
-			characterCoordinates[i] = thePlayers.get(i).getSpriteLocation();
-
-		}
-		
 		final Sprite[] spriteList = new Sprite[numCharacters];
 		
 		for (int i = 0; i < numCharacters; i++) {
-			SpriteCoordinate loc = characterCoordinates[i];
+			SpriteCoordinate loc = thePlayers.get(i).getSpriteLocation();
 			spriteList[i] = new Sprite(loc.getX(), loc.getY(), character[i], 
 					this.getVertexBufferObjectManager());
 		}
@@ -812,12 +768,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 			moving = true;
 
-			SpriteCoordinate finalPosition = new SpriteCoordinate(offset.getX()*ranNumb, offset.getY()*ranNumb);
-			SpriteCoordinate newPosition = offset.add(characterCoordinates[currentCharacter]);
+			SpriteCoordinate characterLocation = thePlayers.get(currentCharacter).getSpriteLocation();
+			SpriteCoordinate newPosition = offset.add(characterLocation);
 			
-			newPosition = this.mainMapEvent.checkBoundaries(characterCoordinates[currentCharacter], newPosition);
-				
-			finalPosition = characterCoordinates[currentCharacter].add(finalPosition);
+			newPosition = this.mainMapEvent.checkBoundaries(characterLocation, newPosition);
 			
 			moveSprite(ranNumb-1, newPosition, offset, mySprite);		
 		}
@@ -825,9 +779,11 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	
 	public void moveSprite(final int moves, final SpriteCoordinate newPosition,
 			final SpriteCoordinate offset, final Sprite mySprite) {
-
+		
+		SpriteCoordinate characterLocation = thePlayers.get(currentCharacter).getSpriteLocation();
+		
 			mySprite.registerEntityModifier(new MoveModifier(0.5f,
-					characterCoordinates[currentCharacter].getX(), characterCoordinates[currentCharacter].getY(),
+					characterLocation.getX(), characterLocation.getY(),
 					newPosition.getX(), newPosition.getY()) {
 				
 				@Override
@@ -840,8 +796,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				
 				@Override
 				protected void onModifierFinished(IEntity pItem) {
-					characterCoordinates[currentCharacter].setX(mySprite.getX());
-					characterCoordinates[currentCharacter].setY(mySprite.getY());
+					thePlayers.get(currentCharacter).setLocation(mySprite.getX(), mySprite.getY());
 					super.onModifierFinished(pItem);
 					
 					if (moves == 0) {
@@ -849,9 +804,9 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 						swipeDone = false;
 						turnDone = true;
 						moving = false;
-					} else if (characterCoordinates[currentCharacter].compareTo(newPosition) == 0) {
+					} else if (thePlayers.get(currentCharacter).getSpriteLocation().compareTo(newPosition) == 0) {
 						SpriteCoordinate newPos = newPosition.add(offset);
-						newPos = mainMapEvent.checkBoundaries(characterCoordinates[currentCharacter], newPos);
+						newPos = mainMapEvent.checkBoundaries(thePlayers.get(currentCharacter).getSpriteLocation(), newPos);
 						int numMoves = moves - 1;
 						// if not a valid move, newPos = newPosition, and we need to show options
 						if (newPos.compareTo(newPosition) == 0) {
@@ -898,7 +853,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
 						SpriteCoordinate offset = Event.getPositionFromDirection(dialogChoices[which]);
-						SpriteCoordinate newPos = offset.add(characterCoordinates[currentCharacter]);
+						SpriteCoordinate newPos = offset.add(thePlayers.get(currentCharacter).getSpriteLocation());
 						moveSprite(moves, newPos, offset, mySprite);
 					}
 				});
@@ -917,7 +872,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	}
 	// Checks the hot spots for the minigames
 	protected void checkMiniGameHotSpots(int current) {
-		Event.getEvent(characterCoordinates[current], this, characterNames[current]);
+		Event.getEvent(thePlayers.get(current).getSpriteLocation(), this, thePlayers.get(current).getName());
 		
 		if (!(move || gameDone)) {
 			gameDone = true;
@@ -991,10 +946,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	}
 	
 	private void addCredits(int character, int creditsToAdd) {
-		characterCredits[currentCharacter] += creditsToAdd;
-		textStrokes[character].setText(characterNames[character]
-				+ "\nCredits: " + characterCredits[currentCharacter]
-				+ "\nCoins: " + characterCoins[currentCharacter]);
+		thePlayers.get(character).addCredits(creditsToAdd);
+		textStrokes[character].setText(thePlayers.get(character).getName()
+				+ "\nCredits: " + thePlayers.get(character).getCredits()
+				+ "\nCoins: " + thePlayers.get(character).getCoins());
 	}
 	
 	// Get the character names and credits for game over screen
@@ -1003,7 +958,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	}
 	
 	private void checkCredits(int character) {
-		if (characterCredits[currentCharacter] >= CREDITS_NEEDED_GRADUATE) {
+		if (thePlayers.get(character).getCredits() >= CREDITS_NEEDED_GRADUATE) {
 			runOnUiThread(new Runnable() {                  
 	            @Override
 	            public void run() {
@@ -1017,10 +972,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	}
 	
 	private void addCoins(int character, int coinsToAdd) {
-		characterCoins[currentCharacter] += coinsToAdd;
-		textStrokes[character].setText(characterNames[character]
-				+ "\nCredits: " + characterCredits[currentCharacter]
-				+ "\nCoins: " + characterCoins[currentCharacter]);
+		thePlayers.get(character).addCoins(coinsToAdd);
+		textStrokes[character].setText(thePlayers.get(character).getName()
+				+ "\nCredits: " + thePlayers.get(character).getCredits()
+				+ "\nCoins: " + thePlayers.get(character).getCoins());
 	}
 	
 	

@@ -138,7 +138,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	private final MapCoordinate centerMap = new MapCoordinate(7,7);
 	private final SpriteCoordinate centerSprite = centerMap.mapToSprite();
 
-	private int[] characterCredits;
 	private String[] characterNames;
 	private int[] characterCoins;
 	static ArrayList<Character> thePlayers;
@@ -204,14 +203,12 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		thePlayers = (ArrayList<Character>) bundle.getSerializable(ChooseCharacterActivity.THE_PLAYERS);
 		numCharacters = thePlayers.size();
 		
-		characterCredits = new int[numCharacters];
 		characterNames = new String[numCharacters];
 		characterCoins = new int[numCharacters];
 		
 		for (int i = 0; i < numCharacters; i++) {
 			characterNames[i] = thePlayers.get(i).getName();
 			characterCoins[i] = thePlayers.get(i).getCoins();
-			characterCredits[i] = thePlayers.get(i).getCredits();
 		}
 		
 		//Create all four character sprites
@@ -347,7 +344,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		for (int i = 0; i < numCharacters; i++) {
 			SpriteCoordinate coord = textStrokeCoordinates[i];
 			textStrokes[i] = new Text(coord.getX(), coord.getY(), this.mStrokeFont,
-					characterNames[i]   +"\nCredits: " + characterCredits[i]
+					characterNames[i]   +"\nCredits: " + thePlayers.get(i).getCredits()
 				    + "\nCoins: " + characterCoins[i], vertexBufferObjectManager); 
 		}
 		final Text textStroke5 = new Text(180, 20, this.mStrokeFont,
@@ -372,7 +369,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	                 * button is being pressed.
 	                 */
 	                //generate random number [1,3]
-	        	currentCharacterYear = (characterCredits[currentCharacter]%CREDITS_NEEDED_GRADUATE) + 1;
+	        	currentCharacterYear = (thePlayers.get(currentCharacter).getCredits()%CREDITS_NEEDED_GRADUATE) + 1;
 	        	switch(currentCharacterYear) {
 	        	case 1: maxRoll = 3;
 	        			break;
@@ -975,9 +972,9 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	}
 	
 	private void addCredits(int character, int creditsToAdd) {
-		characterCredits[currentCharacter] += creditsToAdd;
+		thePlayers.get(character).addCredits(creditsToAdd);
 		textStrokes[character].setText(characterNames[character]
-				+ "\nCredits: " + characterCredits[currentCharacter]
+				+ "\nCredits: " + thePlayers.get(character).getCredits()
 				+ "\nCoins: " + characterCoins[currentCharacter]);
 	}
 	
@@ -987,7 +984,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	}
 	
 	private void checkCredits(int character) {
-		if (characterCredits[currentCharacter] >= CREDITS_NEEDED_GRADUATE) {
+		if (thePlayers.get(character).getCredits() >= CREDITS_NEEDED_GRADUATE) {
 			runOnUiThread(new Runnable() {                  
 	            @Override
 	            public void run() {
@@ -1003,7 +1000,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	private void addCoins(int character, int coinsToAdd) {
 		characterCoins[currentCharacter] += coinsToAdd;
 		textStrokes[character].setText(characterNames[character]
-				+ "\nCredits: " + characterCredits[currentCharacter]
+				+ "\nCredits: " + thePlayers.get(character).getCredits()
 				+ "\nCoins: " + characterCoins[currentCharacter]);
 	}
 	

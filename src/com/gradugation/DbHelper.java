@@ -412,6 +412,16 @@ public class DbHelper extends SQLiteOpenHelper {
         	}
         	return rowArray;
         }
+        
+        public int getGameCount() {
+            Cursor c = db.rawQuery("select count(*) from " + GAMES, null);
+            int count = 0;
+            if (c.moveToNext()) {
+                count = c.getInt(c.getColumnIndex("count(*)"));
+            }
+            c.close();
+            return count;
+         }
 
 }
 

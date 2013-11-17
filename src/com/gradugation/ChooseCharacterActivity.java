@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
@@ -114,7 +115,7 @@ public void startGame() {
             SQLiteDatabase db = dbhelper.openDB();
             
             //Game Table
-            String[] game = {"0","0",Integer.toString(playersChosen),"0"};
+            String[] game = {Integer.toString(dbhelper.getGameCount()),"0",Integer.toString(playersChosen),"0"};
         	dbhelper.insertRow(1, game);
         	
         	//Item Table
@@ -124,12 +125,12 @@ public void startGame() {
         	//For loop assigning each minigame ID to each minigame row
         	//Minigame Table
         	event = new Event();
-	        String[] minigame1 = {"0",Integer.toString(event.BENCH_PRESS_REQUEST_CODE),"0","0","0","0"};
-	        String[] minigame2 = {"0",Integer.toString(event.WIRES_REQUEST_CODE),"0","0","0","0"};
-	        String[] minigame3 = {"0",Integer.toString(event.WAIT_IN_LINE_REQUEST_CODE),"0","0","0","0"};
-	        String[] minigame4 = {"0",Integer.toString(event.WHACK_AFLYER_REQUEST_CODE),"0","0","0","0"};
-	        String[] minigame5 = {"0",Integer.toString(event.COLOR_REQUEST_CODE),"0","0","0","0"};
-	        String[] minigame6 = {"0",Integer.toString(event.GRADUATION_REQUEST_CODE),"0","0","0","0"};
+	        String[] minigame1 = {Integer.toString(dbhelper.getGameCount()),Integer.toString(event.BENCH_PRESS_REQUEST_CODE),"0","0","0","0"};
+	        String[] minigame2 = {Integer.toString(dbhelper.getGameCount()),Integer.toString(event.WIRES_REQUEST_CODE),"0","0","0","0"};
+	        String[] minigame3 = {Integer.toString(dbhelper.getGameCount()),Integer.toString(event.WAIT_IN_LINE_REQUEST_CODE),"0","0","0","0"};
+	        String[] minigame4 = {Integer.toString(dbhelper.getGameCount()),Integer.toString(event.WHACK_AFLYER_REQUEST_CODE),"0","0","0","0"};
+	        String[] minigame5 = {Integer.toString(dbhelper.getGameCount()),Integer.toString(event.COLOR_REQUEST_CODE),"0","0","0","0"};
+	        String[] minigame6 = {Integer.toString(dbhelper.getGameCount()),Integer.toString(event.GRADUATION_REQUEST_CODE),"0","0","0","0"};
 	        dbhelper.insertRow(4, minigame1);
 	        dbhelper.insertRow(4, minigame2);
 	        dbhelper.insertRow(4, minigame3);
@@ -143,6 +144,7 @@ public void startGame() {
 	            String[] character = {Integer.toString(i),null,null,"0","0","0","0",Integer.toString(i+1)};	
             	dbhelper.insertRow(2, character);
             }
+            Log.d("# of Games", Integer.toString(dbhelper.getGameCount()));
             
         	dbhelper.close();
         	

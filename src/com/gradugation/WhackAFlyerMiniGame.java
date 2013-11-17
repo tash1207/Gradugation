@@ -35,7 +35,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.widget.Toast;
 
-public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneTouchListener {
+public class WhackAFlyerMiniGame extends SimpleBaseGameActivity implements IOnSceneTouchListener {
 
     private static final int CAMERA_WIDTH = 480;
     private static final int CAMERA_HEIGHT = 320;
@@ -44,7 +44,8 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
     private static final float MIN_TIME_DELAY_FOR_FLYER = .25f;
     private static final float MAX_SPAWN_DELAY = 1;
     private static final float MIN_SPAWN_DELAY = .5f;
-    private static final int POINTS_REQUIRED = 25;
+
+    private static final int POINTS_REQUIRED = 20;
     private static final int CREDITS_EARNED = 3;
     private HashSet<Float> xLocTaken = new HashSet<Float>();
     private HashSet<Float> yLocTaken = new HashSet<Float>();
@@ -84,7 +85,6 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
     private int points;
     private boolean finished = false;
     private boolean gameStarted = false;
-    private Text pointsLabel;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -319,12 +319,13 @@ public class WhackAFlyerGame extends SimpleBaseGameActivity implements IOnSceneT
     private void gameFinished() {
         finished = true;
         if (this.points >= POINTS_REQUIRED) {
-            Toast.makeText(WhackAFlyerGame.this, getString(R.string.whack_aflyer_success, this.points,
+
+            Toast.makeText(WhackAFlyerMiniGame.this, getString(R.string.whack_aflyer_success, this.points,
                     CREDITS_EARNED), Toast.LENGTH_LONG).show();
             // Code to add CREDITS_EARNED number of credits to the character
         }
         else {
-            Toast.makeText(WhackAFlyerGame.this, getString(R.string.whack_aflyer_failure, this.points), 
+            Toast.makeText(WhackAFlyerMiniGame.this, getString(R.string.whack_aflyer_failure, this.points), 
                     Toast.LENGTH_LONG).show();
         }
         

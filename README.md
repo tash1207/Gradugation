@@ -18,7 +18,9 @@ https://github.com/nicolasgramlich/AndEnginePhysicsBox2DExtension/tree/GLES2-Anc
 
 4. Right click AndEngineTMXTiledMapExtension and open properties. Under Android-> libraries remove the current AndEngine project and add in the correct AndEngine
 
-5. Right click on the MainActivity project and open properties. Under Android -> libraries add in AndEngine and AndEngineTMXTiledMapExtensions
+5. Right click AndEnginePhysicsBox2DExtension and open properties. Under Android-> libraries remove the current AndEngine project and add in the correct AndEngine.
+
+5. Right click on the MainActivity project and open properties. Under Android -> libraries add in AndEngine, AndEngineTMXTiledMapExtension, and AndEnginePhysicsBox2DExtension.
 
 6. Refresh and clean the project.
 

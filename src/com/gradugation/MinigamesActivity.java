@@ -28,7 +28,12 @@ public class MinigamesActivity extends BaseActivity {
 	}
 	
 	public void minigameWhackAFlyerButtonClick(View v) {
-		Intent intent = new Intent(this, WhackAFlyerGame.class);
+		Intent intent = new Intent(this, WhackAFlyerMiniGame.class);
+		startActivity(intent);
+	}
+
+	public void minigameColorButtonClick(View v) {
+		Intent intent = new Intent(this, ColorMiniGame.class);
 		startActivity(intent);
 	}
 	
@@ -39,5 +44,9 @@ public class MinigamesActivity extends BaseActivity {
 	public void minigameMoneyCountButtonClick(View v) {
 		Intent intent = new Intent(this, MoneyCount.class);
 		startActivity(intent);
+	}
+	public void minigameWaitInLineButtonClick(View v) {
+		Intent intent = new Intent(this, WaitInLineMinigame.class);
+    	startActivity(intent);
 	}
 }

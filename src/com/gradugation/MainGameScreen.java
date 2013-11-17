@@ -48,12 +48,16 @@ import org.andengine.ui.activity.SimpleBaseGameActivity;
 import org.andengine.util.Constants;
 import org.andengine.util.debug.Debug;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import com.coordinates.MapCoordinate;
 import com.coordinates.SpriteCoordinate;
@@ -678,7 +682,11 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 					finishTurn = false;
 					diceButton.setColor(Color.WHITE);
 					finishTurnButton.setColor(Color.GRAY);
-
+					
+					if (thePlayers.get(currentCharacter).isGameOver()) {
+						gameOver();
+					}
+					
 					// if(currentCharacter==0){
 					// SpriteList[currentCharacter].registerEntityModifier(new
 					// MoveModifier(0.5f,currentX,currentY, currentX,
@@ -695,6 +703,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 					// currentY2-1 ));
 					// }
 				}
+				
+				
 
 				if (swipeDone == false) {
 					//ranNumb = (1 + (int) (Math.random() * ((MAX_CHARACTER_MOVEMENT - 1) + 1))) * CHARACTER_WIDTH;
@@ -803,6 +813,15 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 			super.onResumeGame();
 	}
 
+	void gameOver(){
+        runOnUiThread(new Runnable() {                  
+            @Override
+            public void run() {
+            	Toast.makeText(getApplicationContext(), "You have won! Please head to the O'Connoll Center for gradugation.",
+            			   Toast.LENGTH_LONG).show();
+                }                  
+            });
+                }
 	// ===========================================================
 	// Methods
 	// ===========================================================

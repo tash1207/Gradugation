@@ -689,10 +689,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 					diceButton.setColor(Color.WHITE);
 					finishTurnButton.setColor(Color.GRAY);
 					
-					if (thePlayers.get(currentCharacter).isGameOver()) {
-						gameOver();
-					}
-					
+					checkCredits(currentCharacter);					
 
 				}
 				
@@ -808,7 +805,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 			super.onResumeGame();
 	}
 
-	void gameOver(){
+	/*void gameOver(){
         runOnUiThread(new Runnable() {                  
             @Override
             public void run() {
@@ -816,7 +813,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
             			   Toast.LENGTH_LONG).show();
                 }                  
             });
-                }
+                }*/
 	// ===========================================================
 	// Methods
 	// ===========================================================
@@ -847,8 +844,15 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	
 	private void checkCredits(int character) {
 		if (characterCredits[currentCharacter] >= CREDITS_NEEDED_GRADUATE) {
-			Toast.makeText(this, getString(R.string.ready_to_graduate, currentCharacter,
-					characterCredits[currentCharacter]), Toast.LENGTH_LONG).show();
+			runOnUiThread(new Runnable() {                  
+	            @Override
+	            public void run() {
+	            	Toast.makeText(getApplicationContext(), R.string.ready_to_graduate,
+	            			   Toast.LENGTH_LONG).show();
+	                }                  
+	            });
+			
+			
 		}
 	}
 	

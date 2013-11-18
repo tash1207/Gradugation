@@ -111,6 +111,10 @@ public class Character implements Serializable {
         public String getName()        {
                 return name;
         }
+        
+        public String getType(){
+        	return name;
+        }
 
         public void setId(int id){
                 this.charId = id;
@@ -118,6 +122,10 @@ public class Character implements Serializable {
         
         public int getId(){
                 return charId;
+        }
+        
+        public int getGameId(){
+        	return gameId;
         }
         
         public void addCredits(int credits){

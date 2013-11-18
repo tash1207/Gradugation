@@ -119,9 +119,9 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	
 	private ITexture mFaceTexture;
 	private ITextureRegion mFaceTextureRegion;
-	private ITexture mPausedTexture, mResumeTexture, mMainMenuTexture, mSaveGameTexture;
+	private ITexture mPausedTexture, mResumeTexture, mMainMenuTexture, mSaveTexture;
 	private ITextureRegion mPausedTextureRegion, mResumeTextureRegion,
-			mMainMenuTextureRegion, mSaveGameTextureRegion;
+			mMainMenuTextureRegion, mSaveTextureRegion;
 	
 
 	private CameraScene mPauseScene;
@@ -252,11 +252,11 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				.extractFromTexture(this.mMainMenuTexture);
 		this.mMainMenuTexture.load();
 
-		this.mSaveGameTexture = new AssetBitmapTexture(this.getTextureManager(),
+		this.mSaveTexture = new AssetBitmapTexture(this.getTextureManager(),
 				this.getAssets(), "gfx/savegame.png", TextureOptions.BILINEAR);
-		this.mSaveGameTextureRegion = TextureRegionFactory
-				.extractFromTexture(this.mSaveGameTexture);
-		this.mSaveGameTexture.load();
+		this.mSaveTextureRegion = TextureRegionFactory
+				.extractFromTexture(this.mSaveTexture);
+		this.mSaveTexture.load();
 
 		// UI Fonts
 		final ITexture fontTexture = new EmptyTexture(this.getTextureManager(),
@@ -474,6 +474,30 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		this.mPauseScene.registerTouchArea(mainMenuButton);
 		this.mPauseScene.attachChild(mainMenuButton);
 		//save game button
+		
+		final Sprite saveButton = new Sprite(cX + (CAMERA_WIDTH / 10), cY
+				+ (CAMERA_HEIGHT / 6), this.mSaveTextureRegion,
+				this.getVertexBufferObjectManager()) {
+			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
+				switch (touchEvent.getAction()) {
+				case TouchEvent.ACTION_DOWN:
+					//update database here
+					saveGame();
+					mHUD.clearChildScene();
+					scene.setIgnoreUpdate(false);
+					//save to database
+					break;
+				case TouchEvent.ACTION_MOVE:
+					break;
+				case TouchEvent.ACTION_UP:
+					break;
+				}
+				return true;
+			};
+		};
+		this.mPauseScene.registerTouchArea(saveButton);
+		this.mPauseScene.attachChild(saveButton);
+		
 //		final Sprite saveGameButton = new Sprite(cX+(CAMERA_WIDTH/10), cY + (CAMERA_HEIGHT/4),
 //				this.mSaveGameTextureRegion, this.getVertexBufferObjectManager()) {
 //			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
@@ -719,6 +743,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 					turnDone = false;
 					diceDone = false;
 					currentCharacter = (currentCharacter + 1) % (numCharacters);
+					saveGame();
 					// consider a delay here so the camera doesn't switch back and forth so fast
 					MainGameScreen.this.mCamera
 							.setChaseEntity(spriteList[currentCharacter]);
@@ -976,6 +1001,34 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		textStrokes[character].setText(thePlayers.get(character).getName()
 				+ "\nCredits: " + thePlayers.get(character).getCredits()
 				+ "\nCoins: " + thePlayers.get(character).getCoins());
+	}
+	
+	public void saveGame(){
+		Intent intent = getIntent();
+		ArrayList<Character> thePlayers = (ArrayList<Character>) intent.getSerializableExtra(ChooseCharacterActivity.THE_PLAYERS); 
+	
+		int numPlayers = thePlayers.size();
+		
+		DbHelper dbhelper = new DbHelper(this);
+		SQLiteDatabase db = dbhelper.openDB();
+    
+		int gameId = dbhelper.getGameCount()-1;//thePlayers.get(0).getGameId();  
+        
+		String[] table1Values = {Integer.toString(gameId), "0", Integer.toString(numCharacters), Integer.toString(currentCharacter)};
+		Log.d("debug,",Integer.toString(gameId) + "0" + Integer.toString(numCharacters) + Integer.toString(currentCharacter));
+		
+        String[] table1Key = {Integer.toString(gameId)};
+        dbhelper.updateRow(1, table1Key, table1Values);
+        
+        //insert numPlayers rows into table 3
+        for (int i = 0; i < numPlayers; i++)
+        {
+        	String[] characterKey = {Integer.toString(gameId<<2 + thePlayers.get(i).getId())};
+        	String[] newCharacter = {characterKey[0], thePlayers.get(i).getType(), thePlayers.get(i).getName(), Float.toString(thePlayers.get(i).getMapLocation().getX()), Float.toString(thePlayers.get(i).getMapLocation().getY()), Integer.toString(thePlayers.get(i).getCredits()), Integer.toString(thePlayers.get(i).getCoins()), Integer.toString(i)};
+        	Log.d("debug,", characterKey[0]+ thePlayers.get(i).getType()+thePlayers.get(i).getName()+Float.toString(thePlayers.get(i).getMapLocation().getX())+Float.toString(thePlayers.get(i).getMapLocation().getY())+Integer.toString(thePlayers.get(i).getCredits())+Integer.toString(thePlayers.get(i).getCoins())+Integer.toString(i));
+        	dbhelper.updateRow(2, characterKey, newCharacter);
+        }
+		
 	}
 	
 	

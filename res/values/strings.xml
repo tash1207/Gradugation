@@ -92,7 +92,7 @@
 	    to perform as many reps as possible in the allotted time.</string>
 	    
     <!-- Wait in Line Minigame -->
-    <string name="wait_in_line_instructions">You have 15 seconds to make it through the Hub to get to class! 
+    <string name="wait_in_line_instructions">You have 16 seconds to make it through the Hub to get to class! 
         Touch the screen to stop your character from moving. Watch out for other students! 
         If you hit them, you won\'t make it to class!</string>
     <string name="wait_in_line_success">Congradugation! You made it through the Hub in time to earn %1$d credits!</string>

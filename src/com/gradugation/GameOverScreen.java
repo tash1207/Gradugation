@@ -1,7 +1,11 @@
 package com.gradugation;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.options.EngineOptions;
@@ -56,14 +60,13 @@ public class GameOverScreen extends SimpleBaseGameActivity {
 	private ITextureRegion continueTextureRegion;
 	private static String winner;
 	private static int credits;
-	private static String[] playerNames;
-	private static int[] playerCredits;
+	private static String[] playerNames = { "Abby", "Bob", "Charlie", "Donna" };
+	private static int[] playerCredits = { 3, 7, 2, 5 };
 	
-
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	
+
 	private Scene scene;
 
 	// ===========================================================
@@ -93,17 +96,6 @@ public class GameOverScreen extends SimpleBaseGameActivity {
 				Color.WHITE);
 		this.mCongratsFont.load();
 
-		this.mScoreFont = new StrokeFont(this.getFontManager(),
-				strokeFontTexture, Typeface.create(Typeface.DEFAULT,
-						Typeface.BOLD), FONT_SIZE, true, Color.BLACK, 1,
-				Color.WHITE);
-		this.mScoreFont.load();
-		
-		
-		/*this.continueTexture = new BitmapTextureAtlas(this.getTextureManager(), 128, 128, TextureOptions.BILINEAR);
-        this.continueTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.continueTexture, this, "gfx/whack_aflyer_img/continue_button.png", 0, 0);
-        this.continueTexture.load();*/
-		
 		try {
 			this.continueTexture = new AssetBitmapTexture(
 					this.getTextureManager(), this.getAssets(),
@@ -128,17 +120,46 @@ public class GameOverScreen extends SimpleBaseGameActivity {
 
 		final VertexBufferObjectManager vertexBufferObjectManager = this
 				.getVertexBufferObjectManager();
-				
+
 		// Output
 		final Text congratsText = new Text(CAMERA_WIDTH / 2, CAMERA_HEIGHT
 				- (CAMERA_HEIGHT / 6), this.mCongratsFont,
 				"Congratulations for Gradugating!", vertexBufferObjectManager);
-		displayWinner();
-		displayScoreboard();
-
 		scene.attachChild(congratsText);
-				
-		final Sprite continueButton = new Sprite(CAMERA_WIDTH/2, CAMERA_HEIGHT/2-(CAMERA_HEIGHT/3), continueTextureRegion,
+		displayWinner();
+		
+		//bubbleSort(playerNames, playerCredits);
+		
+		if (playerNames.length >= 1) {
+			final Text playerOneText = new Text(CAMERA_WIDTH / 2, CAMERA_HEIGHT
+					- (CAMERA_HEIGHT / 2), this.mCongratsFont,
+					playerNames[0] + " : " + playerCredits[0], vertexBufferObjectManager);
+			scene.attachChild(playerOneText);
+		} 
+		
+		if (playerNames.length >= 2) {
+			final Text playerTwoText = new Text(CAMERA_WIDTH / 2, CAMERA_HEIGHT
+				- (CAMERA_HEIGHT / 2), this.mCongratsFont,
+				"\n\n" + playerNames[1] + " : " + playerCredits[1], vertexBufferObjectManager);
+			scene.attachChild(playerTwoText);
+		} 
+
+		if (playerNames.length >= 3) {
+			final Text playerThreeText = new Text(CAMERA_WIDTH / 2, CAMERA_HEIGHT
+				- (CAMERA_HEIGHT / 2), this.mCongratsFont,
+				"\n\n\n\n" + playerNames[2] + " : " + playerCredits[2], vertexBufferObjectManager);
+			scene.attachChild(playerThreeText);
+		} 
+		
+		if (playerNames.length >= 4) {
+			final Text playerFourText = new Text(CAMERA_WIDTH / 2, CAMERA_HEIGHT
+				- (CAMERA_HEIGHT / 2), this.mCongratsFont,
+				"\n\n\n\n\n\n" + playerNames[3] + " : " + playerCredits[3], vertexBufferObjectManager);
+			scene.attachChild(playerFourText);
+		} 
+
+		final Sprite continueButton = new Sprite(CAMERA_WIDTH / 2,
+				CAMERA_HEIGHT / 2 - (CAMERA_HEIGHT / 2), continueTextureRegion,
 				this.getVertexBufferObjectManager()) {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
@@ -158,7 +179,6 @@ public class GameOverScreen extends SimpleBaseGameActivity {
 		};
 		scene.attachChild(continueButton);
 		scene.registerTouchArea(continueButton);
-		
 
 		return scene;
 	}
@@ -166,45 +186,52 @@ public class GameOverScreen extends SimpleBaseGameActivity {
 	// ===========================================================
 	// Methods
 	// ===========================================================
-	
+
 	public void mainMenuClick(View view) {
 		Intent intent = new Intent(this, MainActivity.class);
 		startActivity(intent);
 	}
-	
+
 	public void displayWinner() {
 		final VertexBufferObjectManager vertexBufferObjectManager = this
 				.getVertexBufferObjectManager();
 		final Text winnerText = new Text(CAMERA_WIDTH / 2, CAMERA_HEIGHT
-				- (CAMERA_HEIGHT / 4), this.mCongratsFont,
-				"Our winner is " + winner + "  with " + credits + " credits!",
+				- (CAMERA_HEIGHT / 4), this.mCongratsFont, "Our winner is "
+				+ winner + "  with " + credits + " credits!",
 				vertexBufferObjectManager);
 		scene.attachChild(winnerText);
 	}
 	
+	public void displayScore() {
+		
+	}
+
 	public static void setWinner(String s, int c) {
-		winner = s; 
+		winner = s;
 		credits = c;
 	}
-	
+
 	public static void setPlayers(String[] names, int[] credits) {
 		playerNames = names;
 		playerCredits = credits;
 	}
 	
-	public void displayScoreboard() {
-			final VertexBufferObjectManager vertexBufferObjectManager = this
-					.getVertexBufferObjectManager();
-			if  (playerNames != null && playerCredits != null) {
-			Text[] scoreboardText = new Text[playerNames.length];
-			for (int i = 0; i < playerNames.length; i++) {
-				scoreboardText[i] = new Text(CAMERA_WIDTH/2, CAMERA_HEIGHT/2 + (i + (CAMERA_HEIGHT/6)), this.mCongratsFont,
-						playerNames[i]   +"Credits: " + playerCredits[i] + "\n", vertexBufferObjectManager); 
-				scene.attachChild(scoreboardText[i]);
+	public void bubbleSort(String[] playerNames, int[] playerCredits) {
+		int length = playerCredits.length;
+		int temp1 = 0;
+		String temp2 = null;
+		for (int i = 0; i < length; i++) {
+			for (int j = (length - 1); j >= (i+1); j--) {
+				if (playerCredits[i] < playerCredits[i-1]) {
+					temp1 = playerCredits[j];
+					playerCredits[j] = playerCredits[j-1];
+					playerCredits[j-1] = temp1;
+				
+				}
 			}
-			}
+		}
 	}
-	
+
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================

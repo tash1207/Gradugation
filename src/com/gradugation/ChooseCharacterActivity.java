@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -14,7 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class ChooseCharacterActivity extends BaseActivity {
-
+		private DbHelper dbhelper;
+		private Event event;
+		
         public static final String THE_PLAYERS = "com.gradugation.the_players";
         private RadioGroup radioGroup;
         private RadioButton radioGroup1Button;
@@ -98,7 +101,51 @@ public class ChooseCharacterActivity extends BaseActivity {
             }
         }
         
-        public void startGame() {
+public void startGame() {
+        	
+        	// need to have as many character objects as characters to pass to main game screen
+        	// character needs: SpriteCoordiate location, credits, coins, id for use in db, id for use in game
+        	// game id, characterNames, characterTypes, function to get the image for the character based on their names
+        	// characterLocation is default position
+        	// need credits/coints = 0 for each player
+        	// need to generate gameId for use in db
+        	
+        	dbhelper = new DbHelper(this);
+            SQLiteDatabase db = dbhelper.openDB();
+            
+            //Game Table
+            String[] game = {"0","0",Integer.toString(playersChosen),"0"};
+        	dbhelper.insertRow(1, game);
+        	
+        	//Item Table
+            String[] item = {"0",null,"0",null,null,"0",null};
+        	dbhelper.insertRow(3, item);
+        	
+        	//For loop assigning each minigame ID to each minigame row
+        	//Minigame Table
+        	event = new Event();
+	        String[] minigame1 = {"0",Integer.toString(event.BENCH_PRESS_REQUEST_CODE),"0","0","0","0"};
+	        String[] minigame2 = {"0",Integer.toString(event.WIRES_REQUEST_CODE),"0","0","0","0"};
+	        String[] minigame3 = {"0",Integer.toString(event.WAIT_IN_LINE_REQUEST_CODE),"0","0","0","0"};
+	        String[] minigame4 = {"0",Integer.toString(event.WHACK_AFLYER_REQUEST_CODE),"0","0","0","0"};
+	        String[] minigame5 = {"0",Integer.toString(event.COLOR_REQUEST_CODE),"0","0","0","0"};
+	        String[] minigame6 = {"0",Integer.toString(event.GRADUATION_REQUEST_CODE),"0","0","0","0"};
+	        dbhelper.insertRow(4, minigame1);
+	        dbhelper.insertRow(4, minigame2);
+	        dbhelper.insertRow(4, minigame3);
+	        dbhelper.insertRow(4, minigame4);
+	        dbhelper.insertRow(4, minigame5);
+	        dbhelper.insertRow(4, minigame6);
+   
+	        //Character Table
+            for (int i = 0; i < playersChosen; i++){
+            	//Convert variable i to string
+	            String[] character = {Integer.toString(i),null,null,"0","0","0","0",Integer.toString(i+1)};	
+            	dbhelper.insertRow(2, character);
+            }
+            
+        	dbhelper.close();
+        	
             Intent intent = new Intent(this, MainGameScreen.class);
             intent.putExtra(THE_PLAYERS, (Serializable)thePlayers);
             startActivity(intent);

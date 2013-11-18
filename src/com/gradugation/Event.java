@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 import android.app.Activity;
@@ -44,44 +45,32 @@ public class Event {
 		public String getName() {
 			return this.name;
 		}
-	}
-
-	private final static MapCoordinate OCONNELL_CENTER = new MapCoordinate(3,
-			11);
-	private final static MapCoordinate STADIUM = new MapCoordinate(7, 12);
-	private final static MapCoordinate NEW_PHYSICS_BUILDING = new MapCoordinate(
-			5, 4);
-	private final static MapCoordinate NEW_ENGINEERING_BUILDING = new MapCoordinate(
-			9, 1);
-	private final static MapCoordinate REITZ = new MapCoordinate(9, 6);
-	private final static MapCoordinate HUB = new MapCoordinate(11, 9);
-	private final static MapCoordinate TURLINGTON = new MapCoordinate(14, 11);
-	private final static MapCoordinate COMPUTER_SCIENCE = new MapCoordinate(14,
-			7);
-	private final static MapCoordinate PSYCHOLOGY_BUILDING = new MapCoordinate(
-			12, 1);
-	private final static MapCoordinate FOOD_SCIENCE = new MapCoordinate(17, 5);
-	private final static MapCoordinate LIBRARY_WEST = new MapCoordinate(20, 12);
-	private final static MapCoordinate LITTLE_HALL = new MapCoordinate(22, 7);
-	private final static MapCoordinate SHANDS = new MapCoordinate(19, 0);
-	private final static MapCoordinate HOUGH = new MapCoordinate(23, 10);
-
-	private final static MiniGameCoordinate GRADUATION = new MiniGameCoordinate(
-			OCONNELL_CENTER);
-	private final static MiniGameCoordinate BENCH_PRESS_MINI_GAME = new MiniGameCoordinate(
-			STADIUM);
-	private final static MiniGameCoordinate WIRES_MINI_GAME = new MiniGameCoordinate(
-			NEW_ENGINEERING_BUILDING);
-	private final static MiniGameCoordinate WAIT_IN_LINE_MINI_GAME = new MiniGameCoordinate(
-			HUB);
-	private final static MiniGameCoordinate WHACK_AFLYER_MINI_GAME = new MiniGameCoordinate(
-			TURLINGTON);
-	private final static MiniGameCoordinate COLOR_MINI_GAME = new MiniGameCoordinate(
-			PSYCHOLOGY_BUILDING);
-	private final static MiniGameCoordinate FOOD_MINI_GAME = new MiniGameCoordinate(
-			FOOD_SCIENCE);
-
-	private MapSet mapPath = new MapSet();
+    }
+	
+	private final static MapCoordinate OCONNELL_CENTER = new MapCoordinate(3,11);
+	private final static MapCoordinate STADIUM = new MapCoordinate(7,12);
+	private final static MapCoordinate NEW_PHYSICS_BUILDING = new MapCoordinate(5,4);
+	private final static MapCoordinate NEW_ENGINEERING_BUILDING = new MapCoordinate(9,1);
+	private final static MapCoordinate REITZ = new MapCoordinate(9,6);
+	private final static MapCoordinate HUB = new MapCoordinate(11,9);
+	private final static MapCoordinate TURLINGTON = new MapCoordinate(14,11);
+	private final static MapCoordinate COMPUTER_SCIENCE = new MapCoordinate(14,7);
+	private final static MapCoordinate PSYCHOLOGY_BUILDING = new MapCoordinate(12,1);
+	private final static MapCoordinate FOOD_SCIENCE = new MapCoordinate(17,5);
+	private final static MapCoordinate LIBRARY_WEST = new MapCoordinate(20,12);
+	private final static MapCoordinate LITTLE_HALL = new MapCoordinate(22,7);
+	private final static MapCoordinate SHANDS = new MapCoordinate(19,0);
+	private final static MapCoordinate HOUGH = new MapCoordinate(23,10);
+	
+	private final static MiniGameCoordinate GRADUATION = new MiniGameCoordinate(OCONNELL_CENTER);
+	private final static MiniGameCoordinate BENCH_PRESS_MINI_GAME = new MiniGameCoordinate(STADIUM);
+	private final static MiniGameCoordinate WIRES_MINI_GAME = new MiniGameCoordinate(NEW_ENGINEERING_BUILDING);
+	private final static MiniGameCoordinate WAIT_IN_LINE_MINI_GAME = new MiniGameCoordinate(HUB);
+	private final static MiniGameCoordinate WHACK_AFLYER_MINI_GAME = new MiniGameCoordinate(TURLINGTON);
+	private final static MiniGameCoordinate COLOR_MINI_GAME = new MiniGameCoordinate(PSYCHOLOGY_BUILDING);
+	private final static MiniGameCoordinate FOOD_MINI_GAME = new MiniGameCoordinate(FOOD_SCIENCE);
+	
+	private MapSet mapPath = new MapSet() ;
 
 	public final static int BENCH_PRESS_REQUEST_CODE = 0;
 	public final static int WIRES_REQUEST_CODE = 1;
@@ -90,11 +79,12 @@ public class Event {
 	public final static int COLOR_REQUEST_CODE = 4;
 	public final static int FOOD_REQUEST_CODE = 5;
 	public final static int GRADUATION_REQUEST_CODE = 6;
-
-	// public void method for each event, use switch case for each eventID
-	// eventID 0 - do nothing, 1 - lose a turn? depends on turn mechanics -
 	// maybe do something else, 2 - pick up an item
-
+	
+	
+	//public void method for each event, use switch case for each eventID
+	//eventID 0 - do nothing, 1 - lose a turn? depends on turn mechanics - maybe do something else, 2 - pick up an item
+	
 	public Event() {
 	}
 
@@ -123,8 +113,8 @@ public class Event {
 		}
 	}
 
-	public SpriteCoordinate checkBoundaries(SpriteCoordinate coordinate,
-			SpriteCoordinate offset) {
+	
+	public SpriteCoordinate checkBoundaries(SpriteCoordinate coordinate, SpriteCoordinate offset) {
 		MapCoordinate mapEndLocation = offset.spriteToMap();
 
 		if (!mapPath.contains(mapEndLocation)) {
@@ -203,6 +193,7 @@ public class Event {
 
 		} else if (BENCH_PRESS_MINI_GAME.isEqual(coordinate) && !hasGraduated) {
 			// call bench press game
+		
 			Intent intent = new Intent(context, BenchPressMinigame.class);
 			intent.putExtra("character_type", characterType);
 			context.startActivityForResult(intent, BENCH_PRESS_REQUEST_CODE);
@@ -232,6 +223,32 @@ public class Event {
 			context.startActivityForResult(intent, FOOD_REQUEST_CODE);
 		} else {
 			// generate random event
+			int[] eventArray = new int[10];
+            Random r = new Random();
+            int eventIndex;
+            
+            String[] event = {"Learn from yesterday", "Live for today", "Hope for tomorrow"};
+            int eventMessage;
+            
+            for (int i = 0; i < eventArray.length; i++){
+                    eventIndex = r.nextInt(2);
+                    eventArray[i] = eventIndex;
+                    if (eventArray[i] == 1){
+                            eventMessage = r.nextInt(3);
+                            Log.d("Event message", event[eventMessage]);
+                            //Create Message for random event
+                            /*
+                            Context toastContext = context;
+                            CharSequence text = event[eventMessage];
+                            int duration = Toast.LENGTH_SHORT;
+
+                            Toast toast = Toast.makeText(toastContext, text, duration);
+                            toast.show();
+                            */
+                            
+                    }
+                    break;
+            }
 		}
 	}
 }

@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,21 +15,46 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ChooseCharacterActivity extends BaseActivity {
+import com.coordinates.MapCoordinate;
+import com.coordinates.SpriteCoordinate;
 
+public class ChooseCharacterActivity extends BaseActivity {
+		private DbHelper dbhelper;
+		private Event event;
+		
         public static final String THE_PLAYERS = "com.gradugation.the_players";
         private RadioGroup radioGroup;
         private RadioButton radioGroup1Button;
         
         private ImageView characterImage;
         private TextView characterAttributes;
+    	private final MapCoordinate centerMap = new MapCoordinate(7,7);
+    	private int numPlayers;
+
+        private static MapCoordinate[] defaultLocation;
         
+
         ArrayList<Character> thePlayers = new ArrayList<Character>();
         int playersChosen = 0;
         @Override
         protected void onCreate(Bundle savedInstanceState) {
                 super.onCreate(savedInstanceState);
                 setContentView(R.layout.activity_choose_character);
+                
+                Intent intent = getIntent();
+                numPlayers = intent.getIntExtra(NewGameActivity.NUMBER_OF_PLAYERS, 1);
+                defaultLocation = new MapCoordinate[numPlayers];
+                
+                for (int i = 0; i < numPlayers; i++) {
+                	MapCoordinate offset = new MapCoordinate();
+        			if (i == 2 || i == 3) {
+        				offset.setY(1);
+        			}
+        			if (i % 2 == 1) {
+        				offset.setX(1);
+        			}
+        			defaultLocation[i] = offset.add(centerMap);
+                }
                 
                 radioGroup = (RadioGroup) findViewById(R.id.radioGroup1);
                 characterImage = (ImageView) findViewById(R.id.character_image);
@@ -59,8 +86,9 @@ public class ChooseCharacterActivity extends BaseActivity {
         }
         
         public void btnContinueClicked(View view) {
-        	Intent intent = getIntent();
-            int numPlayers = intent.getIntExtra(NewGameActivity.NUMBER_OF_PLAYERS, 1);
+        	dbhelper = new DbHelper(this);
+            SQLiteDatabase db = dbhelper.openDB();
+            
             if (playersChosen > numPlayers-1) {                                        
                     startGame();
             }
@@ -70,8 +98,10 @@ public class ChooseCharacterActivity extends BaseActivity {
                     //find the radiobutton by returned id
                     radioGroup1Button = (RadioButton) findViewById(selectedId);
                     
-                    Character thePlayer = new Character((String)radioGroup1Button.getText());
-                    thePlayer.setName((String)radioGroup1Button.getText());
+                    String type = (String)radioGroup1Button.getText();
+                    // need to grab game id from database when we are saving this
+                    int gameID = dbhelper.getGameCount();
+                    Character thePlayer = new Character(type.toUpperCase(), type, defaultLocation[playersChosen].mapToSprite(), playersChosen, gameID, 0, 0);
                     thePlayers.add(thePlayer);
                     
                     
@@ -87,8 +117,11 @@ public class ChooseCharacterActivity extends BaseActivity {
                     //find the radiobutton by returned id
                     radioGroup1Button = (RadioButton) findViewById(selectedId);
                     
-                    Character thePlayer = new Character((String)radioGroup1Button.getText());
-                    thePlayer.setName((String)radioGroup1Button.getText());
+                    String type = (String)radioGroup1Button.getText();
+                    // need to grab game id from database when we are saving this
+                    int gameID = dbhelper.getGameCount();
+                    Character thePlayer = new Character(type.toUpperCase(), type, defaultLocation[playersChosen].mapToSprite(), playersChosen, gameID, 0, 0);
+
                     thePlayers.add(thePlayer);
                     
                     Toast.makeText(ChooseCharacterActivity.this,  
@@ -96,9 +129,62 @@ public class ChooseCharacterActivity extends BaseActivity {
                     		thePlayers.get(playersChosen).getName(), Toast.LENGTH_SHORT).show();
                     playersChosen++;
             }
+            dbhelper.close();
         }
         
-        public void startGame() {
+        public void startGame() {        	
+
+        	// need to have as many character objects as characters to pass to main game screen
+        	// character needs: SpriteCoordiate location, credits, coins, id for use in db, id for use in game
+        	// game id, characterNames, characterTypes, function to get the image for the character based on their names
+        	// characterLocation is default position
+        	// need credits/coints = 0 for each player
+        	// need to generate gameId for use in db
+        	
+        	
+        	
+        	
+        	dbhelper = new DbHelper(this);
+            SQLiteDatabase db = dbhelper.openDB();
+            
+            int gameId = dbhelper.getGameCount();
+            //Game Table
+            String[] game = {Integer.toString(gameId),"0",Integer.toString(playersChosen),"0"};
+        	dbhelper.insertRow(1, game);
+        	
+        	//Item Table
+            String[] item = {Integer.toString(gameId),null,"0",null,null,"0",null};
+        	dbhelper.insertRow(3, item);
+        	
+        	//For loop assigning each minigame ID to each minigame row
+        	//Minigame Table
+        	event = new Event();
+	        String[] minigame1 = {Integer.toString(gameId),Integer.toString(event.BENCH_PRESS_REQUEST_CODE),"0","0","0","0"};
+	        String[] minigame2 = {Integer.toString(gameId),Integer.toString(event.WIRES_REQUEST_CODE),"0","0","0","0"};
+	        String[] minigame3 = {Integer.toString(gameId),Integer.toString(event.WAIT_IN_LINE_REQUEST_CODE),"0","0","0","0"};
+	        String[] minigame4 = {Integer.toString(gameId),Integer.toString(event.WHACK_AFLYER_REQUEST_CODE),"0","0","0","0"};
+	        String[] minigame5 = {Integer.toString(gameId),Integer.toString(event.COLOR_REQUEST_CODE),"0","0","0","0"};
+	        String[] minigame6 = {Integer.toString(gameId),Integer.toString(event.GRADUATION_REQUEST_CODE),"0","0","0","0"};
+	        dbhelper.insertRow(4, minigame1);
+	        dbhelper.insertRow(4, minigame2);
+	        dbhelper.insertRow(4, minigame3);
+	        dbhelper.insertRow(4, minigame4);
+	        dbhelper.insertRow(4, minigame5);
+	        dbhelper.insertRow(4, minigame6);
+   
+	        //Character Table
+            for (int i = 0; i < playersChosen; i++){
+            	//Convert variable i to string
+            	String charName = thePlayers.get(i).getName();
+            	float charX = thePlayers.get(i).getMapLocation().getX();
+            	float charY = thePlayers.get(i).getMapLocation().getY();
+	            String[] character = {Integer.toString((gameId << 2) + i),charName,charName,Float.toString(charX),Float.toString(charY),"0","0",Integer.toString(i+1)};	
+            	dbhelper.insertRow(2, character);
+            }
+            Log.d("# of Games", Integer.toString(dbhelper.getGameCount()));
+            
+        	dbhelper.close();
+        	
             Intent intent = new Intent(this, MainGameScreen.class);
             intent.putExtra(THE_PLAYERS, (Serializable)thePlayers);
             startActivity(intent);

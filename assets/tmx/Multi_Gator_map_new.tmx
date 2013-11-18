@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="25" height="15" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="grass-tiles-2-small" tilewidth="32" tileheight="32">
+  <image source="gfx/grass-tiles-2-small.png" width="384" height="192"/>
+ </tileset>
+ <tileset firstgid="73" name="qubodup-bush_berries_0" tilewidth="32" tileheight="32">
+  <image source="gfx/qubodup-bush_berries_0.png" width="32" height="32"/>
+ </tileset>
+ <tileset firstgid="74" name="tileset-shinygold" tilewidth="32" tileheight="32">
+  <image source="gfx/tileset-shinygold.png" width="128" height="4300"/>
+ </tileset>
+ <tileset firstgid="610" name="Library_west" tilewidth="32" tileheight="32">
+  <image source="gfx/Library west.png" trans="ffffff" width="64" height="64"/>
+ </tileset>
+ <tileset firstgid="614" name="Stadium" tilewidth="32" tileheight="32">
+  <image source="gfx/Stadium.png" trans="ffffff" width="64" height="64"/>
+ </tileset>
+ <tileset firstgid="618" name="OConnell_Center" tilewidth="32" tileheight="32">
+  <image source="gfx/O'Connell Center.png" trans="ffffff" width="64" height="64"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="25" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC4WUwQoDMQhE1bt+TA/tsbD9/3/qFhIYXpQeJLuJjjpOkmbmt8VtuVZf3y57tb4TvrXM8a/7tc7UXPC2vQU3GnziuuwzbuPvM82nPgWcgq/mzCZvIU/aWW+HHQ3+1GvaWU+XX3ne/srDNDe3s5YOX+MTuagPB7bWovvEohYT+Mo9Z9/x/69WngVif+tlvV60L2qWvU0ch+T6NH25nZxQ0wFfRxzvZncvqsGf5jndHeXxAZ6oU609gB3IzXfiedsLMRM+34qwc17dXC70pZzwfSB+p0fWN72bvCdlJzdat2qF2v8C8Fg1cNwFAAA=
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 1" width="25" height="15" opacity="0.72">
+  <properties>
+   <property name="minigame" value="1"/>
+  </properties>
+ </objectgroup>
+ <layer name="path" width="25" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC92TMQ4AIAgD+f/Mg/1A27SgiyQupHAFter/aHCcmk3PFtqEkXhQ3pjHqQc3j3TKn3NPbA5Uy/hOLxbujIn+BmPyxpNdqVzKesFAtSk3YUz3t4nknxwURiSz3AUAAA==
+  </data>
+ </layer>
+ <layer name="Tile Layer 2" width="25" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC2NgGDiQxsTAkM5Emp4koPpkPHqygHLZSPIZQHYmHvWeUIwMUoDqU/HoyQHK5ZLgbmx2kKOGUj30sINSgMs+cv1KilnUtIOeYCimHXqEG63sGGxu92TAnhYB/YXTu9wFAAA=
+  </data>
+ </layer>
+</map>

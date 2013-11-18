@@ -14,6 +14,8 @@
     <string name="title_activity_bench_press_minigame">BenchPressMinigame</string>
     <string name="title_activity_wires_mini_game">WiresMiniGame</string>
     <string name="title_activity_waitinline_minigame">WaitInLineMinigame</string>
+    <string name="title_activity_game_over_screen">GameOverScreen</string>
+    <string name="game_over_text">Game Over Screen</string>
 
     <!-- Main Activity -->
     <string name="new_game">New Game</string>
@@ -35,6 +37,7 @@
         <item>3</item>
         <item>4</item> 
     </string-array>
+   
     <!-- Choose Character -->
     <string name="choose_character">Choose a Character</string>
     <string name="character_engineer">Engineer</string>
@@ -45,6 +48,10 @@
     <string name="attributes_engineer">The engineer gets a credit bonus at the Physics Building for the Wires Minigame</string>
     <string name="attributes_gradugator">Gradugator gets a credit bonus in Turlington for the Whack-A-Flyer Minigame</string>
     
+    <!-- MainGameScreen -->
+    <string name="ready_to_graduate">Player %1$d has earned %2$d credits! You are ready to graduate.
+        Please head to the O\'Connell Center!</string>
+  
     <!-- Minigames Screen -->
     <string name="wires">Wires</string>
     <string name="bench_press">Bench Press</string>
@@ -85,7 +92,7 @@
 	    to perform as many reps as possible in the allotted time.</string>
 	    
     <!-- Wait in Line Minigame -->
-    <string name="wait_in_line_instructions">You have 15 seconds to make it through the Hub to get to class! 
+    <string name="wait_in_line_instructions">You have 16 seconds to make it through the Hub to get to class! 
         Touch the screen to stop your character from moving. Watch out for other students! 
         If you hit them, you won\'t make it to class!</string>
     <string name="wait_in_line_success">Congradugation! You made it through the Hub in time to earn %1$d credits!</string>

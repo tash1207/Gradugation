@@ -5,6 +5,7 @@ import org.andengine.util.math.MathUtils;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -51,16 +52,19 @@ public class ColorMiniGame extends Activity {
 			public void onFinish() {
 				seconds_text.setText("Time Left: 0 secs");
 				gameFinished = true;
-				
+				Intent output = new Intent();
 				if (points/total >= PERCENTAGE_REQUIRED && points != 0) {
 					Toast.makeText(ColorMiniGame.this, getString(R.string.color_mini_game_success, (int)points, 
 							(int)total, CREDITS_EARNED), Toast.LENGTH_LONG).show();
 					// Code to add CREDITS_EARNED number of credits to the character
+					output.putExtra(Event.COLOR_REQUEST_CODE+"", CREDITS_EARNED);
 				}
 				else {
 					Toast.makeText(ColorMiniGame.this, getString(R.string.color_mini_game_failure, (int)points,
 							(int)total), Toast.LENGTH_LONG).show();
+					output.putExtra(Event.COLOR_REQUEST_CODE+"",0);
 				}
+				setResult(RESULT_OK, output);
 				Button continueButton = (Button)findViewById(R.id.color_mini_game_continue_button);
 				continueButton.setVisibility(View.VISIBLE);
 				((RadioButton)findViewById(R.id.color_mini_game_black_radio)).setClickable(false);

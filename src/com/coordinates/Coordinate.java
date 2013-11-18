@@ -1,6 +1,8 @@
 package com.coordinates;
 
-public abstract class Coordinate {
+import java.io.Serializable;
+
+public abstract class Coordinate implements Serializable {
 	
 	protected float x;
 	protected float y;
@@ -19,6 +21,10 @@ public abstract class Coordinate {
 	
 	public void setY(float y) {
 		this.y = y;
+	}
+	
+	public String toString() {
+		return this.x + "," + this.y;
 	}
 	
 	abstract Coordinate add(Coordinate toAdd);

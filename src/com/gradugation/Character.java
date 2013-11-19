@@ -173,7 +173,9 @@ public class Character implements Serializable {
         	return this.location;
         }
         
-      
+        public MapCoordinate getMapLocation() {
+            return this.location.spriteToMap();
+    }
         
         public String getCharacterImage() {
         	return this.character.getImageName();

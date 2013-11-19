@@ -3,6 +3,8 @@ package com.gradugation;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -60,8 +62,7 @@ public class GameOverScreen extends SimpleBaseGameActivity {
 	private ITextureRegion continueTextureRegion;
 	private static String winner;
 	private static int credits;
-	private static String[] playerNames = { "Abby", "Bob", "Charlie", "Donna" };
-	private static int[] playerCredits = { 3, 7, 2, 5 };
+	static ArrayList<Character> players;
 	
 	// ===========================================================
 	// Constructors
@@ -120,46 +121,48 @@ public class GameOverScreen extends SimpleBaseGameActivity {
 
 		final VertexBufferObjectManager vertexBufferObjectManager = this
 				.getVertexBufferObjectManager();
-
+		
 		// Output
 		final Text congratsText = new Text(CAMERA_WIDTH / 2, CAMERA_HEIGHT
 				- (CAMERA_HEIGHT / 6), this.mCongratsFont,
 				"Congratulations for Gradugating!", vertexBufferObjectManager);
 		scene.attachChild(congratsText);
-		displayWinner();
+		int playerSize = players.size();
+		Collections.sort(players, new MyComparator());
+		displayWinner(players.get(0).getName(), players.get(0).getCredits(), players.get(0).getCoins());
 		
-		//bubbleSort(playerNames, playerCredits);
 		
-		if (playerNames.length >= 1) {
+		
+		if (playerSize >= 1) {
 			final Text playerOneText = new Text(CAMERA_WIDTH / 2, CAMERA_HEIGHT
 					- (CAMERA_HEIGHT / 2), this.mCongratsFont,
-					playerNames[0] + " : " + playerCredits[0], vertexBufferObjectManager);
+					players.get(0).getName()+ " : " + players.get(0).getCredits() + " credits and " + players.get(0).getCoins() + " coins.", vertexBufferObjectManager);
 			scene.attachChild(playerOneText);
 		} 
 		
-		if (playerNames.length >= 2) {
+		if (playerSize >= 2) {
 			final Text playerTwoText = new Text(CAMERA_WIDTH / 2, CAMERA_HEIGHT
 				- (CAMERA_HEIGHT / 2), this.mCongratsFont,
-				"\n\n" + playerNames[1] + " : " + playerCredits[1], vertexBufferObjectManager);
+				"\n\n" + players.get(1).getName() + " : " + players.get(1).getCredits() + " credits and " + players.get(1).getCoins() + " coins.", vertexBufferObjectManager);
 			scene.attachChild(playerTwoText);
 		} 
 
-		if (playerNames.length >= 3) {
+		if (playerSize >= 3) {
 			final Text playerThreeText = new Text(CAMERA_WIDTH / 2, CAMERA_HEIGHT
 				- (CAMERA_HEIGHT / 2), this.mCongratsFont,
-				"\n\n\n\n" + playerNames[2] + " : " + playerCredits[2], vertexBufferObjectManager);
+				"\n\n\n\n" + players.get(2).getName() + " : " + players.get(2).getCredits() + " credits and " + players.get(2).getCoins() + " coins.", vertexBufferObjectManager);
 			scene.attachChild(playerThreeText);
 		} 
 		
-		if (playerNames.length >= 4) {
+		if (playerSize >= 4) {
 			final Text playerFourText = new Text(CAMERA_WIDTH / 2, CAMERA_HEIGHT
 				- (CAMERA_HEIGHT / 2), this.mCongratsFont,
-				"\n\n\n\n\n\n" + playerNames[3] + " : " + playerCredits[3], vertexBufferObjectManager);
+				"\n\n\n\n\n\n" + players.get(3).getName() + " : " + players.get(3).getCredits() + " credits and " + players.get(3).getCoins() + " coins.", vertexBufferObjectManager);
 			scene.attachChild(playerFourText);
 		} 
 
 		final Sprite continueButton = new Sprite(CAMERA_WIDTH / 2,
-				CAMERA_HEIGHT / 2 - (CAMERA_HEIGHT / 2), continueTextureRegion,
+				CAMERA_HEIGHT / 2 - (CAMERA_HEIGHT / 3), continueTextureRegion,
 				this.getVertexBufferObjectManager()) {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
@@ -192,47 +195,40 @@ public class GameOverScreen extends SimpleBaseGameActivity {
 		startActivity(intent);
 	}
 
-	public void displayWinner() {
+	public void displayWinner(String s, int credits, int coins) {
 		final VertexBufferObjectManager vertexBufferObjectManager = this
 				.getVertexBufferObjectManager();
 		final Text winnerText = new Text(CAMERA_WIDTH / 2, CAMERA_HEIGHT
 				- (CAMERA_HEIGHT / 4), this.mCongratsFont, "Our winner is "
-				+ winner + "  with " + credits + " credits!",
+				+ s + " with " + credits + " credits and " + coins + " coins!",
 				vertexBufferObjectManager);
 		scene.attachChild(winnerText);
 	}
 	
-	public void displayScore() {
-		
-	}
-
-	public static void setWinner(String s, int c) {
-		winner = s;
-		credits = c;
-	}
-
-	public static void setPlayers(String[] names, int[] credits) {
-		playerNames = names;
-		playerCredits = credits;
+	public static void setPlayers(ArrayList<Character> thePlayers) {
+		players = thePlayers;
 	}
 	
-	public void bubbleSort(String[] playerNames, int[] playerCredits) {
-		int length = playerCredits.length;
-		int temp1 = 0;
-		String temp2 = null;
-		for (int i = 0; i < length; i++) {
-			for (int j = (length - 1); j >= (i+1); j--) {
-				if (playerCredits[i] < playerCredits[i-1]) {
-					temp1 = playerCredits[j];
-					playerCredits[j] = playerCredits[j-1];
-					playerCredits[j-1] = temp1;
-				
-				}
-			}
-		}
-	}
 
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
+	
+	class MyComparator implements Comparator<Character> {
+		@Override
+		public int compare(Character c1, Character c2) {
+			if (c1.getCredits() > c2.getCredits()) {
+				return -1;
+			} else if (c1.getCredits() < c2.getCredits()) {
+				return 1;
+			} else if (c1.getCredits() == c2.getCredits()) {
+				if (c1.getCoins() > c2.getCoins()) {
+					return -1;
+				} else if (c1.getCoins() < c1.getCoins()) {
+					return 1;
+				}
+			}
+			return 0;
+		}
+	}
 }

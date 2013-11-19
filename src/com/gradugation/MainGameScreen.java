@@ -102,7 +102,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 	private TMXTiledMap mTMXTiledMap;
 	protected int mCactusCount;
-	private int CREDITS_NEEDED_GRADUATE = 15;
+	private int CREDITS_NEEDED_GRADUATE = 3;
 
 	//private BitmapTextureAtlas characterTextureAtlas,characterTextureAtlas2,characterTextureAtlas3,characterTextureAtlas4;
 	//public ITextureRegion character,character2,character3,character4;
@@ -914,7 +914,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	}
 	// Checks the hot spots for the minigames
 	protected void checkMiniGameHotSpots(int current) {
-		Event.getEvent(thePlayers.get(current).getSpriteLocation(), this, thePlayers.get(current).getName());
+		Event.getEvent(thePlayers.get(current).getSpriteLocation(), this, thePlayers.get(current).getName(), hasGraduated);
 		
 		if (!(move || gameDone)) {
 			gameDone = true;
@@ -999,16 +999,15 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		return thePlayers;
 	}
 	
-	private void checkCredits(int character) {
+	private void checkCredits(final int character) {
 		if (thePlayers.get(character).getCredits() >= CREDITS_NEEDED_GRADUATE) {
 			runOnUiThread(new Runnable() {                  
 	            @Override
 	            public void run() {
 	            	hasGraduated = true;
-	            	Toast.makeText(getApplicationContext(), R.string.ready_to_graduate,
+	            	Toast.makeText(getApplicationContext(), getString(R.string.ready_to_graduate, thePlayers.get(character).getName(), thePlayers.get(character).getCredits()),
 	            			   Toast.LENGTH_LONG).show();
-	            	GameOverScreen.setWinner(characterNames[currentCharacter], characterCredits[currentCharacter]);
-	            	GameOverScreen.setPlayers(characterNames, characterCredits);
+	            	GameOverScreen.setPlayers(thePlayers);
 	                }                  
 	            	            	
 	            });

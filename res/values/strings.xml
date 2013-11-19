@@ -49,7 +49,7 @@
     <string name="attributes_gradugator">Gradugator gets a credit bonus in Turlington for the Whack-A-Flyer Minigame</string>
     
     <!-- MainGameScreen -->
-    <string name="ready_to_graduate">Player %1$d has earned %2$d credits! You are ready to graduate.
+    <string name="ready_to_graduate">Player %1$s has earned %2$d credits! You are ready to graduate.
         Please head to the O\'Connell Center!</string>
   
     <!-- Minigames Screen -->

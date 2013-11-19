@@ -30,22 +30,22 @@ public class MainActivity extends BaseActivity {
         Log.d("TEST", "Database has been created");
         
         //Insert Some Data into Database
-        String[] game = {"0","0","3","2"};
-        String[] character1 = {"000","Engineer","Ahmad","7","7","105","45","3"};
-        String[] character2 = {"001","Athlete","Dorian","7","8","105","45","3"};
-        String[] character3 = {"002","Gradugator","Ashley","7","9","105","45","3"};
-        String[] item = {"12","Scooter","500","Movement","Speed","700","Ridin 'round and I'm gettin it"};
-        String[] minigame = {"1","6","4","2","1","3"};
-        
-        String[] gameNew = {"1","4","3","2"};
-        String[] characterNew = {"4","Athlete","Ahmad","34","11","105","45","3"};
-        String[] itemNew = {"12","Car","5100","Movement","Speed","700","Ridin 'round and I'm gettin it"};
-        String[] minigameNew = {"1","6","1","2","3","4"};
-        
-        String[] gameKey = {"1"};
-        String[] characterKey = {"8"};
-        String[] itemKey = {"12"};
-        String[] minigameKey = {"1","6"};
+//        String[] game = {"0","0","3","2"};
+//        String[] character1 = {"000","Engineer","Ahmad","7","7","105","45","3"};
+//        String[] character2 = {"001","Athlete","Dorian","7","8","105","45","3"};
+//        String[] character3 = {"002","Gradugator","Ashley","7","9","105","45","3"};
+//        String[] item = {"12","Scooter","500","Movement","Speed","700","Ridin 'round and I'm gettin it"};
+//        String[] minigame = {"1","6","4","2","1","3"};
+//        
+//        String[] gameNew = {"1","4","3","2"};
+//        String[] characterNew = {"4","Athlete","Ahmad","34","11","105","45","3"};
+//        String[] itemNew = {"12","Car","5100","Movement","Speed","700","Ridin 'round and I'm gettin it"};
+//        String[] minigameNew = {"1","6","1","2","3","4"};
+//        
+//        String[] gameKey = {"1"};
+//        String[] characterKey = {"8"};
+//        String[] itemKey = {"12"};
+//        String[] minigameKey = {"1","6"};
         
         //Insert Row method
         /*

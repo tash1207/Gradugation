@@ -25,7 +25,7 @@ import android.widget.Toast;
 public class ContinueActivity extends Activity {
 
 	private DbHelper dbhelper;
-	public int numberSavedGames=4;
+	public int numberSavedGames;
 	private ArrayList<Character> thePlayers = new ArrayList<Character>();
     public static final String THE_PLAYERS = "com.gradugation.the_players";
 
@@ -37,7 +37,12 @@ public class ContinueActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_continue);
 		
-		
+		//Open Database
+        dbhelper = new DbHelper(this);
+        SQLiteDatabase db = dbhelper.openDB();
+        Log.d("TEST", "Database has been opened");
+        
+		numberSavedGames=dbhelper.getGameCount();
 
 		populateSavedGameList();
 		populateListView();
@@ -51,9 +56,13 @@ public class ContinueActivity extends Activity {
 	 * at moment of save
 	 */
 	private void populateSavedGameList() {
-		for(int i=0;i<numberSavedGames-1;i++){
+		for(int i=0;i<numberSavedGames;i++){
 			mySavedGames.add(new SavedGame("saved game"+ i, R.drawable.ic_launcher,
 					"Last saved mm/dd 00:00"));
+		}
+		if(numberSavedGames==0){
+			mySavedGames.add(new SavedGame("No saved games yet", R.drawable.ic_launcher,
+					""));
 		}
 	}
 
@@ -71,7 +80,12 @@ public class ContinueActivity extends Activity {
 
 			public void onItemClick(AdapterView<?> parent, View viewClicked,
 					int position, long id) {
-				LoadSavedGame(position);
+				if(numberSavedGames==0){
+					String message = "Create a new game first.";
+					Toast.makeText(ContinueActivity.this, message, Toast.LENGTH_SHORT).show();
+				}else{
+					LoadSavedGame(position);
+				}
 			}
 		});
 	}
@@ -104,7 +118,7 @@ public class ContinueActivity extends Activity {
 
 			// Grab each character info
 			for (int i = 0; i < (numCharacters); i++) {
-				String[] tempStringArray = { "" + (id << 2) + i }; // Game ID | Char ID = Char Index 
+				String[] tempStringArray = { "" + (id << 2 + i) }; // Game ID | Char ID = Char Index 
 				characterList = dbhelper.getRow(2, tempStringArray);
 				
 				String type = (String) characterList.get(1);

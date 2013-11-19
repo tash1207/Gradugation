@@ -1,6 +1,8 @@
 package com.coordinates;
 
-public abstract class Coordinate {
+import java.io.Serializable;
+
+public abstract class Coordinate implements Serializable {
 	
 	protected float x;
 	protected float y;

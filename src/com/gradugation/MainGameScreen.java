@@ -51,8 +51,10 @@ import org.andengine.util.debug.Debug;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
@@ -117,9 +119,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	
 	private ITexture mFaceTexture;
 	private ITextureRegion mFaceTextureRegion;
-	private ITexture mPausedTexture, mResumeTexture, mMainMenuTexture;
+	private ITexture mPausedTexture, mResumeTexture, mMainMenuTexture, mSaveTexture;
 	private ITextureRegion mPausedTextureRegion, mResumeTextureRegion,
-			mMainMenuTextureRegion;
+			mMainMenuTextureRegion, mSaveTextureRegion;
+	
 
 	private CameraScene mPauseScene;
 	private Scene scene;
@@ -131,20 +134,13 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	private StrokeFont mStrokeFont, mStrokeFontLarge;
 	
 	private Music mMusic;
-	
-	private final MapCoordinate centerMap = new MapCoordinate(7,7);
-	private final SpriteCoordinate centerSprite = centerMap.mapToSprite();
 
-	private SpriteCoordinate[] characterCoordinates; 
-	private int[] characterCredits;
-	private String[] characterNames;
-	private int[] characterCoins;
 	static ArrayList<Character> thePlayers;
 	
 	private Text[] textStrokes;
 	final private SpriteCoordinate[] textStrokeCoordinates = {
-	        new SpriteCoordinate(80,300), new SpriteCoordinate(400,300), 
-	        new SpriteCoordinate(80,20), new SpriteCoordinate(400,20) };
+	        new SpriteCoordinate(60,280), new SpriteCoordinate(420,280), 
+	        new SpriteCoordinate(60,40), new SpriteCoordinate(420,40) };
 
 	private boolean turnDone;
 	private boolean eventCompleted;
@@ -174,6 +170,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	private boolean diceDone = false;
 
 	boolean swipeDone = false;
+	private DbHelper dbhelper;
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {
@@ -199,19 +196,9 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		mainMapEvent = new Event(this, R.raw.map_text_file);
 
         Intent intent = getIntent();
-		thePlayers = (ArrayList<Character>) intent.getSerializableExtra(ChooseCharacterActivity.THE_PLAYERS);
+        Bundle bundle = intent.getExtras();
+		thePlayers = (ArrayList<Character>) bundle.getSerializable(ChooseCharacterActivity.THE_PLAYERS);
 		numCharacters = thePlayers.size();
-		
-		characterCoordinates = new SpriteCoordinate[numCharacters];
-		characterCredits = new int[numCharacters];
-		characterNames = new String[numCharacters];
-		characterCoins = new int[numCharacters];
-		
-		for (int i = 0; i < numCharacters; i++) {
-			characterNames[i] = thePlayers.get(i).getName();
-			characterCoins[i] = thePlayers.get(i).getCoins();
-			characterCredits[i] = thePlayers.get(i).getCredits();
-		}
 		
 		//Create all four character sprites
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
@@ -223,7 +210,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 			characterTextureAtlas[i] = new BitmapTextureAtlas(
 					this.getTextureManager(), 1000, 1000, TextureOptions.BILINEAR);
 			character[i] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(characterTextureAtlas[i],
-					this, NameToImageName(characterNames[i]), 0, 0);
+					this, thePlayers.get(i).getCharacterImage(), 0 , 0);   //NameToImageName(characterTypes[i]), 0, 0);
 			characterTextureAtlas[i].load();
 		}
 
@@ -240,7 +227,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
                 .createFromAsset(finishTurnTextureAtlas, this, "finish_button.png",
                                 0, 0);
 		this.finishTurnTextureAtlas.load();
-		
 		
 		// Pause Assets
 		this.mFaceTexture = new AssetBitmapTexture(this.getTextureManager(),
@@ -267,6 +253,12 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		this.mMainMenuTextureRegion = TextureRegionFactory
 				.extractFromTexture(this.mMainMenuTexture);
 		this.mMainMenuTexture.load();
+
+		this.mSaveTexture = new AssetBitmapTexture(this.getTextureManager(),
+				this.getAssets(), "gfx/savegame.png", TextureOptions.BILINEAR);
+		this.mSaveTextureRegion = TextureRegionFactory
+				.extractFromTexture(this.mSaveTexture);
+		this.mSaveTexture.load();
 
 		// UI Fonts
 		final ITexture fontTexture = new EmptyTexture(this.getTextureManager(),
@@ -302,19 +294,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
         }
 
 	}
-	
-	public String NameToImageName(String name) {
-		
-		if (name.compareTo("Athlete") == 0) {
-			return "athlete.png";
-		} else if (name.compareTo("Engineer") == 0) {
-			return "engineer.png";
-		} else if (name.compareTo("Gradugator") == 0) {
-			return "splash2.png";
-		} else {
-			return "";
-		}
-	}
 
 	@Override
 	public Scene onCreateScene() {
@@ -333,6 +312,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 		textStrokes = new Text[numCharacters];
 
+
 		/*
 		 * To update text, use [text].setText("blah blah"); In which "blah blah"
 		 * is whatever you want to change the text to. You can use variables.
@@ -340,12 +320,13 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		for (int i = 0; i < numCharacters; i++) {
 			SpriteCoordinate coord = textStrokeCoordinates[i];
 			textStrokes[i] = new Text(coord.getX(), coord.getY(), this.mStrokeFont,
-					characterNames[i]   +"\nCredits: " + characterCredits[i]
-				    + "\nCoins: " + characterCoins[i], vertexBufferObjectManager); 
+					thePlayers.get(i).getName()   +"\nCredits: " + thePlayers.get(i).getCredits()
+				    + "\nCoins: " + thePlayers.get(i).getCoins(), vertexBufferObjectManager); 
 		}
-		final Text textStroke5 = new Text(400, 100, this.mStrokeFont,
-                characterNames[0] + " rolled " + diceRoll, vertexBufferObjectManager);
+		final Text textStroke5 = new Text(180, 20, this.mStrokeFont,
+                " " + diceRoll, vertexBufferObjectManager);
 
+		textStroke5.setScale((float) .7 ); 
 		mHUD = new HUD();
 		mHUD.attachChild(scene);
 
@@ -364,7 +345,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	                 * button is being pressed.
 	                 */
 	                //generate random number [1,3]
-	        	currentCharacterYear = (characterCredits[currentCharacter]%CREDITS_NEEDED_GRADUATE) + 1;
+	        	currentCharacterYear = (thePlayers.get(currentCharacter).getCredits()%CREDITS_NEEDED_GRADUATE) + 1;
 	        	switch(currentCharacterYear) {
 	        	case 1: maxRoll = 3;
 	        			break;
@@ -381,7 +362,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	                	swipeDone = false;
 	                	if (touchEvent.isActionUp()) {
 	                		this.setColor(Color.GRAY);
-	                		textStroke5.setText(characterNames[currentCharacter] + " rolled: " + diceRoll);
+	                		textStroke5.setText(" " + diceRoll);
 	                		diceDone = true;
 	                		
 	                	}
@@ -491,8 +472,79 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				return true;
 			};
 		};
+		
 		this.mPauseScene.registerTouchArea(mainMenuButton);
 		this.mPauseScene.attachChild(mainMenuButton);
+		//save game button
+		
+		final Sprite saveButton = new Sprite(cX + (CAMERA_WIDTH / 10), cY
+				+ (CAMERA_HEIGHT / 6), this.mSaveTextureRegion,
+				this.getVertexBufferObjectManager()) {
+			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
+				switch (touchEvent.getAction()) {
+				case TouchEvent.ACTION_DOWN:
+					//update database here
+					saveGame();
+					mHUD.clearChildScene();
+					scene.setIgnoreUpdate(false);
+					//save to database
+					break;
+				case TouchEvent.ACTION_MOVE:
+					break;
+				case TouchEvent.ACTION_UP:
+					break;
+				}
+				return true;
+			};
+		};
+		this.mPauseScene.registerTouchArea(saveButton);
+		this.mPauseScene.attachChild(saveButton);
+		
+//		final Sprite saveGameButton = new Sprite(cX+(CAMERA_WIDTH/10), cY + (CAMERA_HEIGHT/4),
+//				this.mSaveGameTextureRegion, this.getVertexBufferObjectManager()) {
+//			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
+//				switch (touchEvent.getAction()) {
+//				case TouchEvent.ACTION_DOWN:
+//					String[] key1 = {"128"};
+//					String[] key2 = {"128"};
+//					String[] key3 = {"128","1"};
+//					String[] key4 = {"128"};
+//					String[] key5 = {"128","1"};
+//					String[] key6 = {"128"};
+//					String[] key7 = {"128"};
+//					String[] key8 = {"128"};
+//					String[] key9 = {"128","1","2"};
+//			        
+//					String[] newTable1Values = {"128","1","2"};
+//			        String[] newTable2Values = {"128","1","2","4"};
+//			        String[] newTable3Values = {"128","1","2","3","4","5"};
+//			        String[] newTable4Values = {"128","1","4","3","4"};
+//			        String[] newTable5Values = {"128","1","9"};
+//			        String[] newTable6Values = {"128","1","5","3","4"};
+//			        String[] newTable7Values = {"128","1","5","1","4","5","6"};
+//			        String[] newTable8Values = {"128","0"};
+//			        String[] newTable9Values = {"128","1","2","3"};
+//					//db.updateRow(tableNum, table1Values, newTable1Values);
+//			        dbhelper.updateRow(1,key1,newTable1Values);
+//			        dbhelper.updateRow(2,key2,newTable2Values);
+//			        dbhelper.updateRow(3,key3,newTable3Values);
+//			        dbhelper.updateRow(4,key4,newTable4Values);
+//			        dbhelper.updateRow(5,key5,newTable5Values);
+//			        dbhelper.updateRow(6,key6,newTable6Values);
+//			        dbhelper.updateRow(7,key7,newTable7Values);
+//			        dbhelper.updateRow(8,key8,newTable8Values);
+//			        dbhelper.updateRow(9,key9,newTable9Values);
+//					break;
+//				case TouchEvent.ACTION_MOVE:
+//					break;
+//				case TouchEvent.ACTION_UP:
+//					break;
+//				}
+//				return true;
+//			};
+//		};
+//		this.mPauseScene.registerTouchArea(saveGameButton);
+//		this.mPauseScene.attachChild(saveGameButton);
 
 		/* Makes the paused Game look through. */
 		this.mPauseScene.setBackgroundEnabled(false);
@@ -518,11 +570,12 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 			mHUD.attachChild(textStrokes[i]);
 		}
 
-		mHUD.attachChild(textStroke5);
 		mHUD.registerTouchArea(diceButton);
 		mHUD.attachChild(diceButton);	
 		mHUD.registerTouchArea(finishTurnButton);
 		mHUD.attachChild(finishTurnButton);
+		mHUD.attachChild(textStroke5);
+
 
 		mHUD.registerTouchArea(pauseSprite);
 		mHUD.attachChild(pauseSprite);
@@ -578,22 +631,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		this.mCamera.setBoundsEnabled(true);
 
 		
-		for (int i = 0; i < numCharacters; i++) {
-			SpriteCoordinate offset = new SpriteCoordinate();
-			if (i == 2 || i == 3) {
-				offset.setY(32f);
-			}
-			if (i % 2 == 1) {
-				offset.setX(32f);
-			}
-
-			characterCoordinates[i] = offset.add(centerSprite);
-		}
-		
 		final Sprite[] spriteList = new Sprite[numCharacters];
 		
 		for (int i = 0; i < numCharacters; i++) {
-			SpriteCoordinate loc = characterCoordinates[i];
+			SpriteCoordinate loc = thePlayers.get(i).getSpriteLocation();
 			spriteList[i] = new Sprite(loc.getX(), loc.getY(), character[i], 
 					this.getVertexBufferObjectManager());
 		}
@@ -601,8 +642,23 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		/* Create the sprite and add it to the scene. */
 		// final AnimatedSprite player = new AnimatedSprite(centerX, centerY,
 		// this.character, this.getVertexBufferObjectManager());
-		
-		currentCharacter = 0;
+
+		//Open Database
+        dbhelper = new DbHelper(this);
+        SQLiteDatabase db = dbhelper.openDB();
+        Log.d("TEST", "Database has been opened");
+        
+        
+        String[] gameKey = { Integer.toString(thePlayers.get(0).gameId) };
+      //Grab Game info
+      		ArrayList gameList = dbhelper.getRow(1, gameKey);
+      		
+      		if (gameList.size()>0){
+      			currentCharacter = Integer.valueOf((String)gameList.get(3));
+      		}
+      		
+      	dbhelper.close();
+        
 		this.mCamera.setChaseEntity(spriteList[currentCharacter]);
 
 		// final Path path = new Path(5).to(50, 740).to(50, 1000).to(820,
@@ -704,6 +760,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 					turnDone = false;
 					diceDone = false;
 					currentCharacter = (currentCharacter + 1) % (numCharacters);
+					saveGame();
 					// consider a delay here so the camera doesn't switch back and forth so fast
 					MainGameScreen.this.mCamera
 							.setChaseEntity(spriteList[currentCharacter]);
@@ -724,7 +781,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 			}
 		});
 		
-		for (int i = 0; i < numCharacters; i++) {
+		for (int i = (numCharacters-1); i>=0 ; i--) {
 			spriteList[i].setScale(.1f);
 			scene.attachChild(spriteList[i]);
 		}
@@ -736,7 +793,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 	protected void movementFunction(Sprite mySprite) {
 		if (!moving && swipeDone) {
-			int thisCurrent = currentCharacter;
+			//int thisCurrent = currentCharacter;
 			SpriteCoordinate offset = new SpriteCoordinate();
 
 			if (finalY - initY > 40) {
@@ -753,22 +810,22 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 			moving = true;
 
-			SpriteCoordinate finalPosition = new SpriteCoordinate(offset.getX()*ranNumb, offset.getY()*ranNumb);
-			SpriteCoordinate newPosition = offset.add(characterCoordinates[thisCurrent]);
+			SpriteCoordinate characterLocation = thePlayers.get(currentCharacter).getSpriteLocation();
+			SpriteCoordinate newPosition = offset.add(characterLocation);
 			
-			newPosition = this.mainMapEvent.checkBoundaries(characterCoordinates[thisCurrent], newPosition);
-				
-			finalPosition = characterCoordinates[thisCurrent].add(finalPosition);
+			newPosition = this.mainMapEvent.checkBoundaries(characterLocation, newPosition);
 			
-			moveSprite(ranNumb-1, newPosition, offset, thisCurrent, mySprite);		
+			moveSprite(ranNumb-1, newPosition, offset, mySprite);		
 		}
 	}
 	
 	public void moveSprite(final int moves, final SpriteCoordinate newPosition,
-			final SpriteCoordinate offset, final int thisCurrent, final Sprite mySprite) {
-
+			final SpriteCoordinate offset, final Sprite mySprite) {
+		
+		SpriteCoordinate characterLocation = thePlayers.get(currentCharacter).getSpriteLocation();
+		
 			mySprite.registerEntityModifier(new MoveModifier(0.5f,
-					characterCoordinates[thisCurrent].getX(), characterCoordinates[thisCurrent].getY(),
+					characterLocation.getX(), characterLocation.getY(),
 					newPosition.getX(), newPosition.getY()) {
 				
 				@Override
@@ -781,33 +838,32 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				
 				@Override
 				protected void onModifierFinished(IEntity pItem) {
-					characterCoordinates[thisCurrent].setX(mySprite.getX());
-					characterCoordinates[thisCurrent].setY(mySprite.getY());
+					thePlayers.get(currentCharacter).setLocation(mySprite.getX(), mySprite.getY());
 					super.onModifierFinished(pItem);
 					
 					if (moves == 0) {
-						checkMiniGameHotSpots(thisCurrent);
+						checkMiniGameHotSpots(currentCharacter);
 						swipeDone = false;
 						turnDone = true;
 						moving = false;
-					} else if (characterCoordinates[thisCurrent].compareTo(newPosition) == 0) {
+					} else if (thePlayers.get(currentCharacter).getSpriteLocation().compareTo(newPosition) == 0) {
 						SpriteCoordinate newPos = newPosition.add(offset);
-						newPos = mainMapEvent.checkBoundaries(characterCoordinates[thisCurrent], newPos);
+						newPos = mainMapEvent.checkBoundaries(thePlayers.get(currentCharacter).getSpriteLocation(), newPos);
 						int numMoves = moves - 1;
 						// if not a valid move, newPos = newPosition, and we need to show options
 						if (newPos.compareTo(newPosition) == 0) {
-							getNewMove(mainMapEvent.getPossiblePath(newPos), numMoves, thisCurrent, mySprite);
+							getNewMove(mainMapEvent.getPossiblePath(newPos), numMoves, mySprite);
 							return;
 						}
 						
-						moveSprite(numMoves, newPos, offset, thisCurrent, mySprite);
+						moveSprite(numMoves, newPos, offset, mySprite);
 					}
 				}
 			});
 	}
 
-	private void getNewMove(SpriteCoordinate[] pathOptions, final int moves,
-			final int thisCurrent, final Sprite mySprite) {
+	private void getNewMove(SpriteCoordinate[] pathOptions, final int moves, 
+			final Sprite mySprite) {
 		StringBuilder options = new StringBuilder();
 		StringBuilder choices = new StringBuilder();
 		
@@ -839,8 +895,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
 						SpriteCoordinate offset = Event.getPositionFromDirection(dialogChoices[which]);
-						SpriteCoordinate newPos = offset.add(characterCoordinates[thisCurrent]);
-						moveSprite(moves, newPos, offset, thisCurrent, mySprite);
+						SpriteCoordinate newPos = offset.add(thePlayers.get(currentCharacter).getSpriteLocation());
+						moveSprite(moves, newPos, offset, mySprite);
 					}
 				});
 
@@ -858,7 +914,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	}
 	// Checks the hot spots for the minigames
 	protected void checkMiniGameHotSpots(int current) {
-		Event.getEvent(characterCoordinates[current], this, characterNames[current], hasGraduated);
+		Event.getEvent(thePlayers.get(current).getSpriteLocation(), this, thePlayers.get(current).getName());
 		
 		if (!(move || gameDone)) {
 			gameDone = true;
@@ -932,10 +988,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	}
 	
 	private void addCredits(int character, int creditsToAdd) {
-		characterCredits[currentCharacter] += creditsToAdd;
-		textStrokes[character].setText(characterNames[character]
-				+ "\nCredits: " + characterCredits[currentCharacter]
-				+ "\nCoins: " + characterCoins[currentCharacter]);
+		thePlayers.get(character).addCredits(creditsToAdd);
+		textStrokes[character].setText(thePlayers.get(character).getName()
+				+ "\nCredits: " + thePlayers.get(character).getCredits()
+				+ "\nCoins: " + thePlayers.get(character).getCoins());
 	}
 	
 	// Get the character names and credits for game over screen
@@ -944,7 +1000,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	}
 	
 	private void checkCredits(int character) {
-		if (characterCredits[currentCharacter] >= CREDITS_NEEDED_GRADUATE) {
+		if (thePlayers.get(character).getCredits() >= CREDITS_NEEDED_GRADUATE) {
 			runOnUiThread(new Runnable() {                  
 	            @Override
 	            public void run() {
@@ -962,10 +1018,37 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	}
 	
 	private void addCoins(int character, int coinsToAdd) {
-		characterCoins[currentCharacter] += coinsToAdd;
-		textStrokes[character].setText(characterNames[character]
-				+ "\nCredits: " + characterCredits[currentCharacter]
-				+ "\nCoins: " + characterCoins[currentCharacter]);
+		thePlayers.get(character).addCoins(coinsToAdd);
+		textStrokes[character].setText(thePlayers.get(character).getName()
+				+ "\nCredits: " + thePlayers.get(character).getCredits()
+				+ "\nCoins: " + thePlayers.get(character).getCoins());
+	}
+	
+	public void saveGame(){
+		int numPlayers = thePlayers.size();
+		
+		DbHelper dbhelper = new DbHelper(this);
+		SQLiteDatabase db = dbhelper.openDB();
+    
+		int gameId = thePlayers.get(0).getGameId();  
+        
+		String[] table1Values = {Integer.toString(gameId), "0", Integer.toString(numCharacters), Integer.toString(currentCharacter)};
+		Log.d("debug,",Integer.toString(gameId) + "0" + Integer.toString(numCharacters) + Integer.toString(currentCharacter));
+		
+        String[] table1Key = {Integer.toString(gameId)};
+        dbhelper.updateRow(1, table1Key, table1Values); //Update game table
+        
+        //insert numPlayers rows into table 3
+        for (int i = 0; i < numPlayers; i++)
+        {
+        	String[] characterKey = {Integer.toString((gameId<<2) + i)};
+        	String[] newCharacter = {characterKey[0], thePlayers.get(i).getType(), thePlayers.get(i).getName(), Float.toString(thePlayers.get(i).getMapLocation().getX()), Float.toString(thePlayers.get(i).getMapLocation().getY()), Integer.toString(thePlayers.get(i).getCredits()), Integer.toString(thePlayers.get(i).getCoins()), Integer.toString(i)};
+        	Log.d("debug,", characterKey[0]+ thePlayers.get(i).getType()+thePlayers.get(i).getName()+Float.toString(thePlayers.get(i).getMapLocation().getX())+Float.toString(thePlayers.get(i).getMapLocation().getY())+Integer.toString(thePlayers.get(i).getCredits())+Integer.toString(thePlayers.get(i).getCoins())+Integer.toString(i+1));
+        	dbhelper.updateRow(2, characterKey, newCharacter);
+        }
+        
+        dbhelper.close();
+		
 	}
 	
 	

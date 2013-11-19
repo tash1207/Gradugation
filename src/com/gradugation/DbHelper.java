@@ -77,6 +77,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 this.context = context;
         }
         
+
     public SQLiteDatabase openDB() {
         db = this.getWritableDatabase();
         Log.d("openDB", "Database Opened");
@@ -412,7 +413,20 @@ public class DbHelper extends SQLiteOpenHelper {
         	}
         	return rowArray;
         }
+        
+        public int getGameCount() {
+        	
+            Cursor c = db.rawQuery("select count(*) from games", null);
+            int count = 0;
+            if (c.moveToNext()) {
+                count = c.getInt(c.getColumnIndex("count(*)"));
+            }
+            c.close();
+            
+            return count;
+         }
 
 }
 
                 
+

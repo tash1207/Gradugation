@@ -169,6 +169,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	private boolean diceDone = false;
 
 	boolean swipeDone = false;
+	private DbHelper dbhelper;
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {
@@ -640,8 +641,23 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		/* Create the sprite and add it to the scene. */
 		// final AnimatedSprite player = new AnimatedSprite(centerX, centerY,
 		// this.character, this.getVertexBufferObjectManager());
-		
-		currentCharacter = 0;
+
+		//Open Database
+        dbhelper = new DbHelper(this);
+        SQLiteDatabase db = dbhelper.openDB();
+        Log.d("TEST", "Database has been opened");
+        
+        
+        String[] gameKey = { Integer.toString(thePlayers.get(0).gameId) };
+      //Grab Game info
+      		ArrayList gameList = dbhelper.getRow(1, gameKey);
+      		
+      		if (gameList.size()>0){
+      			currentCharacter = Integer.valueOf((String)gameList.get(3));
+      		}
+      		
+      	dbhelper.close();
+        
 		this.mCamera.setChaseEntity(spriteList[currentCharacter]);
 
 		// final Path path = new Path(5).to(50, 740).to(50, 1000).to(820,
@@ -1009,18 +1025,18 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		DbHelper dbhelper = new DbHelper(this);
 		SQLiteDatabase db = dbhelper.openDB();
     
-		int gameId = dbhelper.getGameCount()-1;//thePlayers.get(0).getGameId();  
+		int gameId = thePlayers.get(0).getGameId();  
         
 		String[] table1Values = {Integer.toString(gameId), "0", Integer.toString(numCharacters), Integer.toString(currentCharacter)};
 		Log.d("debug,",Integer.toString(gameId) + "0" + Integer.toString(numCharacters) + Integer.toString(currentCharacter));
 		
         String[] table1Key = {Integer.toString(gameId)};
-        dbhelper.updateRow(1, table1Key, table1Values);
+        dbhelper.updateRow(1, table1Key, table1Values); //Update game table
         
         //insert numPlayers rows into table 3
         for (int i = 0; i < numPlayers; i++)
         {
-        	String[] characterKey = {Integer.toString(gameId*4 + thePlayers.get(i).getId())};
+        	String[] characterKey = {Integer.toString((gameId<<2) + i)};
         	String[] newCharacter = {characterKey[0], thePlayers.get(i).getType(), thePlayers.get(i).getName(), Float.toString(thePlayers.get(i).getMapLocation().getX()), Float.toString(thePlayers.get(i).getMapLocation().getY()), Integer.toString(thePlayers.get(i).getCredits()), Integer.toString(thePlayers.get(i).getCoins()), Integer.toString(i)};
         	Log.d("debug,", characterKey[0]+ thePlayers.get(i).getType()+thePlayers.get(i).getName()+Float.toString(thePlayers.get(i).getMapLocation().getX())+Float.toString(thePlayers.get(i).getMapLocation().getY())+Integer.toString(thePlayers.get(i).getCredits())+Integer.toString(thePlayers.get(i).getCoins())+Integer.toString(i+1));
         	dbhelper.updateRow(2, characterKey, newCharacter);

@@ -1004,9 +1004,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	}
 	
 	public void saveGame(){
-		Intent intent = getIntent();
-		ArrayList<Character> thePlayers = (ArrayList<Character>) intent.getSerializableExtra(ChooseCharacterActivity.THE_PLAYERS); 
-	
 		int numPlayers = thePlayers.size();
 		
 		DbHelper dbhelper = new DbHelper(this);
@@ -1023,11 +1020,13 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
         //insert numPlayers rows into table 3
         for (int i = 0; i < numPlayers; i++)
         {
-        	String[] characterKey = {Integer.toString(gameId<<2 + thePlayers.get(i).getId())};
+        	String[] characterKey = {Integer.toString(gameId*4 + thePlayers.get(i).getId())};
         	String[] newCharacter = {characterKey[0], thePlayers.get(i).getType(), thePlayers.get(i).getName(), Float.toString(thePlayers.get(i).getMapLocation().getX()), Float.toString(thePlayers.get(i).getMapLocation().getY()), Integer.toString(thePlayers.get(i).getCredits()), Integer.toString(thePlayers.get(i).getCoins()), Integer.toString(i)};
-        	Log.d("debug,", characterKey[0]+ thePlayers.get(i).getType()+thePlayers.get(i).getName()+Float.toString(thePlayers.get(i).getMapLocation().getX())+Float.toString(thePlayers.get(i).getMapLocation().getY())+Integer.toString(thePlayers.get(i).getCredits())+Integer.toString(thePlayers.get(i).getCoins())+Integer.toString(i));
+        	Log.d("debug,", characterKey[0]+ thePlayers.get(i).getType()+thePlayers.get(i).getName()+Float.toString(thePlayers.get(i).getMapLocation().getX())+Float.toString(thePlayers.get(i).getMapLocation().getY())+Integer.toString(thePlayers.get(i).getCredits())+Integer.toString(thePlayers.get(i).getCoins())+Integer.toString(i+1));
         	dbhelper.updateRow(2, characterKey, newCharacter);
         }
+        
+        dbhelper.close();
 		
 	}
 	

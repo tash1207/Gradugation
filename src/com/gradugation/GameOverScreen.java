@@ -131,36 +131,20 @@ public class GameOverScreen extends SimpleBaseGameActivity {
 		Collections.sort(players, new MyComparator());
 		displayWinner(players.get(0).getName(), players.get(0).getCredits(), players.get(0).getCoins());
 		
+		ArrayList<Text> playerText = new ArrayList<Text>();
+		String escapeSequence = "\n";
 		
+		for (int i = 0; i < playerSize; i++) {
+			if (playerSize >= i + 1) {
+				escapeSequence += "\n\n\n\n\n\n\n\n\n".substring(0, i*2);
+				playerText.add(new Text(CAMERA_WIDTH / 2, CAMERA_HEIGHT
+						- (CAMERA_HEIGHT / 3), this.mCongratsFont,
+						escapeSequence + players.get(i).getName()+ " : " + players.get(i).getCredits() + " credits and " + players.get(i).getCoins() + " coins.", vertexBufferObjectManager));
+				scene.attachChild(playerText.get(i));
+			
+			}
+		}
 		
-		if (playerSize >= 1) {
-			final Text playerOneText = new Text(CAMERA_WIDTH / 2, CAMERA_HEIGHT
-					- (CAMERA_HEIGHT / 2), this.mCongratsFont,
-					players.get(0).getName()+ " : " + players.get(0).getCredits() + " credits and " + players.get(0).getCoins() + " coins.", vertexBufferObjectManager);
-			scene.attachChild(playerOneText);
-		} 
-		
-		if (playerSize >= 2) {
-			final Text playerTwoText = new Text(CAMERA_WIDTH / 2, CAMERA_HEIGHT
-				- (CAMERA_HEIGHT / 2), this.mCongratsFont,
-				"\n\n" + players.get(1).getName() + " : " + players.get(1).getCredits() + " credits and " + players.get(1).getCoins() + " coins.", vertexBufferObjectManager);
-			scene.attachChild(playerTwoText);
-		} 
-
-		if (playerSize >= 3) {
-			final Text playerThreeText = new Text(CAMERA_WIDTH / 2, CAMERA_HEIGHT
-				- (CAMERA_HEIGHT / 2), this.mCongratsFont,
-				"\n\n\n\n" + players.get(2).getName() + " : " + players.get(2).getCredits() + " credits and " + players.get(2).getCoins() + " coins.", vertexBufferObjectManager);
-			scene.attachChild(playerThreeText);
-		} 
-		
-		if (playerSize >= 4) {
-			final Text playerFourText = new Text(CAMERA_WIDTH / 2, CAMERA_HEIGHT
-				- (CAMERA_HEIGHT / 2), this.mCongratsFont,
-				"\n\n\n\n\n\n" + players.get(3).getName() + " : " + players.get(3).getCredits() + " credits and " + players.get(3).getCoins() + " coins.", vertexBufferObjectManager);
-			scene.attachChild(playerFourText);
-		} 
-
 		final Sprite continueButton = new Sprite(CAMERA_WIDTH / 2,
 				CAMERA_HEIGHT / 2 - (CAMERA_HEIGHT / 3), continueTextureRegion,
 				this.getVertexBufferObjectManager()) {

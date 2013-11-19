@@ -1006,9 +1006,11 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	            public void run() {
 	            	hasGraduated = true;
 	            	Toast.makeText(getApplicationContext(), getString(R.string.ready_to_graduate, thePlayers.get(character).getName(), thePlayers.get(character).getCredits()),
-	            			   Toast.LENGTH_LONG).show();
+	            			   Toast.LENGTH_SHORT).show();
 	            	GameOverScreen.setPlayers(thePlayers);
+	            	mMusic.pause();
 	                }                  
+	           
 	            	            	
 	            });
 			

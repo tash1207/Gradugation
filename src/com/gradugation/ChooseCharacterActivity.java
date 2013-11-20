@@ -76,6 +76,10 @@ public class ChooseCharacterActivity extends BaseActivity {
 							characterImage.setImageResource(R.drawable.gradugator_big);
 							characterAttributes.setText(getString(R.string.attributes_gradugator));
 						}
+						else if (checkedId == R.id.radio3) {
+							characterImage.setImageResource(R.drawable.med_student_big);
+							characterAttributes.setText(getString(R.string.attributes_med_student));
+						}
 						
 					}
 				});

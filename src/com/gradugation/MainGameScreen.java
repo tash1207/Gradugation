@@ -345,7 +345,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	                 * button is being pressed.
 	                 */
 	                //generate random number [1,3]
-	        	currentCharacterYear = (thePlayers.get(currentCharacter).getCredits()%CREDITS_NEEDED_GRADUATE) + 1;
+	        	currentCharacterYear = (CREDITS_NEEDED_GRADUATE/thePlayers.get(currentCharacter).getCredits()) + 1;
 	        	switch(currentCharacterYear) {
 	        	case 1: maxRoll = 3;
 	        			break;
@@ -354,6 +354,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	        	case 3: maxRoll = 5;
 	        			break;
 	        	case 4: maxRoll = 6;
+	        			break;
+	        	default: maxRoll = 6;
 	        			break;
 	        	}
 	                random = new Random();
@@ -814,7 +816,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 			SpriteCoordinate newPosition = offset.add(characterLocation);
 			
 			newPosition = this.mainMapEvent.checkBoundaries(characterLocation, newPosition);
-			
+			eventCompleted = false;
 			moveSprite(ranNumb-1, newPosition, offset, mySprite);		
 		}
 	}
@@ -840,9 +842,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				protected void onModifierFinished(IEntity pItem) {
 					thePlayers.get(currentCharacter).setLocation(mySprite.getX(), mySprite.getY());
 					super.onModifierFinished(pItem);
-					
-					if (moves == 0) {
+					if (!eventCompleted) {
 						checkMiniGameHotSpots(currentCharacter);
+					}
+					if (moves == 0) {
 						swipeDone = false;
 						turnDone = true;
 						moving = false;
@@ -914,7 +917,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	}
 	// Checks the hot spots for the minigames
 	protected void checkMiniGameHotSpots(int current) {
-		Event.getEvent(thePlayers.get(current).getSpriteLocation(), this, thePlayers.get(current).getName(), hasGraduated);
+		Event.getEvent(thePlayers.get(current).getSpriteLocation(), this, thePlayers.get(current).getName(), hasGraduated, thePlayers);
 		
 		if (!(move || gameDone)) {
 			gameDone = true;
@@ -970,6 +973,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	// Methods
 	// ===========================================================
 	public void onActivityResult (int requestCode, int resultCode, Intent data) {
+		this.eventCompleted = true;
 		if (!(move || gameDone)) {
 			gameDone = true;
 		}
@@ -994,7 +998,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				+ "\nCoins: " + thePlayers.get(character).getCoins());
 	}
 	
-	// Get the character names and credits for game over screen
+	// this should not be here, and should not be static
 	public static ArrayList<Character> getPlayers() {
 		return thePlayers;
 	}
@@ -1004,10 +1008,11 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 			runOnUiThread(new Runnable() {                  
 	            @Override
 	            public void run() {
+	            	// is this variable for all players?
 	            	hasGraduated = true;
 	            	Toast.makeText(getApplicationContext(), getString(R.string.ready_to_graduate, thePlayers.get(character).getName(), thePlayers.get(character).getCredits()),
 	            			   Toast.LENGTH_SHORT).show();
-	            	GameOverScreen.setPlayers(thePlayers);
+	            	//GameOverScreen.setPlayers(thePlayers);
 	            	mMusic.pause();
 	                }                  
 	           
@@ -1017,7 +1022,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 			
 		}
 	}
-	
+
 	private void addCoins(int character, int coinsToAdd) {
 		thePlayers.get(character).addCoins(coinsToAdd);
 		textStrokes[character].setText(thePlayers.get(character).getName()

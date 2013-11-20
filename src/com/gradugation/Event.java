@@ -183,41 +183,44 @@ public class Event {
 	}
 
 	public static void getEvent(SpriteCoordinate coordinate, Activity context,
-			String characterType, boolean hasGraduated) {
+			String characterType, boolean hasGraduated, ArrayList<Character> thePlayers) {
 
 		if (GRADUATION.isEqual(coordinate) && hasGraduated) {
 			// graduate!
+			
+			//this should be passed through intent
+			GameOverScreen.setPlayers(thePlayers);
 			Intent intent = new Intent(context, GameOverScreen.class);
 			intent.putExtra("character_type", characterType);
 			context.startActivityForResult(intent, GRADUATION_REQUEST_CODE);
 
-		} else if (BENCH_PRESS_MINI_GAME.isEqual(coordinate) && !hasGraduated) {
+		} else if (BENCH_PRESS_MINI_GAME.isEqual(coordinate)) {
 			// call bench press game
 		
 			Intent intent = new Intent(context, BenchPressMinigame.class);
 			intent.putExtra("character_type", characterType);
 			context.startActivityForResult(intent, BENCH_PRESS_REQUEST_CODE);
-		} else if (WIRES_MINI_GAME.inRange(coordinate) && !hasGraduated) {
+		} else if (WIRES_MINI_GAME.inRange(coordinate)) {
 			// call wires mini game
 			Intent intent = new Intent(context, WiresMiniGame.class);
 			intent.putExtra("character_type", characterType);
 			context.startActivityForResult(intent, WIRES_REQUEST_CODE);
-		} else if (WAIT_IN_LINE_MINI_GAME.inRange(coordinate) && !hasGraduated) {
+		} else if (WAIT_IN_LINE_MINI_GAME.inRange(coordinate)) {
 			// call wait in line
 			Intent intent = new Intent(context, WaitInLineMinigame.class);
 			intent.putExtra("character_type", characterType);
 			context.startActivityForResult(intent, WAIT_IN_LINE_REQUEST_CODE);
-		} else if (WHACK_AFLYER_MINI_GAME.inRange(coordinate) && !hasGraduated) {
+		} else if (WHACK_AFLYER_MINI_GAME.inRange(coordinate)) {
 			// call whack a flyer
 			Intent intent = new Intent(context, WhackAFlyerMiniGame.class);
 			intent.putExtra("character_type", characterType);
 			context.startActivityForResult(intent, WHACK_AFLYER_REQUEST_CODE);
-		} else if (COLOR_MINI_GAME.inRange(coordinate) && !hasGraduated) {
+		} else if (COLOR_MINI_GAME.inRange(coordinate)) {
 			// call colors
 			Intent intent = new Intent(context, ColorMiniGame.class);
 			intent.putExtra("character_type", characterType);
 			context.startActivityForResult(intent, COLOR_REQUEST_CODE);
-		} else if (FOOD_MINI_GAME.inRange(coordinate) && !hasGraduated) {
+		} else if (FOOD_MINI_GAME.inRange(coordinate)) {
 			Intent intent = new Intent(context, FoodMiniGame.class);
 			intent.putExtra("character_type", characterType);
 			context.startActivityForResult(intent, FOOD_REQUEST_CODE);

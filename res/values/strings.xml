@@ -43,10 +43,12 @@
     <string name="character_engineer">Engineer</string>
     <string name="character_athlete">Athlete</string>
     <string name="character_gradugator">Gradugator</string>
+    <string name="character_med_student">PreMed</string>
     
     <string name="attributes_athlete">The athlete gets a credit bonus at the Stadium for the Bench Press Minigame</string>
     <string name="attributes_engineer">The engineer gets a credit bonus at the Physics Building for the Wires Minigame</string>
     <string name="attributes_gradugator">Gradugator gets a credit bonus in Turlington for the Whack-A-Flyer Minigame</string>
+    <string name="attributes_med_student">The PreMed student avoids getting sick on random events</string>
     
     <!-- MainGameScreen -->
     <string name="ready_to_graduate">Player %1$s has earned %2$d credits! You are ready to graduate.

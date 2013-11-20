@@ -104,7 +104,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 	private TMXTiledMap mTMXTiledMap;
 	protected int mCactusCount;
-	private int CREDITS_NEEDED_GRADUATE = 3;
+	private int CREDITS_NEEDED_GRADUATE = 15;
 
 	//private BitmapTextureAtlas characterTextureAtlas,characterTextureAtlas2,characterTextureAtlas3,characterTextureAtlas4;
 	//public ITextureRegion character,character2,character3,character4;
@@ -919,7 +919,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	}
 	// Checks the hot spots for the minigames
 	protected void checkMiniGameHotSpots(int current) {
-		Event.getEvent(thePlayers.get(current).getSpriteLocation(), this, thePlayers.get(current).getName(), thePlayers.get(current).getGraduated(), thePlayers);
+		Event.getEvent(thePlayers.get(current).getSpriteLocation(), this, thePlayers.get(current).getName(), thePlayers.get(current).getGraduated(), current, thePlayers);
 		
 		if (!(move || gameDone)) {
 			gameDone = true;

@@ -129,7 +129,8 @@ public class GameOverScreen extends SimpleBaseGameActivity {
 		scene.attachChild(congratsText);
 		Intent intent = getIntent();
 		players = (ArrayList<Character>)intent.getSerializableExtra("thePlayers");
-		displayWinner(players.get(0).getName(), players.get(0).getCredits(), players.get(0).getCoins());
+		int current = (Integer) intent.getSerializableExtra("currentCharacter");
+		displayWinner(players.get(current).getName(), players.get(current).getCredits(), players.get(current).getCoins());
 		int playerSize = players.size();
 		Collections.sort(players, new MyComparator());
 		

@@ -90,6 +90,14 @@
     <string name="bench_press_title">2. Bench Press</string>
     <string name="bench_press_body">Quickly tap the screen, right onto the dapper, weight-lifting engineer on the screen
 	    to perform as many reps as possible in the allotted time.</string>
+	<string name="whack_aflyer_title">3. Whack-A-Flyer</string>
+    <string name="whack_aflyer_body">Whack as many flyers as you can to get through Turlington Plaza. Whack the flyers by tapping on them.</string> 
+    <string name="color_title">4. Color</string>
+    <string name="color_body">For every word on the screen, select the color that matches the color of the text.</string>  
+    <string name="wait_in_line_title">4. Wait in Line</string>
+    <string name="wait_in_line_body">Make it through the hub in 16 seconds to get to class. Watch out for other students. If you hit them, you won\'t make it to class! Touch the screen to stop your character from moving.</string>
+    <string name="food_title">5. Junk Food Ninja</string>
+    <string name="food_body">Click on the apples to get 5 points in 15 seconds. Lose points if you click on fries. </string>  
 	    
     <!-- Wait in Line Minigame -->
     <string name="wait_in_line_instructions">You have 16 seconds to make it through the Hub to get to class! 

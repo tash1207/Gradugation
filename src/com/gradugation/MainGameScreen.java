@@ -840,9 +840,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				protected void onModifierFinished(IEntity pItem) {
 					thePlayers.get(currentCharacter).setLocation(mySprite.getX(), mySprite.getY());
 					super.onModifierFinished(pItem);
-					
+					checkMiniGameHotSpots(currentCharacter);
 					if (moves == 0) {
-						checkMiniGameHotSpots(currentCharacter);
 						swipeDone = false;
 						turnDone = true;
 						moving = false;

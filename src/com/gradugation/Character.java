@@ -48,7 +48,6 @@ public class Character implements Serializable {
         	this.gameId = gameID;
         	this.credits = credits;
         	this.coins = coins;
-        	this.hasGraduated = hasGraduated; 
         }
                  
         /**

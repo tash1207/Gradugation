@@ -57,8 +57,7 @@ public class ContinueActivity extends Activity {
 	 */
 	private void populateSavedGameList() {
 		for(int i=0;i<numberSavedGames;i++){
-			mySavedGames.add(new SavedGame("saved game"+ i, R.drawable.ic_launcher,
-					"Last saved mm/dd 00:00"));
+			mySavedGames.add(new SavedGame("Saved game "+ i, R.drawable.ic_launcher));
 		}
 		if(numberSavedGames==0){
 			mySavedGames.add(new SavedGame("No saved games yet", R.drawable.ic_launcher,

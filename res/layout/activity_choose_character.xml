@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="4dp"
         android:text="@string/choose_character"
         android:textColor="@color/gator_orange"
         android:textSize="@dimen/header_text_size" />
@@ -37,6 +37,7 @@
                 android:layout_height="wrap_content"
                 android:checked="true"
                 android:drawableRight="@drawable/athlete"
+                android:drawablePadding="4dp"
                 android:text="@string/character_athlete" />
 
             <RadioButton
@@ -44,6 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableRight="@drawable/engineer"
+                android:drawablePadding="6dp"
                 android:text="@string/character_engineer" />
 
             <RadioButton
@@ -52,6 +54,14 @@
                 android:layout_height="wrap_content"
                 android:drawableRight="@drawable/ic_launcher"
                 android:text="@string/character_gradugator" />
+
+            <RadioButton
+                android:id="@+id/radio3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/med_student"
+                android:drawablePadding="6dp"
+                android:text="@string/character_med_student" />
         </RadioGroup>
 
         <LinearLayout
@@ -65,9 +75,9 @@
                 android:layout_width="85dp"
                 android:layout_height="85dp"
                 android:layout_gravity="center"
+                android:contentDescription="@string/character_athlete"
                 android:padding="4dp"
-                android:src="@drawable/athlete_big"
-                android:contentDescription="@string/character_athlete" />
+                android:src="@drawable/athlete_big" />
 
             <TextView
                 android:id="@+id/character_attributes"
@@ -92,7 +102,7 @@
             android:layout_marginTop="40dp"
             android:layout_weight="1"
             android:background="@drawable/button_rectangle_orange"
-            android:minHeight="55dp"
+            android:minHeight="45dp"
             android:onClick="btnBackClicked"
             android:padding="14dp"
             android:text="@string/back"
@@ -110,7 +120,7 @@
             android:layout_marginTop="40dp"
             android:layout_weight="1"
             android:background="@drawable/button_rectangle_orange"
-            android:minHeight="55dp"
+            android:minHeight="45dp"
             android:onClick="btnContinueClicked"
             android:padding="14dp"
             android:text="@string/continue_game"

@@ -187,10 +187,14 @@ public class Event {
 
 		if (GRADUATION.isEqual(coordinate) && hasGraduated) {
 			// graduate!
+			
+			//this should be passed through intent
+			GameOverScreen.setPlayers(thePlayers);
 			Intent intent = new Intent(context, GameOverScreen.class);
 	    	intent.putExtra("thePlayers", thePlayers);
 			intent.putExtra("character_type", characterType);
 			context.startActivityForResult(intent, GRADUATION_REQUEST_CODE);
+
 		} else if (BENCH_PRESS_MINI_GAME.isEqual(coordinate)) {
 			// call bench press game
 		

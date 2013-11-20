@@ -347,7 +347,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	                 * button is being pressed.
 	                 */
 	                //generate random number [1,3]
-	        	currentCharacterYear = (thePlayers.get(currentCharacter).getCredits()%CREDITS_NEEDED_GRADUATE) + 1;
+	        	currentCharacterYear = (CREDITS_NEEDED_GRADUATE/thePlayers.get(currentCharacter).getCredits()) + 1;
 	        	switch(currentCharacterYear) {
 	        	case 1: maxRoll = 3;
 	        			break;
@@ -356,6 +356,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	        	case 3: maxRoll = 5;
 	        			break;
 	        	case 4: maxRoll = 6;
+	        			break;
+	        	default: maxRoll = 6;
 	        			break;
 	        	}
 	                random = new Random();
@@ -816,7 +818,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 			SpriteCoordinate newPosition = offset.add(characterLocation);
 			
 			newPosition = this.mainMapEvent.checkBoundaries(characterLocation, newPosition);
-			
+			eventCompleted = false;
 			moveSprite(ranNumb-1, newPosition, offset, mySprite);		
 		}
 	}
@@ -842,9 +844,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				protected void onModifierFinished(IEntity pItem) {
 					thePlayers.get(currentCharacter).setLocation(mySprite.getX(), mySprite.getY());
 					super.onModifierFinished(pItem);
-					
-					if (moves == 0) {
+					if (!eventCompleted) {
 						checkMiniGameHotSpots(currentCharacter);
+					}
+					if (moves == 0) {
 						swipeDone = false;
 						turnDone = true;
 						moving = false;
@@ -963,6 +966,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	// Methods
 	// ===========================================================
 	public void onActivityResult (int requestCode, int resultCode, Intent data) {
+		this.eventCompleted = true;
 		if (!(move || gameDone)) {
 			gameDone = true;
 		}
@@ -987,7 +991,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				+ "\nCoins: " + thePlayers.get(character).getCoins());
 	}
 	
-
 	
 	private void checkCredits(final int character) {
 		if (thePlayers.get(character).getCredits() >= CREDITS_NEEDED_GRADUATE) {
@@ -1003,7 +1006,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 		}
 	}
-	
+
 	private void addCoins(int character, int coinsToAdd) {
 		thePlayers.get(character).addCoins(coinsToAdd);
 		textStrokes[character].setText(thePlayers.get(character).getName()

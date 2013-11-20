@@ -63,6 +63,16 @@
                 android:padding="4dp"
                 android:text="@string/character_gradugator"
                 android:textSize="22sp" />
+
+            <RadioButton
+                android:id="@+id/radio3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/med_student"
+                android:drawablePadding="6dp"
+                android:padding="4dp"
+                android:text="@string/character_med_student"
+                android:textSize="22sp" />
         </RadioGroup>
 
         <LinearLayout

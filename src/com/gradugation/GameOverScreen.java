@@ -189,6 +189,7 @@ public class GameOverScreen extends SimpleBaseGameActivity {
 		scene.attachChild(winnerText);
 	}
 	
+	// This should not be here, let alone static. Pass through intent.
 	public static void setPlayers(ArrayList<Character> thePlayers) {
 		players = thePlayers;
 	}

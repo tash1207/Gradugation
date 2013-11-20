@@ -24,7 +24,7 @@ public class Character implements Serializable {
         String name;
         CHARACTERTYPE character;
         
-        boolean hasGraduated;
+        boolean hasGraduated = false;
         
         int charId, credits, coins, gameId;
         SpriteCoordinate location;
@@ -48,6 +48,7 @@ public class Character implements Serializable {
         	this.gameId = gameID;
         	this.credits = credits;
         	this.coins = coins;
+        	this.hasGraduated = hasGraduated; 
         }
                  
         /**
@@ -150,6 +151,14 @@ public class Character implements Serializable {
         
         public int getCoins()        {
                 return coins;
+        }
+        
+        public void setGraduated(boolean hasGraduated) {
+        	this.hasGraduated = hasGraduated;
+        }
+        
+        public boolean getGraduated() {
+        	return hasGraduated;
         }
         
         /**

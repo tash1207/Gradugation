@@ -51,6 +51,8 @@ import org.andengine.util.debug.Debug;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -102,7 +104,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 	private TMXTiledMap mTMXTiledMap;
 	protected int mCactusCount;
-	private int CREDITS_NEEDED_GRADUATE = 15;
+	private int CREDITS_NEEDED_GRADUATE = 3;
 
 	//private BitmapTextureAtlas characterTextureAtlas,characterTextureAtlas2,characterTextureAtlas3,characterTextureAtlas4;
 	//public ITextureRegion character,character2,character3,character4;
@@ -135,7 +137,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	
 	private Music mMusic;
 
-	static ArrayList<Character> thePlayers;
+	private ArrayList<Character> thePlayers;
 	
 	private Text[] textStrokes;
 	final private SpriteCoordinate[] textStrokeCoordinates = {
@@ -914,7 +916,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	}
 	// Checks the hot spots for the minigames
 	protected void checkMiniGameHotSpots(int current) {
-		Event.getEvent(thePlayers.get(current).getSpriteLocation(), this, thePlayers.get(current).getName(), hasGraduated);
+		Event.getEvent(thePlayers.get(current).getSpriteLocation(), this, thePlayers.get(current).getName(), thePlayers.get(current).getGraduated(), thePlayers);
 		
 		if (!(move || gameDone)) {
 			gameDone = true;
@@ -957,15 +959,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 			super.onResumeGame();
 	}
 
-	/*void gameOver(){
-        runOnUiThread(new Runnable() {                  
-            @Override
-            public void run() {
-            	Toast.makeText(getApplicationContext(), "You have won! Please head to the O'Connoll Center for gradugation.",
-            			   Toast.LENGTH_LONG).show();
-                }                  
-            });
-                }*/
 	// ===========================================================
 	// Methods
 	// ===========================================================
@@ -994,27 +987,20 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				+ "\nCoins: " + thePlayers.get(character).getCoins());
 	}
 	
-	// Get the character names and credits for game over screen
-	public static ArrayList<Character> getPlayers() {
-		return thePlayers;
-	}
+
 	
 	private void checkCredits(final int character) {
 		if (thePlayers.get(character).getCredits() >= CREDITS_NEEDED_GRADUATE) {
 			runOnUiThread(new Runnable() {                  
 	            @Override
 	            public void run() {
-	            	hasGraduated = true;
+	            	thePlayers.get(character).setGraduated(true);
 	            	Toast.makeText(getApplicationContext(), getString(R.string.ready_to_graduate, thePlayers.get(character).getName(), thePlayers.get(character).getCredits()),
 	            			   Toast.LENGTH_SHORT).show();
-	            	GameOverScreen.setPlayers(thePlayers);
-	            	mMusic.pause();
+	            	mMusic.stop();
 	                }                  
-	           
-	            	            	
 	            });
-			
-			
+
 		}
 	}
 	

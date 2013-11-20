@@ -127,9 +127,12 @@ public class GameOverScreen extends SimpleBaseGameActivity {
 				- (CAMERA_HEIGHT / 6), this.mCongratsFont,
 				"Congratulations for Gradugating!", vertexBufferObjectManager);
 		scene.attachChild(congratsText);
+		Intent intent = getIntent();
+		players = (ArrayList<Character>)intent.getSerializableExtra("thePlayers");
+		displayWinner(players.get(0).getName(), players.get(0).getCredits(), players.get(0).getCoins());
 		int playerSize = players.size();
 		Collections.sort(players, new MyComparator());
-		displayWinner(players.get(0).getName(), players.get(0).getCredits(), players.get(0).getCoins());
+		
 		
 		ArrayList<Text> playerText = new ArrayList<Text>();
 		String escapeSequence = "\n";
@@ -139,7 +142,7 @@ public class GameOverScreen extends SimpleBaseGameActivity {
 				escapeSequence += "\n\n\n\n\n\n\n\n\n".substring(0, i*2);
 				playerText.add(new Text(CAMERA_WIDTH / 2, CAMERA_HEIGHT
 						- (CAMERA_HEIGHT / 3), this.mCongratsFont,
-						escapeSequence + players.get(i).getName()+ " : " + players.get(i).getCredits() + " credits and " + players.get(i).getCoins() + " coins.", vertexBufferObjectManager));
+						escapeSequence + players.get(i).getName()+ " : " + players.get(i).getCredits() + " credits and " + players.get(i).getCoins() + " coins", vertexBufferObjectManager));
 				scene.attachChild(playerText.get(i));
 			
 			}
@@ -179,21 +182,16 @@ public class GameOverScreen extends SimpleBaseGameActivity {
 		startActivity(intent);
 	}
 
-	public void displayWinner(String s, int credits, int coins) {
+	public void displayWinner(String name, int credits, int coins) {
 		final VertexBufferObjectManager vertexBufferObjectManager = this
 				.getVertexBufferObjectManager();
 		final Text winnerText = new Text(CAMERA_WIDTH / 2, CAMERA_HEIGHT
 				- (CAMERA_HEIGHT / 4), this.mCongratsFont, "Our winner is "
-				+ s + " with " + credits + " credits and " + coins + " coins!",
+				+ name + " with " + credits + " credits and " + coins + " coins!",
 				vertexBufferObjectManager);
 		scene.attachChild(winnerText);
 	}
 	
-	public static void setPlayers(ArrayList<Character> thePlayers) {
-		players = thePlayers;
-	}
-	
-
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================

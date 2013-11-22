@@ -79,6 +79,10 @@ public class Event {
 	public final static int FOOD_REQUEST_CODE = 5;
 	public final static int GRADUATION_REQUEST_CODE = 6;
 	
+	//Array of Good Events
+	public final static String[] goodEvent = new String[5];
+	//Array of Bad Event
+	public final static String[] badEvent = new String[5];
 	
 	//public void method for each event, use switch case for each eventID
 	//eventID 0 - do nothing, 1 - lose a turn? depends on turn mechanics - maybe do something else, 2 - pick up an item
@@ -210,15 +214,16 @@ public class Event {
 			context.startActivityForResult(intent, FOOD_REQUEST_CODE);
 		} else {
 			// generate random event
-			Character character = new Character();
 			int magicNumber = 3;
 			int notMagicNumber = 5;
             Random r = new Random();
             int event  = r.nextInt(10);
             if (event == magicNumber){
             	//Good Random Event
+            	int goodEvent  = r.nextInt(5);
             }else if (event == notMagicNumber){
             	//Bad Random Event
+            	int badEvent  = r.nextInt(5);
             }
 
 		}

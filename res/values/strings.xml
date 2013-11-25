@@ -14,6 +14,7 @@
     <string name="title_activity_bench_press_minigame">BenchPressMinigame</string>
     <string name="title_activity_wires_mini_game">WiresMiniGame</string>
     <string name="title_activity_waitinline_minigame">WaitInLineMinigame</string>
+    <string name="title_activity_find_the_mac_minigame">FindTheMacMinigame</string>
     <string name="title_activity_game_over_screen">GameOverScreen</string>
     <string name="game_over_text">Game Over Screen</string>
 
@@ -59,6 +60,7 @@
     <string name="bench_press">Bench Press</string>
     <string name="whack_aflyer">Whack-A-Flyer</string>
     <string name="wait_in_line">Wait In Line</string>
+    <string name="find_the_mac">Find The Mac</string>
     <string name="title_activity_continue">MainActivity</string>
     <string name="saved_game">Load Saved Game</string>
     <string name="saved_game1">saved game1</string>

@@ -104,6 +104,11 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
         </activity>
         <activity
+            android:name="com.gradugation.FindTheMacMinigame"
+            android:label="@string/title_activity_find_the_mac_minigame" 
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
             android:name="com.gradugation.GameOverScreen"
             android:label="@string/title_activity_game_over_screen"
             android:screenOrientation="landscape"

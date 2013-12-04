@@ -45,6 +45,7 @@ public class BenchPressMinigame extends Activity {
 		if (characterType.equals("Engineer")) image.setImageResource(R.drawable.bench_press_engineer1);
 		else if (characterType.equals("Athlete")) image.setImageResource(R.drawable.bench_press_athlete1);
 		else if (characterType.equals("Gradugator")) image.setImageResource(R.drawable.bench_press_gradugator1);
+		else if (characterType.equals("PreMed"))
 
 		timer = new CountDownTimer(10500, 1000) {
 			public void onTick(long millisUntilFinished) {
@@ -60,8 +61,13 @@ public class BenchPressMinigame extends Activity {
 					Toast.makeText(BenchPressMinigame.this, getString(R.string.bench_press_success, reps, 
 							CREDITS_EARNED), Toast.LENGTH_LONG).show();
 					// Code to add CREDITS_EARNED number of credits to the character
-					
-					output.putExtra(Event.BENCH_PRESS_REQUEST_CODE+"", CREDITS_EARNED);	
+					// Athlete gets a credit bonus for this minigame
+					if (characterType.equals("Athlete")) {
+						output.putExtra(Event.BENCH_PRESS_REQUEST_CODE+"", CREDITS_EARNED + 1);
+					}
+					else {
+						output.putExtra(Event.BENCH_PRESS_REQUEST_CODE+"", CREDITS_EARNED);
+					}
 				}
 				else {
 					Toast.makeText(BenchPressMinigame.this, getString(R.string.bench_press_failure, reps), 

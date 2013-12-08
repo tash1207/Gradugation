@@ -183,14 +183,16 @@ public class Event {
 	}
 
 	public static void getEvent(SpriteCoordinate coordinate, Activity context,
-			String characterType, boolean hasGraduated, ArrayList<Character> thePlayers) {
+			String characterType, boolean hasGraduated, int currentCharacter, ArrayList<Character> thePlayers) {
 
 		if (GRADUATION.isEqual(coordinate) && hasGraduated) {
 			// graduate!
 			
 			//this should be passed through intent
-			GameOverScreen.setPlayers(thePlayers);
 			Intent intent = new Intent(context, GameOverScreen.class);
+	    	intent.putExtra("thePlayers", thePlayers);
+	    	//get the player who triggered this event
+	    	intent.putExtra("currentCharacter", currentCharacter);
 			intent.putExtra("character_type", characterType);
 			context.startActivityForResult(intent, GRADUATION_REQUEST_CODE);
 

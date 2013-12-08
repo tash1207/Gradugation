@@ -10,6 +10,7 @@ import android.view.View;
 
 public class WiresMiniGame extends Activity {
 	static int CREDITS_EARNED = 3;
+	String characterType;
 	
 	// Which wire you will find (1-4).
 	private int gameNumber;
@@ -20,11 +21,13 @@ public class WiresMiniGame extends Activity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-
-		gameNumber = 1 + (int) (Math.random() * 4);
-
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_wires_mini_game);
+		
+		characterType = getIntent().getStringExtra("character_type");
+		if (characterType == null) characterType = "Gradugator";
+		
+		gameNumber = 1 + (int) (Math.random() * 4);
 
 		alertDialogBuilder = new AlertDialog.Builder(this);
 
@@ -94,7 +97,13 @@ public class WiresMiniGame extends Activity {
 	public void win() {
 		//update the player's credits
 		Intent output = new Intent();
-		output.putExtra(Event.WIRES_REQUEST_CODE+"", CREDITS_EARNED);
+		// Engineer gets a credit bonus for this minigame
+		if (characterType.equals("Engineer")) {
+			output.putExtra(Event.WIRES_REQUEST_CODE+"", CREDITS_EARNED + 1);
+		}
+		else {
+			output.putExtra(Event.WIRES_REQUEST_CODE+"", CREDITS_EARNED);
+		}
 		setResult(RESULT_OK, output);
 		alertDialogBuilder = new AlertDialog.Builder(this);
 

@@ -13,23 +13,23 @@ import android.util.Log;
 public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db;
         public static final String DB_NAME = "gradugation";
-        public static final int DB_VERSION = 3;
+        public static final int DB_VERSION = 5;
         
         //Game Table
         public static final String GAMES = "games";
         
         public static final String G_ID = "id";
-        public static final String CHAR_BASE_ID = "char_base_id";
+        public static final String TIME_DATE = "time_date";
         public static final String NUM_OF_PLAYERS = "num_of_players";
         public static final String CURRENT_PLAYER = "current_player";
         
+        public static final String[] GAME_TABLE = {G_ID, TIME_DATE, NUM_OF_PLAYERS, CURRENT_PLAYER};
+        
+        //Table mapping for switch statments
         public static final int GAME_TABLE_ID = 1;
         public static final int CHARACTER_TABLE_ID = 2;
         public static final int ITEM_TABLE_ID = 3;
         public static final int MINIGAME_TABLE_ID = 4;
-        
-        public static final String[] GAME_TABLE = {G_ID, CHAR_BASE_ID, NUM_OF_PLAYERS, CURRENT_PLAYER};
-        
         
         //Character Table
         public static final String CHARACTER = "character";
@@ -120,8 +120,8 @@ public class DbHelper extends SQLiteOpenHelper {
                         "primary key  ("+MINIGAME_GAME_ID+", "+MINIGAME_GID+", "+MINIGAME_CHAR_ID+"));");
                         */
                 db.execSQL("create table if not exists " + GAMES +
-                		"(" + G_ID + " integer, " + CHAR_BASE_ID + " integer, " + NUM_OF_PLAYERS + " integer," + CURRENT_PLAYER + " integer, " +
-                        "primary key  (" + G_ID + "));");
+                		"(" + G_ID + " integer, " + TIME_DATE + " text, " + NUM_OF_PLAYERS + " integer," + CURRENT_PLAYER + " integer, " +
+                        "primary key autoincrement (" + G_ID + "));");
                 db.execSQL("create table if not exists " + CHARACTER +
                 		"(" + CHARACTER_ID + " integer, " + CHARACTER_TYPE + " text, " + CHARACTER_NAME + " TEXT," + X_COORD + " integer, " +
                 		Y_COORD + " integer, " + CREDITS + " integer, " + COINS + " integer, " + PLAYER_ORDER + " integer, " +
@@ -155,7 +155,7 @@ public class DbHelper extends SQLiteOpenHelper {
                         case GAME_TABLE_ID: 
                                 tableName = GAMES;
                                 values.put(G_ID, tableValues[0]);
-                                values.put(CHAR_BASE_ID, tableValues[1]);
+                                values.put(TIME_DATE, tableValues[1]);
                                 values.put(NUM_OF_PLAYERS, tableValues[2]);
                                 values.put(CURRENT_PLAYER, tableValues[3]);
                                 break;
@@ -212,7 +212,7 @@ public class DbHelper extends SQLiteOpenHelper {
 	                        case GAME_TABLE_ID: 
 	                        		tableName = GAMES;
 	                            	values.put(G_ID, newValues[0]);
-	                            	values.put(CHAR_BASE_ID, newValues[1]);
+	                            	values.put(TIME_DATE, newValues[1]);
 	                            	values.put(NUM_OF_PLAYERS, newValues[2]);
 	                            	values.put(CURRENT_PLAYER, newValues[3]);
 	                                db.update(tableName, values, G_ID + " = " + key[0], null);
@@ -320,6 +320,8 @@ public class DbHelper extends SQLiteOpenHelper {
                         				rowArray.add(cursor.getString(1));
                         				rowArray.add(cursor.getString(2));
                         				rowArray.add(cursor.getString(3));
+                        				rowArray.add(cursor.getString(4));
+                        				rowArray.add(cursor.getString(5));
                         			}
                         			while (cursor.moveToNext());
                         		}

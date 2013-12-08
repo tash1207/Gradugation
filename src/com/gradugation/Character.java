@@ -9,7 +9,7 @@ import com.coordinates.SpriteCoordinate;
 public class Character implements Serializable {
 
         public enum CHARACTERTYPE {
-            ALBERT(""), GRADUGATOR("splash2.png"), ENGINEER("engineer.png"), ATHLETE("athlete.png");
+            PREMED("med_student.png"), GRADUGATOR("splash2.png"), ENGINEER("engineer.png"), ATHLETE("athlete.png");
             
             private String imageName;
             
@@ -24,7 +24,7 @@ public class Character implements Serializable {
         String name;
         CHARACTERTYPE character;
         
-        boolean hasGraduated;
+        boolean hasGraduated = false;
         
         int charId, credits, coins, gameId;
         SpriteCoordinate location;
@@ -104,31 +104,31 @@ public class Character implements Serializable {
             this("", "", new SpriteCoordinate(), 0, 0, 0, 0);
         }
         
-        public void setName(String name){
+        public void setName(String name) {
                 this.name = name;
         }
 
-        public String getName()        {
+        public String getName() {
                 return name;
         }
         
-        public String getType(){
+        public String getType() {
         	return name;
         }
 
-        public void setId(int id){
+        public void setId(int id) {
                 this.charId = id;
         }
         
-        public int getId(){
+        public int getId() {
                 return charId;
         }
         
-        public int getGameId(){
+        public int getGameId() {
         	return gameId;
         }
         
-        public void addCredits(int credits){
+        public void addCredits(int credits) {
                 this.credits+=credits;
         }
         
@@ -136,11 +136,11 @@ public class Character implements Serializable {
         	this.credits = credits;
         }
         
-        public int getCredits(){
+        public int getCredits() {
                 return credits;
         }
         
-        public void addCoins(int coins)        {
+        public void addCoins(int coins) {
                 this.coins+=coins;
         }
         
@@ -148,8 +148,16 @@ public class Character implements Serializable {
         	this.coins = coins;
         }
         
-        public int getCoins()        {
+        public int getCoins() {
                 return coins;
+        }
+        
+        public void setGraduated(boolean hasGraduated) {
+        	this.hasGraduated = hasGraduated;
+        }
+        
+        public boolean getGraduated() {
+        	return hasGraduated;
         }
         
         /**
@@ -161,7 +169,7 @@ public class Character implements Serializable {
         	this.location = new SpriteCoordinate(x,y);
         }
 
-        public void setLocation(SpriteCoordinate location){
+        public void setLocation(SpriteCoordinate location) {
                 this.location = location;
         }
         
@@ -174,8 +182,8 @@ public class Character implements Serializable {
         }
         
         public MapCoordinate getMapLocation() {
-        	return this.location.spriteToMap();
-        }
+            return this.location.spriteToMap();
+    }
         
         public String getCharacterImage() {
         	return this.character.getImageName();

@@ -54,6 +54,9 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
     private BitmapTextureAtlas engineerTextureAtlas;
     public ITextureRegion engineerTextureRegion;
     
+    private BitmapTextureAtlas premedTextureAtlas;
+    public ITextureRegion premedTextureRegion;
+    
     private BitmapTextureAtlas busTextureAtlas;
     public ITextureRegion busTextureRegion;
     
@@ -154,6 +157,13 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
 				"engineer.png", 0, 0);
 		this.engineerTextureAtlas.load();
 		
+		// PreMed
+		this.premedTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 530, 530, 
+				TextureOptions.BILINEAR);
+		this.premedTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(premedTextureAtlas, this, 
+				"med_student.png", 0, 0);
+		this.premedTextureAtlas.load();
+		
 		// Bus
 		this.busTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 214, 324, 
 				TextureOptions.BILINEAR);
@@ -208,6 +218,19 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
 			spr2.setVisible(false);
 		}
 		
+		else if (characterType.equals("PreMed")) {
+			sprChar = new Sprite(currentX, currentY, premedTextureRegion, this.getVertexBufferObjectManager());
+			sprChar.setScale(0.115f);
+			
+			spr1 = new Sprite(spr1X, spr1Y, athleteTextureRegion, this.getVertexBufferObjectManager());
+			spr1.setScale(0.115f);
+			spr1.setVisible(false);
+			
+			spr2 = new Sprite(spr2X, spr2Y, character, this.getVertexBufferObjectManager());
+			spr2.setScale(0.125f);
+			spr2.setVisible(false);
+		}
+		
 		sprBus = new Sprite(sprBusX, sprBusY, busTextureRegion, this.getVertexBufferObjectManager());
 		sprBus.setScale(0.8f);
 		
@@ -243,7 +266,7 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
 	                public void onClick(DialogInterface dialog, int arg1) {
 	                        dialog.dismiss();
 	                        gameStarted = true;
-	                		timer = new CountDownTimer(16100, 1000) {
+	                		timer = new CountDownTimer(16300, 1000) {
 	                			public void onTick(long millisUntilFinished) {
 	                			}
 	                			
@@ -356,7 +379,7 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
 					        }
 						});
 					}
-					if (currentY > CAMERA_HEIGHT + 30 && !finalDialogShown) {
+					if (currentY > CAMERA_HEIGHT + 25 && !finalDialogShown) {
 						Log.d("finished", "game");
 						mHandler.post(finishGame);
 						finalDialogShown = true;

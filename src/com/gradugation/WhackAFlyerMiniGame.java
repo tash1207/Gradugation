@@ -1,7 +1,6 @@
 package com.gradugation;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
 
 import org.andengine.engine.camera.BoundCamera;
@@ -18,7 +17,6 @@ import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.entity.text.Text;
 import org.andengine.entity.util.FPSLogger;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.TextureOptions;
@@ -50,6 +48,8 @@ public class WhackAFlyerMiniGame extends SimpleBaseGameActivity implements IOnSc
     private static final int CREDITS_EARNED = 3;
     private HashSet<Float> xLocTaken = new HashSet<Float>();
     private HashSet<Float> yLocTaken = new HashSet<Float>();
+    
+    String characterType;
     
     // Need handler for callbacks to the UI thread
     final Handler mHandler = new Handler();
@@ -106,7 +106,7 @@ public class WhackAFlyerMiniGame extends SimpleBaseGameActivity implements IOnSc
     protected void onCreateResources() throws IOException {
     	
     	Intent intent = getIntent();
-    	String characterType = intent.getStringExtra("character_type");
+    	characterType = intent.getStringExtra("character_type");
     	if (characterType == null) characterType = "Gradugator";
     	String imgName = "splash2.png";
     	if (characterType.equals("Athlete")) {
@@ -114,6 +114,9 @@ public class WhackAFlyerMiniGame extends SimpleBaseGameActivity implements IOnSc
     	}
     	else if (characterType.equals("Engineer")) {
     		imgName = "engineer.png";
+    	}
+    	else if (characterType.equals("PreMed")) {
+    		imgName = "med_student.png";
     	}
 		
         this.points = 0;
@@ -333,10 +336,18 @@ public class WhackAFlyerMiniGame extends SimpleBaseGameActivity implements IOnSc
         finished = true;
         Intent output = new Intent();
         if (this.points >= POINTS_REQUIRED) {
-            Toast.makeText(WhackAFlyerMiniGame.this, getString(R.string.whack_aflyer_success, this.points,
-                    CREDITS_EARNED), Toast.LENGTH_LONG).show();
             // Code to add CREDITS_EARNED number of credits to the character
-            output.putExtra(Event.WHACK_AFLYER_REQUEST_CODE+"", CREDITS_EARNED);
+			// Gradugator gets a credit bonus for this minigame
+			if (characterType.equals("Gradugator")) {
+				Toast.makeText(WhackAFlyerMiniGame.this, getString(R.string.whack_aflyer_success, this.points,
+	                    CREDITS_EARNED + 1), Toast.LENGTH_LONG).show();
+				output.putExtra(Event.WHACK_AFLYER_REQUEST_CODE+"", CREDITS_EARNED + 1);
+			}
+			else {
+				Toast.makeText(WhackAFlyerMiniGame.this, getString(R.string.whack_aflyer_success, this.points,
+	                    CREDITS_EARNED), Toast.LENGTH_LONG).show();
+				output.putExtra(Event.WHACK_AFLYER_REQUEST_CODE+"", CREDITS_EARNED);
+			}
         }
         else {
             Toast.makeText(WhackAFlyerMiniGame.this, getString(R.string.whack_aflyer_failure, this.points), 

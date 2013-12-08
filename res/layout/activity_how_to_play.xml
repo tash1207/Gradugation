@@ -110,6 +110,106 @@
         android:textSize="15sp"
         android:textStyle="normal"
         android:typeface="sans" />
+    
+    <TextView
+        android:id="@+id/testView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:paddingLeft="15dp"
+        android:scrollHorizontally="true"
+        android:text="@string/whack_aflyer_title"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:typeface="sans" />
+    
+    <TextView
+        android:id="@+id/testView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:scrollHorizontally="true"
+        android:text="@string/whack_aflyer_body"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="15sp"
+        android:textStyle="normal"
+        android:typeface="sans" />
+    
+        <TextView
+        android:id="@+id/testView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:paddingLeft="15dp"
+        android:scrollHorizontally="true"
+        android:text="@string/color_title"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:typeface="sans" />
+    
+    <TextView
+        android:id="@+id/testView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:scrollHorizontally="true"
+        android:text="@string/color_body"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="15sp"
+        android:textStyle="normal"
+        android:typeface="sans" />
+    
+     <TextView
+        android:id="@+id/testView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:paddingLeft="15dp"
+        android:scrollHorizontally="true"
+        android:text="@string/wait_in_line_title"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:typeface="sans" />
+    
+    <TextView
+        android:id="@+id/testView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:scrollHorizontally="true"
+        android:text="@string/wait_in_line_body"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="15sp"
+        android:textStyle="normal"
+        android:typeface="sans" />
+    
+    <TextView
+        android:id="@+id/testView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:paddingLeft="15dp"
+        android:scrollHorizontally="true"
+        android:text="@string/food_title"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:typeface="sans" />
+    
+    <TextView
+        android:id="@+id/testView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:scrollHorizontally="true"
+        android:text="@string/food_body"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="15sp"
+        android:textStyle="normal"
+        android:typeface="sans" />
 
     </LinearLayout>
 </ScrollView>

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -20,12 +21,12 @@ import com.coordinates.MiniGameCoordinate;
 import com.coordinates.SpriteCoordinate;
 
 /*main class extends event class, when player steps onto a tile, randomly generate a number b/w 0 and 3 then call 
-create event object in maingame class, every time player steps on tile, do [eventObject].eventAction();
-replace checkMiniGameHotspot() in mainGameScreen
-*/
+ create event object in maingame class, every time player steps on tile, do [eventObject].eventAction();
+ replace checkMiniGameHotspot() in mainGameScreen
+ */
 
 public class Event {
-	
+
 	public enum DIRECTION {
 		RIGHT(0, "Right"), LEFT(1, "Left"), DOWN(2, "Down"), UP(3, "Up");
 
@@ -40,7 +41,7 @@ public class Event {
 		public int getIndex() {
 			return this.index;
 		}
-		
+
 		public String getName() {
 			return this.name;
 		}
@@ -78,6 +79,7 @@ public class Event {
 	public final static int COLOR_REQUEST_CODE = 4;
 	public final static int FOOD_REQUEST_CODE = 5;
 	public final static int GRADUATION_REQUEST_CODE = 6;
+	// maybe do something else, 2 - pick up an item
 	
 	//Array of Good Events
 	public final static String[] goodEvent = new String[5];
@@ -89,22 +91,23 @@ public class Event {
 	
 	public Event() {
 	}
-	
+
 	public Event(Activity context, int resId) {
 		try {
-			InputStream inputStream = context.getResources().openRawResource(resId);
-		    InputStreamReader inputreader = new InputStreamReader(inputStream);
-		    BufferedReader buffreader = new BufferedReader(inputreader);
-		    
-		    String[] rowCol = buffreader.readLine().split(" ");
-		    int rowDim = Integer.parseInt(rowCol[0]);
+			InputStream inputStream = context.getResources().openRawResource(
+					resId);
+			InputStreamReader inputreader = new InputStreamReader(inputStream);
+			BufferedReader buffreader = new BufferedReader(inputreader);
+
+			String[] rowCol = buffreader.readLine().split(" ");
+			int rowDim = Integer.parseInt(rowCol[0]);
 			int colDim = Integer.parseInt(rowCol[1]);
-			
-			for (int y = rowDim-1; y >= 0; y--) {
-				String mapText = buffreader.readLine();//sc.nextLine();
+
+			for (int y = rowDim - 1; y >= 0; y--) {
+				String mapText = buffreader.readLine();// sc.nextLine();
 				for (int x = 0; x < colDim; x++) {
 					if (mapText.charAt(x) == 'X') {
-						mapPath.add(new MapCoordinate(x,y));
+						mapPath.add(new MapCoordinate(x, y));
 					}
 				}
 			}
@@ -123,73 +126,88 @@ public class Event {
 		}
 		return mapEndLocation.mapToSprite();
 	}
-	
+
 	public SpriteCoordinate[] getPossiblePath(SpriteCoordinate position) {
 		SpriteCoordinate[] possiblePaths = new SpriteCoordinate[4];
 		MapCoordinate spritePosition = position.spriteToMap();
-		MapCoordinate right = spritePosition.add(new MapCoordinate(1,0));
+		MapCoordinate right = spritePosition.add(new MapCoordinate(1, 0));
 		// Check position to the right
-		if (mapPath.contains(right)) {//spritePosition.add(new MapCoordinate(1,0)))) {
-			possiblePaths[DIRECTION.RIGHT.getIndex()] = new SpriteCoordinate(MainGameScreen.CHARACTER_WIDTH, 0);
+		if (mapPath.contains(right)) {// spritePosition.add(new
+										// MapCoordinate(1,0)))) {
+			possiblePaths[DIRECTION.RIGHT.getIndex()] = new SpriteCoordinate(
+					MainGameScreen.CHARACTER_WIDTH, 0);
 		}
-		
-		// Check position to the left 
-		if (mapPath.contains(spritePosition.add(new MapCoordinate(-1,0)))) {
-			possiblePaths[DIRECTION.LEFT.getIndex()] = new SpriteCoordinate(-MainGameScreen.CHARACTER_WIDTH, 0);
+
+		// Check position to the left
+		if (mapPath.contains(spritePosition.add(new MapCoordinate(-1, 0)))) {
+			possiblePaths[DIRECTION.LEFT.getIndex()] = new SpriteCoordinate(
+					-MainGameScreen.CHARACTER_WIDTH, 0);
 		}
-		
-		// Check position behind 
-		if (mapPath.contains(spritePosition.add(new MapCoordinate(0,1)))) {
-			possiblePaths[DIRECTION.UP.getIndex()] = new SpriteCoordinate(0, MainGameScreen.CHARACTER_WIDTH);
+
+		// Check position behind
+		if (mapPath.contains(spritePosition.add(new MapCoordinate(0, 1)))) {
+			possiblePaths[DIRECTION.UP.getIndex()] = new SpriteCoordinate(0,
+					MainGameScreen.CHARACTER_WIDTH);
 		}
-		
-		// Check position forward 
-		if (mapPath.contains(spritePosition.add(new MapCoordinate(0,-1)))) {
-			possiblePaths[DIRECTION.DOWN.getIndex()] = new SpriteCoordinate(0, -MainGameScreen.CHARACTER_WIDTH);
+
+		// Check position forward
+		if (mapPath.contains(spritePosition.add(new MapCoordinate(0, -1)))) {
+			possiblePaths[DIRECTION.DOWN.getIndex()] = new SpriteCoordinate(0,
+					-MainGameScreen.CHARACTER_WIDTH);
 		}
 
 		return possiblePaths;
 	}
-	
+
 	public static SpriteCoordinate getPositionFromDirection(String dirName) {
 		SpriteCoordinate newPosition = null;
 		DIRECTION dir = DIRECTION.valueOf(dirName);
-		
+
 		switch (dir) {
-			case DOWN:
-				newPosition = new SpriteCoordinate(0, -MainGameScreen.CHARACTER_WIDTH);
-				break;
-			case UP:
-				newPosition = new SpriteCoordinate(0, MainGameScreen.CHARACTER_WIDTH);
-				break;
-			case LEFT:
-				newPosition =  new SpriteCoordinate(-MainGameScreen.CHARACTER_WIDTH, 0);
-				break;
-			case RIGHT:
-				newPosition = new SpriteCoordinate(MainGameScreen.CHARACTER_WIDTH, 0);
-				break;
-			default:
-				break;
+		case DOWN:
+			newPosition = new SpriteCoordinate(0,
+					-MainGameScreen.CHARACTER_WIDTH);
+			break;
+		case UP:
+			newPosition = new SpriteCoordinate(0,
+					MainGameScreen.CHARACTER_WIDTH);
+			break;
+		case LEFT:
+			newPosition = new SpriteCoordinate(-MainGameScreen.CHARACTER_WIDTH,
+					0);
+			break;
+		case RIGHT:
+			newPosition = new SpriteCoordinate(MainGameScreen.CHARACTER_WIDTH,
+					0);
+			break;
+		default:
+			break;
 		}
 		return newPosition;
 	}
-	
-	public static void getEvent(SpriteCoordinate coordinate, 
-			Activity context, String characterType) {
 
-		if (GRADUATION.isEqual(coordinate)) {
-			//graduate!
+	public static void getEvent(SpriteCoordinate coordinate, Activity context,
+			String characterType, boolean hasGraduated, int currentCharacter, ArrayList<Character> thePlayers) {
+
+		if (GRADUATION.isEqual(coordinate) && hasGraduated) {
+			// graduate!
+			
+			//this should be passed through intent
 			Intent intent = new Intent(context, GameOverScreen.class);
+	    	intent.putExtra("thePlayers", thePlayers);
+	    	//get the player who triggered this event
+	    	intent.putExtra("currentCharacter", currentCharacter);
 			intent.putExtra("character_type", characterType);
 			context.startActivityForResult(intent, GRADUATION_REQUEST_CODE);
-		
+
 		} else if (BENCH_PRESS_MINI_GAME.isEqual(coordinate)) {
-			//call bench press game
+			// call bench press game
+		
 			Intent intent = new Intent(context, BenchPressMinigame.class);
 			intent.putExtra("character_type", characterType);
 			context.startActivityForResult(intent, BENCH_PRESS_REQUEST_CODE);
 		} else if (WIRES_MINI_GAME.inRange(coordinate)) {
-			//call wires mini game
+			// call wires mini game
 			Intent intent = new Intent(context, WiresMiniGame.class);
 			intent.putExtra("character_type", characterType);
 			context.startActivityForResult(intent, WIRES_REQUEST_CODE);

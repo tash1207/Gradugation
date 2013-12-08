@@ -1,6 +1,13 @@
 package com.gradugation;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.options.EngineOptions;
@@ -24,10 +31,15 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TextureRegionFactory;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
+import org.andengine.util.adt.array.ArrayUtils;
 
+import com.coordinates.SpriteCoordinate;
+
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.view.View;
 
 public class GameOverScreen extends SimpleBaseGameActivity {
@@ -44,14 +56,18 @@ public class GameOverScreen extends SimpleBaseGameActivity {
 	// Fields
 	// ===========================================================
 
-	private StrokeFont mCongratsFont, mScoreFont;
+	private static StrokeFont mCongratsFont;
+	private StrokeFont mScoreFont;
 	private AssetBitmapTexture continueTexture;
 	private ITextureRegion continueTextureRegion;
-
+	private static String winner;
+	private static int credits;
+	static ArrayList<Character> players;
+	
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	
+
 	private Scene scene;
 
 	// ===========================================================
@@ -81,17 +97,6 @@ public class GameOverScreen extends SimpleBaseGameActivity {
 				Color.WHITE);
 		this.mCongratsFont.load();
 
-		this.mScoreFont = new StrokeFont(this.getFontManager(),
-				strokeFontTexture, Typeface.create(Typeface.DEFAULT,
-						Typeface.BOLD), FONT_SIZE, true, Color.BLACK, 1,
-				Color.WHITE);
-		this.mScoreFont.load();
-		
-		
-		/*this.continueTexture = new BitmapTextureAtlas(this.getTextureManager(), 128, 128, TextureOptions.BILINEAR);
-        this.continueTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.continueTexture, this, "gfx/whack_aflyer_img/continue_button.png", 0, 0);
-        this.continueTexture.load();*/
-		
 		try {
 			this.continueTexture = new AssetBitmapTexture(
 					this.getTextureManager(), this.getAssets(),
@@ -117,28 +122,35 @@ public class GameOverScreen extends SimpleBaseGameActivity {
 		final VertexBufferObjectManager vertexBufferObjectManager = this
 				.getVertexBufferObjectManager();
 		
-		//Sort this array by maximum number of credits
-		ArrayList<Character> thePlayers = MainGameScreen.getPlayers();
-		
 		// Output
 		final Text congratsText = new Text(CAMERA_WIDTH / 2, CAMERA_HEIGHT
 				- (CAMERA_HEIGHT / 6), this.mCongratsFont,
 				"Congratulations for Gradugating!", vertexBufferObjectManager);
-		final Text winnerText = new Text(CAMERA_WIDTH / 2, CAMERA_HEIGHT
-				- (CAMERA_HEIGHT / 4), this.mCongratsFont,
-				"Our winner and esteemed valedictorian is [Player1]",
-				vertexBufferObjectManager);
-
-		final Text playerOneText = new Text(CAMERA_WIDTH / 2, CAMERA_HEIGHT
-				- (CAMERA_HEIGHT / 2), this.mCongratsFont,
-				"[Player1] : [Credits1]\n[Player2] : [Credits2]\n[Player3] : [Credits3]\n[Player4] : [Credits4]",
-				vertexBufferObjectManager);
-
 		scene.attachChild(congratsText);
-		scene.attachChild(winnerText);
-		scene.attachChild(playerOneText);
+		Intent intent = getIntent();
+		players = (ArrayList<Character>)intent.getSerializableExtra("thePlayers");
+		int current = (Integer) intent.getSerializableExtra("currentCharacter");
+		displayWinner(players.get(current).getName(), players.get(current).getCredits(), players.get(current).getCoins());
+		int playerSize = players.size();
+		Collections.sort(players, new MyComparator());
 		
-		final Sprite continueButton = new Sprite(CAMERA_WIDTH/2, CAMERA_HEIGHT/2-(CAMERA_HEIGHT/3), continueTextureRegion,
+		
+		ArrayList<Text> playerText = new ArrayList<Text>();
+		String escapeSequence = "\n";
+		
+		for (int i = 0; i < playerSize; i++) {
+			if (playerSize >= i + 1) {
+				escapeSequence += "\n\n\n\n\n\n\n\n\n".substring(0, i*2);
+				playerText.add(new Text(CAMERA_WIDTH / 2, CAMERA_HEIGHT
+						- (CAMERA_HEIGHT / 3), this.mCongratsFont,
+						escapeSequence + players.get(i).getName()+ " : " + players.get(i).getCredits() + " credits and " + players.get(i).getCoins() + " coins", vertexBufferObjectManager));
+				scene.attachChild(playerText.get(i));
+			
+			}
+		}
+		
+		final Sprite continueButton = new Sprite(CAMERA_WIDTH / 2,
+				CAMERA_HEIGHT / 2 - (CAMERA_HEIGHT / 3), continueTextureRegion,
 				this.getVertexBufferObjectManager()) {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
@@ -158,7 +170,6 @@ public class GameOverScreen extends SimpleBaseGameActivity {
 		};
 		scene.attachChild(continueButton);
 		scene.registerTouchArea(continueButton);
-		
 
 		return scene;
 	}
@@ -166,12 +177,41 @@ public class GameOverScreen extends SimpleBaseGameActivity {
 	// ===========================================================
 	// Methods
 	// ===========================================================
-	
+
 	public void mainMenuClick(View view) {
 		Intent intent = new Intent(this, MainActivity.class);
 		startActivity(intent);
 	}
+
+	public void displayWinner(String name, int credits, int coins) {
+		final VertexBufferObjectManager vertexBufferObjectManager = this
+				.getVertexBufferObjectManager();
+		final Text winnerText = new Text(CAMERA_WIDTH / 2, CAMERA_HEIGHT
+				- (CAMERA_HEIGHT / 4), this.mCongratsFont, "Our winner is "
+				+ name + " with " + credits + " credits and " + coins + " coins!",
+				vertexBufferObjectManager);
+		scene.attachChild(winnerText);
+	}
+	
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
+	
+	class MyComparator implements Comparator<Character> {
+		@Override
+		public int compare(Character c1, Character c2) {
+			if (c1.getCredits() > c2.getCredits()) {
+				return -1;
+			} else if (c1.getCredits() < c2.getCredits()) {
+				return 1;
+			} else if (c1.getCredits() == c2.getCredits()) {
+				if (c1.getCoins() > c2.getCoins()) {
+					return -1;
+				} else if (c1.getCoins() < c1.getCoins()) {
+					return 1;
+				}
+			}
+			return 0;
+		}
+	}
 }

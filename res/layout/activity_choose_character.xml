@@ -47,10 +47,18 @@
                 android:text="@string/character_engineer" />
 
             <RadioButton
+                android:id="@+id/RadioButton01"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="18dp"
+                android:drawableRight="@drawable/ic_launcher"
+                android:text="@string/character_gradugator" />
+
+            <RadioButton
                 android:id="@+id/radio2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableRight="@drawable/ic_launcher"
+                android:drawableRight="@drawable/MedStudent"
                 android:text="@string/character_gradugator" />
         </RadioGroup>
 

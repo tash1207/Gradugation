@@ -259,6 +259,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 			return "engineer.png";
 		} else if (name.compareTo("Gradugator") == 0) {
 			return "splash2.png";
+		} else if (name.compareTo("Med") == 0) {
+			return "MedStudent.png";
 		} else {
 			return "";
 		}

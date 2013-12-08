@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 public class Character implements Serializable{
         public enum characterType {
-            ALBERT, ALBERTA, ENGINEER, ATHLETE
+            MED, ALBERTA, ENGINEER, ATHLETE
         }
         String Charactertype; //need to enumerate this data type
         String name;
@@ -39,8 +39,8 @@ public class Character implements Serializable{
         
         public Character()
         {
-        		Charactertype = "ALBERT";
-                name = "Alberto Gonzalez";
+        		Charactertype = "MED";
+                name = "Med Student";
                 id = 0;
                 credits = 0;
                 coins = 0;

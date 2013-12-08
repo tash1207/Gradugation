@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+The athlete gets a credit bonus at the Stadium for the Bench Press Minigame<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <string name="app_name">Gradugation</string>
@@ -39,14 +39,14 @@
     <string name="choose_character">Choose a Character</string>
     <string name="character_engineer">Engineer</string>
     <string name="character_athlete">Athlete</string>
-    <string name="character_gradugator">Gradugator</string>
+    <string name="character_med">Med Student</string><string name="character_gradugator">Gradugator</string>
     
     <string name="attributes_athlete">The athlete gets a credit bonus at the Stadium for the Bench Press Minigame</string>
     <string name="attributes_engineer">The engineer gets a credit bonus at the Physics Building for the Wires Minigame</string>
     <string name="attributes_gradugator">Gradugator gets a credit bonus in Turlington for the Whack-A-Flyer Minigame</string>
     
     <!-- Minigames Screen -->
-    <string name="wires">Wires</string>
+    <string name="attributes_med">The med student gets a credit bonus at Shands for the Shands Minigame</string><string name="wires">Wires</string>
     <string name="bench_press">Bench Press</string>
     <string name="whack_aflyer">Whack-A-Flyer</string>
     <string name="wait_in_line">Wait In Line</string>
@@ -127,5 +127,7 @@
     <!-- Food Minigame -->
     <string name="title_activity_food_mini_game">FoodMiniGame</string>
     <string name="food_mini_game">Junk Food Ninja</string>
+    
+    
 
 </resources>

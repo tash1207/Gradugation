@@ -345,17 +345,21 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	                 * button is being pressed.
 	                 */
 	                //generate random number [1,3]
-	        	currentCharacterYear = (CREDITS_NEEDED_GRADUATE/thePlayers.get(currentCharacter).getCredits()) + 1;
+	        	currentCharacterYear = (thePlayers.get(currentCharacter).getCredits()/3) + 1;
 	        	switch(currentCharacterYear) {
+	        	case 0: maxRoll = 3;
+	        			break;
 	        	case 1: maxRoll = 3;
 	        			break;
 	        	case 2: maxRoll = 4;
 	        			break;
-	        	case 3: maxRoll = 5;
-	        			break;
-	        	case 4: maxRoll = 6;
-	        			break;
-	        	default: maxRoll = 6;
+	        	case 3: maxRoll = 4;
+    					break;
+	        	case 4: maxRoll = 5;
+    					break;
+	        	case 5: maxRoll = 6;
+    					break;
+	        	default: maxRoll = 3;
 	        			break;
 	        	}
 	                random = new Random();

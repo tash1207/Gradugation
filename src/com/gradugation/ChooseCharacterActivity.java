@@ -161,7 +161,7 @@ public class ChooseCharacterActivity extends BaseActivity {
             int day = time_date.get(Calendar.DATE);
             int hour = time_date.get(Calendar.HOUR);
             int minute = time_date.get(Calendar.MINUTE);
-            String timeDate = Integer.toString(minute)+Integer.toString(hour)+Integer.toString(day)+Integer.toString(month)+Integer.toString(year);
+            String timeDate = Integer.toString(month) + "/" + Integer.toString(day) + "/" + Integer.toString(year) + "   " + Integer.toString(hour) + ":" +Integer.toString(minute);
             String[] game = {Integer.toString(gameId),timeDate,Integer.toString(playersChosen),"0"};
         	dbhelper.insertRow(1, game);
         	

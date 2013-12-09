@@ -13,7 +13,7 @@ import android.util.Log;
 public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db;
         public static final String DB_NAME = "gradugation";
-        public static final int DB_VERSION = 5;
+        public static final int DB_VERSION = 3;
         
         //Game Table
         public static final String GAMES = "games";
@@ -23,13 +23,13 @@ public class DbHelper extends SQLiteOpenHelper {
         public static final String NUM_OF_PLAYERS = "num_of_players";
         public static final String CURRENT_PLAYER = "current_player";
         
-        public static final String[] GAME_TABLE = {G_ID, TIME_DATE, NUM_OF_PLAYERS, CURRENT_PLAYER};
-        
-        //Table mapping for switch statments
         public static final int GAME_TABLE_ID = 1;
         public static final int CHARACTER_TABLE_ID = 2;
         public static final int ITEM_TABLE_ID = 3;
         public static final int MINIGAME_TABLE_ID = 4;
+        
+        public static final String[] GAME_TABLE = {G_ID, TIME_DATE, NUM_OF_PLAYERS, CURRENT_PLAYER};
+        
         
         //Character Table
         public static final String CHARACTER = "character";
@@ -120,8 +120,8 @@ public class DbHelper extends SQLiteOpenHelper {
                         "primary key  ("+MINIGAME_GAME_ID+", "+MINIGAME_GID+", "+MINIGAME_CHAR_ID+"));");
                         */
                 db.execSQL("create table if not exists " + GAMES +
-                		"(" + G_ID + " integer, " + TIME_DATE + " text, " + NUM_OF_PLAYERS + " integer," + CURRENT_PLAYER + " integer, " +
-                        "primary key autoincrement (" + G_ID + "));");
+                		"(" + G_ID + " integer, " + TIME_DATE + " integer, " + NUM_OF_PLAYERS + " integer," + CURRENT_PLAYER + " integer, " +
+                        "primary key  (" + G_ID + "));");
                 db.execSQL("create table if not exists " + CHARACTER +
                 		"(" + CHARACTER_ID + " integer, " + CHARACTER_TYPE + " text, " + CHARACTER_NAME + " TEXT," + X_COORD + " integer, " +
                 		Y_COORD + " integer, " + CREDITS + " integer, " + COINS + " integer, " + PLAYER_ORDER + " integer, " +
@@ -320,8 +320,6 @@ public class DbHelper extends SQLiteOpenHelper {
                         				rowArray.add(cursor.getString(1));
                         				rowArray.add(cursor.getString(2));
                         				rowArray.add(cursor.getString(3));
-                        				rowArray.add(cursor.getString(4));
-                        				rowArray.add(cursor.getString(5));
                         			}
                         			while (cursor.moveToNext());
                         		}

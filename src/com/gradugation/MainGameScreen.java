@@ -2,6 +2,7 @@ package com.gradugation;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Random;
 
 import org.andengine.audio.music.Music;
@@ -656,6 +657,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
         dbhelper = new DbHelper(this);
         SQLiteDatabase db = dbhelper.openDB();
         Log.d("TEST", "Database has been opened");
+        Log.d("TEST2", Integer.toString(thePlayers.get(0).gameId));
+
         
         
         String[] gameKey = { Integer.toString(thePlayers.get(0).gameId) };
@@ -1024,10 +1027,19 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		
 		DbHelper dbhelper = new DbHelper(this);
 		SQLiteDatabase db = dbhelper.openDB();
+		
+		Calendar time_date = Calendar.getInstance();
+
+        int year = time_date.get(Calendar.YEAR);
+        int month = time_date.get(Calendar.MONTH)+ 1;
+        int day = time_date.get(Calendar.DATE);
+        int hour = time_date.get(Calendar.HOUR_OF_DAY);
+        int minute = time_date.get(Calendar.MINUTE);
+        String timeDate = Integer.toString(month) + "/" + Integer.toString(day) + "/" + Integer.toString(year) + "   " + Integer.toString(hour) + ":" +Integer.toString(minute);
     
 		int gameId = thePlayers.get(0).getGameId();  
         
-		String[] table1Values = {Integer.toString(gameId), "0", Integer.toString(numCharacters), Integer.toString(currentCharacter)};
+		String[] table1Values = {Integer.toString(gameId), timeDate, Integer.toString(numCharacters), Integer.toString(currentCharacter)};
 		Log.d("debug,",Integer.toString(gameId) + "0" + Integer.toString(numCharacters) + Integer.toString(currentCharacter));
 		
         String[] table1Key = {Integer.toString(gameId)};

@@ -13,7 +13,7 @@ import android.util.Log;
 public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db;
         public static final String DB_NAME = "gradugation";
-        public static final int DB_VERSION = 5;
+        public static final int DB_VERSION = 7;
         
         //Game Table
         public static final String GAMES = "games";
@@ -120,8 +120,7 @@ public class DbHelper extends SQLiteOpenHelper {
                         "primary key  ("+MINIGAME_GAME_ID+", "+MINIGAME_GID+", "+MINIGAME_CHAR_ID+"));");
                         */
                 db.execSQL("create table if not exists " + GAMES +
-                		"(" + G_ID + " integer, " + TIME_DATE + " text, " + NUM_OF_PLAYERS + " integer," + CURRENT_PLAYER + " integer, " +
-                        "primary key autoincrement (" + G_ID + "));");
+                		"(" + G_ID + " integer primary key, " + TIME_DATE + " text, " + NUM_OF_PLAYERS + " integer, " + CURRENT_PLAYER + " integer);");
                 db.execSQL("create table if not exists " + CHARACTER +
                 		"(" + CHARACTER_ID + " integer, " + CHARACTER_TYPE + " text, " + CHARACTER_NAME + " TEXT," + X_COORD + " integer, " +
                 		Y_COORD + " integer, " + CREDITS + " integer, " + COINS + " integer, " + PLAYER_ORDER + " integer, " +

@@ -238,10 +238,14 @@ public class Event {
             int event  = r.nextInt(10);
             if (event == magicNumber){
             	//Good Random Event
-            	int goodEvent  = r.nextInt(5);
+            	//int goodEvent  = r.nextInt(5);
+            	Intent gEvent = new Intent(context, RandomEventGood.class);
+            	context.startActivity(gEvent);
             }else if (event == notMagicNumber){
             	//Bad Random Event
-            	int badEvent  = r.nextInt(5);
+            	//int badEvent  = r.nextInt(5);
+            	Intent bEvent = new Intent(context, RandomEventBad.class);
+            	context.startActivity(bEvent);
             }
 
 		}

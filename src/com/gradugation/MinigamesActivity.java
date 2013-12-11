@@ -57,4 +57,8 @@ public class MinigamesActivity extends BaseActivity {
 		Intent intent = new Intent(this, moneyCount.class);
     	startActivity(intent);
 	}
+	public void libWestButtonClick(View v) {
+		Intent intent = new Intent(this, LibraryBombardment.class);
+    	startActivity(intent);
+	}
 }

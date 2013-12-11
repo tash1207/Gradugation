@@ -79,6 +79,12 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:screenOrientation="landscape" >
         </activity>
+        <activity
+            android:name=".moneyCount"
+            android:label="@string/moneyCount"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape" >
+        </activity>
 
         <service android:name="com.gradugation.BackgroundMusicService" >
         </service>

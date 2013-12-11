@@ -20,6 +20,7 @@
         android:textSize="@dimen/header_text_size" />
 
     <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -68,8 +69,8 @@
                 android:id="@+id/radio3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableRight="@drawable/med_student"
                 android:drawablePadding="6dp"
+                android:drawableRight="@drawable/med_student"
                 android:padding="4dp"
                 android:text="@string/character_med_student"
                 android:textSize="22sp" />
@@ -101,6 +102,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -138,5 +140,14 @@
             android:textColor="@android:color/black"
             android:textSize="16sp" />
     </LinearLayout>
+
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/linearLayout2"
+        android:layout_alignRight="@+id/linearLayout2"
+        android:hint="Enter name here"
+        android:ems="10" />
 
 </RelativeLayout>

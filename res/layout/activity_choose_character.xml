@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".MainActivity" >
+    tools:context=".ChooseCharacterActivity" >
 
     <TextView
         android:id="@+id/choose_character_text"
@@ -62,6 +62,12 @@
                 android:drawableRight="@drawable/med_student"
                 android:drawablePadding="6dp"
                 android:text="@string/character_med_student" />
+            <RadioButton
+                android:id="@+id/radio4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/ic_launcher"
+                android:text="@string/character_gradugator" />
         </RadioGroup>
 
         <LinearLayout

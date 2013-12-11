@@ -50,6 +50,8 @@
     <string name="attributes_gradugator">Gradugator gets a credit bonus in Turlington for the Whack-A-Flyer Minigame</string>
     <string name="attributes_med_student">The PreMed student avoids getting sick on random events</string>
     
+    <string name="name_hint">Enter you name here</string>
+    
     <!-- MainGameScreen -->
     <string name="ready_to_graduate">Player %1$s has earned %2$d credits! You are ready to graduate.
         Please head to the O\'Connell Center!</string>
@@ -141,6 +143,10 @@
         the color that matches the color of the text. You need to get more than %1$d%% correct. 
         Good luck!</string>
         
+    <!-- Math Minigame -->
+    <string name="math">MathMiniGame</string>
+    
+    
     <!-- Food Minigame -->
     <string name="title_activity_food_mini_game">FoodMiniGame</string>
     <string name="food_mini_game">Junk Food Ninja</string>

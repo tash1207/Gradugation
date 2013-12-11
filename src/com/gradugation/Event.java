@@ -69,6 +69,8 @@ public class Event {
 	private final static MiniGameCoordinate WHACK_AFLYER_MINI_GAME = new MiniGameCoordinate(TURLINGTON);
 	private final static MiniGameCoordinate COLOR_MINI_GAME = new MiniGameCoordinate(PSYCHOLOGY_BUILDING);
 	private final static MiniGameCoordinate FOOD_MINI_GAME = new MiniGameCoordinate(FOOD_SCIENCE);
+	private final static MiniGameCoordinate MCOUNT_MINI_GAME = new MiniGameCoordinate(HOUGH);
+
 	
 	private MapSet mapPath = new MapSet() ;
 
@@ -79,6 +81,7 @@ public class Event {
 	public final static int COLOR_REQUEST_CODE = 4;
 	public final static int FOOD_REQUEST_CODE = 5;
 	public final static int GRADUATION_REQUEST_CODE = 6;
+	public final static int MCOUNT_REQUEST_CODE = 7;
 	// maybe do something else, 2 - pick up an item
 	
 	//Array of Good Events
@@ -230,7 +233,11 @@ public class Event {
 			Intent intent = new Intent(context, FoodMiniGame.class);
 			intent.putExtra("character_type", characterType);
 			context.startActivityForResult(intent, FOOD_REQUEST_CODE);
-		} else {
+		} else if (MCOUNT_MINI_GAME.inRange(coordinate)) {
+			Intent intent = new Intent(context, moneyCount.class);
+			intent.putExtra("character_type", characterType);
+			context.startActivityForResult(intent, MCOUNT_REQUEST_CODE);
+		}else {
 			// generate random event
 			int magicNumber = 3;
 			int notMagicNumber = 5;

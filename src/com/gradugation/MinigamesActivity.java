@@ -61,4 +61,8 @@ public class MinigamesActivity extends BaseActivity {
 		Intent intent = new Intent(this, LibraryBombardment.class);
     	startActivity(intent);
 	}
+	public void BalanceButtonClick(View v) {
+		Intent intent = new Intent(this, BalancingMiniGame.class);
+    	startActivity(intent);
+	}
 }

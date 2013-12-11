@@ -90,6 +90,12 @@
             android:label="@string/LibraryBombardment"
             android:screenOrientation="landscape" >
         </activity>
+        <activity
+            android:name=".BalancingMiniGame"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:label="@string/BalancingMiniGame"
+            android:screenOrientation="landscape" >
+        </activity>
 
         <service android:name="com.gradugation.BackgroundMusicService" >
         </service>

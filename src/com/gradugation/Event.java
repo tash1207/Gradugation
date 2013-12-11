@@ -71,6 +71,8 @@ public class Event {
 	private final static MiniGameCoordinate FOOD_MINI_GAME = new MiniGameCoordinate(FOOD_SCIENCE);
 	private final static MiniGameCoordinate MCOUNT_MINI_GAME = new MiniGameCoordinate(HOUGH);
 	private final static MiniGameCoordinate LIB_WEST_MINI_GAME = new MiniGameCoordinate(LIBRARY_WEST);
+	private final static MiniGameCoordinate BALANCE_MINI_GAME = new MiniGameCoordinate(NEW_PHYSICS_BUILDING);
+
 
 
 	
@@ -85,6 +87,8 @@ public class Event {
 	public final static int GRADUATION_REQUEST_CODE = 6;
 	public final static int MCOUNT_REQUEST_CODE = 7;
 	public final static int LIB_WEST_REQUEST_CODE = 8;
+	public final static int BALANCE_REQUEST_CODE = 9;
+
 	// maybe do something else, 2 - pick up an item
 	
 	//Array of Good Events
@@ -244,6 +248,10 @@ public class Event {
 			Intent intent = new Intent(context, LibraryBombardment.class);
 			intent.putExtra("character_type", characterType);
 			context.startActivityForResult(intent, LIB_WEST_REQUEST_CODE);
+		}else if (BALANCE_MINI_GAME.inRange(coordinate)) {
+			Intent intent = new Intent(context, BalancingMiniGame.class);
+			intent.putExtra("character_type", characterType);
+			context.startActivityForResult(intent, BALANCE_REQUEST_CODE);
 		}else {
 			// generate random event
 			int magicNumber = 3;

@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.text.Editable;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class BalancingMiniGame extends SimpleBaseGameActivity {
 
@@ -34,7 +35,7 @@ public class BalancingMiniGame extends SimpleBaseGameActivity {
 	static int CREDITS_EARNED = 3;
 
 	private int mysteryWeight = 1 + (int) (Math.random() * 100);
-	private int numGuesses = 7;
+	private int numGuesses = 1;
 
 	private ITextureRegion needLessWeightRegion;
 	private BitmapTextureAtlas needLessWeightAtlas;
@@ -71,7 +72,7 @@ public class BalancingMiniGame extends SimpleBaseGameActivity {
 
 		// set title and message
 		alertDialogBuilder
-				.setTitle("Try to balance the scale! You have 7 guesses.");
+				.setTitle("Try to balance the scale! It is between 1 and 100lbs. You have 7 guesses.");
 		alertDialogBuilder.setMessage("Press Continue to play.");
 		alertDialogBuilder.setCancelable(false);
 
@@ -170,7 +171,7 @@ public class BalancingMiniGame extends SimpleBaseGameActivity {
 
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-		if (numGuesses == 7)
+		if (numGuesses == 1)
 			alert.setTitle("Guess " + numGuesses
 					+ ": What is your first guess?");
 		else if (more == true) {
@@ -192,12 +193,13 @@ public class BalancingMiniGame extends SimpleBaseGameActivity {
 				Editable value = input.getText();
 				try {
 					int x = Integer.parseInt(value.toString());
-					numGuesses--;
+					//Toast.makeText(getApplicationContext(), "x is "+String.valueOf(x),Toast.LENGTH_LONG).show();
+					numGuesses++;
 					
 					if (x == mysteryWeight) {
 						win();
 					}
-					if (numGuesses < 1){
+					if (numGuesses > 7){
 						dialog.cancel();
 						dialog.dismiss();
 						lose();
@@ -218,8 +220,8 @@ public class BalancingMiniGame extends SimpleBaseGameActivity {
 						}
 					}
 				} catch (NumberFormatException e) {
-					numGuesses--;
-					if (numGuesses < 1){
+					numGuesses++;
+					if (numGuesses > 7){
 						dialog.cancel();
 						dialog.dismiss();
 						lose();
@@ -229,7 +231,7 @@ public class BalancingMiniGame extends SimpleBaseGameActivity {
 
 			}
 		});
-		if (numGuesses < 1)
+		if (numGuesses > 7)
 			lose();
 		alert.show();
 	}
@@ -270,7 +272,7 @@ public class BalancingMiniGame extends SimpleBaseGameActivity {
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
 		alert.setTitle("Sorry!");
-		alert.setMessage("Come back to try again.");
+		alert.setMessage("Come back to try again. The mystery weight was "+ mysteryWeight+".");
 
 		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {

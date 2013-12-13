@@ -50,6 +50,7 @@ import org.andengine.util.Constants;
 import org.andengine.util.debug.Debug;
 
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -63,6 +64,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.coordinates.MapCoordinate;
@@ -98,7 +100,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 	private TMXTiledMap mTMXTiledMap;
 	protected int mCactusCount;
-	private int CREDITS_NEEDED_GRADUATE = 15;
+	private int CREDITS_NEEDED_GRADUATE = 3;
 
 	private BitmapTextureAtlas[] characterTextureAtlas;
 	private ITextureRegion[] character;
@@ -865,12 +867,17 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	private void checkCredits(final int character) {
 		if (thePlayers.get(character).getCredits() >= CREDITS_NEEDED_GRADUATE) {
 			runOnUiThread(new Runnable() {                  
-	            @Override
 	            public void run() {
+	            	if (thePlayers.get(character).getGraduated() == false) {
+	            	    Builder alert = new AlertDialog.Builder(MainGameScreen.this);
+	            	    alert.setTitle("You have graduated!");
+	            	    alert.setMessage("Please head to the O'Connoll Center.");
+	            	    alert.setPositiveButton("OK", null);
+	            	    alert.show();
+	            	}
 	            	thePlayers.get(character).setGraduated(true);
-	            	Toast.makeText(getApplicationContext(), getString(R.string.ready_to_graduate, thePlayers.get(character).getName(), thePlayers.get(character).getCredits()),
-	            			   Toast.LENGTH_SHORT).show();
-	            	mMusic.stop();
+	            	/*Toast.makeText(getApplicationContext(), getString(R.string.ready_to_graduate, thePlayers.get(character).getName(), thePlayers.get(character).getCredits()),
+	            			   Toast.LENGTH_SHORT).show();*/
 	                }                  
 	            });
 

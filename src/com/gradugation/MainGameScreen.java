@@ -100,7 +100,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 	private TMXTiledMap mTMXTiledMap;
 	protected int mCactusCount;
-	private int CREDITS_NEEDED_GRADUATE = 3;
+	private int CREDITS_NEEDED_GRADUATE = 15;
 
 	private BitmapTextureAtlas[] characterTextureAtlas;
 	private ITextureRegion[] character;

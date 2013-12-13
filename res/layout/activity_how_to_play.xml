@@ -292,6 +292,33 @@
             android:textSize="16sp"
             android:textStyle="normal"
             android:typeface="sans" />
+        
+        <TextView
+            android:id="@+id/title_find_the_mac"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:paddingLeft="15dp"
+            android:scrollHorizontally="true"
+            android:text="@string/find_the_mac_title"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:typeface="sans" />
+
+        <TextView
+            android:id="@+id/body_find_the_mac"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:paddingLeft="15dp"
+            android:scrollHorizontally="true"
+            android:text="@string/find_the_mac_body"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            android:typeface="sans" />
+        
     </LinearLayout>
 
 </ScrollView>

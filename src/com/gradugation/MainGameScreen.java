@@ -107,9 +107,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	protected int mCactusCount;
 	private int CREDITS_NEEDED_GRADUATE = 15;
 
-	//private BitmapTextureAtlas characterTextureAtlas,characterTextureAtlas2,characterTextureAtlas3,characterTextureAtlas4;
-	//public ITextureRegion character,character2,character3,character4;
-
 	private BitmapTextureAtlas[] characterTextureAtlas;
 	private ITextureRegion[] character;
 
@@ -177,10 +174,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {
-		// Toast.makeText(this,
-		// "The tile the player is walking on will be highlighted.",
-		// Toast.LENGTH_LONG).show();
-
 		final float maxVelocityX = 150;
 		final float maxVelocityY = 150;
 		final float maxZoomFactorChange = 5;
@@ -315,7 +308,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 		textStrokes = new Text[numCharacters];
 
-
 		/*
 		 * To update text, use [text].setText("blah blah"); In which "blah blah"
 		 * is whatever you want to change the text to. You can use variables.
@@ -333,20 +325,11 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		mHUD = new HUD();
 		mHUD.attachChild(scene);
 
-		/*
-		 * Where the button should go A fancier button should go here, but to
-		 * test the randomizer, I believe this should suffice.
-		 */
 
 		final Sprite diceButton = new Sprite(180, CAMERA_HEIGHT/10, this.diceTextureRegion,
                 this.getVertexBufferObjectManager()) {
 
 	        public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
-	                /*
-	                 * Here, you can update the randomizer when the user presses the
-	                 * button. Disregard the effect, just lets me know that the
-	                 * button is being pressed.
-	                 */
 	                //generate random number [1,3]
 	        	
 	        	currentCharacterYear = (thePlayers.get(currentCharacter).getCredits()/3) + 1;
@@ -509,52 +492,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		};
 		this.mPauseScene.registerTouchArea(saveButton);
 		this.mPauseScene.attachChild(saveButton);
-		
-//		final Sprite saveGameButton = new Sprite(cX+(CAMERA_WIDTH/10), cY + (CAMERA_HEIGHT/4),
-//				this.mSaveGameTextureRegion, this.getVertexBufferObjectManager()) {
-//			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
-//				switch (touchEvent.getAction()) {
-//				case TouchEvent.ACTION_DOWN:
-//					String[] key1 = {"128"};
-//					String[] key2 = {"128"};
-//					String[] key3 = {"128","1"};
-//					String[] key4 = {"128"};
-//					String[] key5 = {"128","1"};
-//					String[] key6 = {"128"};
-//					String[] key7 = {"128"};
-//					String[] key8 = {"128"};
-//					String[] key9 = {"128","1","2"};
-//			        
-//					String[] newTable1Values = {"128","1","2"};
-//			        String[] newTable2Values = {"128","1","2","4"};
-//			        String[] newTable3Values = {"128","1","2","3","4","5"};
-//			        String[] newTable4Values = {"128","1","4","3","4"};
-//			        String[] newTable5Values = {"128","1","9"};
-//			        String[] newTable6Values = {"128","1","5","3","4"};
-//			        String[] newTable7Values = {"128","1","5","1","4","5","6"};
-//			        String[] newTable8Values = {"128","0"};
-//			        String[] newTable9Values = {"128","1","2","3"};
-//					//db.updateRow(tableNum, table1Values, newTable1Values);
-//			        dbhelper.updateRow(1,key1,newTable1Values);
-//			        dbhelper.updateRow(2,key2,newTable2Values);
-//			        dbhelper.updateRow(3,key3,newTable3Values);
-//			        dbhelper.updateRow(4,key4,newTable4Values);
-//			        dbhelper.updateRow(5,key5,newTable5Values);
-//			        dbhelper.updateRow(6,key6,newTable6Values);
-//			        dbhelper.updateRow(7,key7,newTable7Values);
-//			        dbhelper.updateRow(8,key8,newTable8Values);
-//			        dbhelper.updateRow(9,key9,newTable9Values);
-//					break;
-//				case TouchEvent.ACTION_MOVE:
-//					break;
-//				case TouchEvent.ACTION_UP:
-//					break;
-//				}
-//				return true;
-//			};
-//		};
-//		this.mPauseScene.registerTouchArea(saveGameButton);
-//		this.mPauseScene.attachChild(saveGameButton);
 
 		/* Makes the paused Game look through. */
 		this.mPauseScene.setBackgroundEnabled(false);
@@ -608,14 +545,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 								final TMXLayer pTMXLayer,
 								final TMXTile pTMXTile,
 								final TMXProperties<TMXTileProperty> pTMXTileProperties) {
-							/*
-							 * We are going to count the tiles that have the
-							 * property "cactus=true" set.
-							 */
-							// if(pTMXTileProperties.containsTMXProperty("cactus",
-							// "true")) {
-							// MainGameScreen.this.mCactusCount++;
-							// }
 						}
 					});
 			this.mTMXTiledMap = tmxLoader
@@ -630,7 +559,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		moving = false;
 		turnDone = false;
 		turnNum = 1;
-		//ranNumb = 1 + (int) (Math.random() * ((6 - 1) + 1));
 
 		scene.attachChild(this.mTMXTiledMap);
 
@@ -649,18 +577,12 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 					this.getVertexBufferObjectManager());
 		}
 
-		/* Create the sprite and add it to the scene. */
-		// final AnimatedSprite player = new AnimatedSprite(centerX, centerY,
-		// this.character, this.getVertexBufferObjectManager());
-
 		//Open Database
         dbhelper = new DbHelper(this);
         SQLiteDatabase db = dbhelper.openDB();
         Log.d("TEST", "Database has been opened");
         Log.d("TEST2", Integer.toString(thePlayers.get(0).gameId));
 
-        
-        
         String[] gameKey = { Integer.toString(thePlayers.get(0).gameId) };
       //Grab Game info
       		ArrayList gameList = dbhelper.getRow(1, gameKey);
@@ -672,62 +594,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
       	dbhelper.close();
         
 		this.mCamera.setChaseEntity(spriteList[currentCharacter]);
-
-		// final Path path = new Path(5).to(50, 740).to(50, 1000).to(820,
-		// 1000).to(820, 740).to(0);
-
-		// player.registerEntityModifier(new LoopEntityModifier(new
-		// PathModifier(30, path, null, new IPathModifierListener() {
-		// @Override
-		// public void onPathStarted(final PathModifier pPathModifier, final
-		// IEntity pEntity) {
-		//
-		// }
-		//
-		// @Override
-		// public void onPathWaypointStarted(final PathModifier pPathModifier,
-		// final IEntity pEntity, final int pWaypointIndex) {
-		// switch(pWaypointIndex) {
-		// case 0:
-		// player.animate(new long[] { 200, 200, 200 }, 0, 2, true);
-		// break;
-		// case 1:
-		// player.animate(new long[] { 200, 200, 200 }, 3, 5, true);
-		// break;
-		// case 2:
-		// player.animate(new long[] { 200, 200, 200 }, 6, 8, true);
-		// break;
-		// case 3:
-		// player.animate(new long[] { 200, 200, 200 }, 9, 11, true);
-		// break;
-		// }
-		// }
-		//
-		// @Override
-		// public void onPathWaypointFinished(final PathModifier pPathModifier,
-		// final IEntity pEntity, final int pWaypointIndex) {
-		//
-		// }
-		//
-		// @Override
-		// public void onPathFinished(final PathModifier pPathModifier, final
-		// IEntity pEntity) {
-		//
-		// }
-		// })));
-
-		/*
-		 * Now we are going to create a rectangle that will always highlight the
-		 * tile below the feet of the pEntity.
-		 */
-//		final Rectangle currentTileRectangle = new Rectangle(0, 0,
-//				this.mTMXTiledMap.getTileWidth(),
-//				this.mTMXTiledMap.getTileHeight(),
-//				this.getVertexBufferObjectManager());
-//		/* Set the OffsetCenter to 0/0, so that it aligns with the TMXTiles. */
-//		currentTileRectangle.setOffsetCenter(0, 0);
-		//currentTileRectangle.setColor(1, 0, 0, 0.25f);
-		//scene.attachChild(currentTileRectangle);
 
 		/* The layer for the player to walk on. */
 		final TMXLayer tmxLayer = this.mTMXTiledMap.getTMXLayers().get(0);
@@ -745,26 +611,17 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				localCoord[1] = spriteList[currentCharacter].getHeight() * .5f;
 				final float[] playerFootCordinates = spriteList[currentCharacter]
 						.convertLocalCoordinatesToSceneCoordinates(localCoord);
-				//
+				
 				/* Get the tile the feet of the player are currently waking on. */
 				final TMXTile tmxTile = tmxLayer.getTMXTileAt(
 						playerFootCordinates[Constants.VERTEX_INDEX_X],
 						playerFootCordinates[Constants.VERTEX_INDEX_Y]);
-//				if (tmxTile != null) {
-//					// tmxTile.setTextureRegion(null); <-- Eraser-style removing
-//					// of tiles =D
-//					currentTileRectangle.setPosition(
-//							tmxLayer.getTileX(tmxTile.getTileColumn()),
-//							tmxLayer.getTileY(tmxTile.getTileRow()));
-//				}
 
 				if (move && !turnDone && diceDone) {
 					movementFunction(spriteList[currentCharacter]);
 					MainGameScreen.this.mCamera.updateChaseEntity();
 					finishTurnButton.setColor(Color.WHITE);
 				}
-				
-				
 
 				if (turnDone && finishTurn) { //&& swipeDone == false
 					moving = false;
@@ -783,13 +640,9 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 				}
 				
-				
-
 				if (swipeDone == false) {
-					//ranNumb = (1 + (int) (Math.random() * ((MAX_CHARACTER_MOVEMENT - 1) + 1))) * CHARACTER_WIDTH;
-					ranNumb = diceRoll;// * CHARACTER_WIDTH;
+					ranNumb = diceRoll;
 				}
-
 			}
 		});
 		
@@ -805,7 +658,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 	protected void movementFunction(Sprite mySprite) {
 		if (!moving && swipeDone) {
-			//int thisCurrent = currentCharacter;
 			SpriteCoordinate offset = new SpriteCoordinate();
 
 			if (finalY - initY > 40) {
@@ -892,7 +744,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		CharSequence[] dialogOptions = options.toString().split(",");
 		final String[] dialogChoices = choices.toString().split(",");
 
-		
 		alertDialogBuilder = new AlertDialog.Builder(this);
 
 		// set title and message
@@ -914,7 +765,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				});
 
 		mHandler.post(mUpdateResults);
-		
 	}
 
 	public void askDirection() {
@@ -939,11 +789,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 	@Override
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
-		// if (pSceneTouchEvent.getAction() == MotionEvent.ACTION_UP)
-		// {
-		// move = true;
-		//
-		// }
 		if (pSceneTouchEvent.getAction() == MotionEvent.ACTION_DOWN) {
 			initX = pSceneTouchEvent.getX();
 			initY = pSceneTouchEvent.getY();
@@ -1057,7 +902,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
         dbhelper.close();
 		
 	}
-	
 	
 }
 

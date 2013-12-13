@@ -27,7 +27,7 @@ https://github.com/nicolasgramlich/AndEnginePhysicsBox2DExtension/tree/GLES2-Anc
 =================
 Database Scheme
 
-create table if not exists game(game_id integer, char_base_id integer, num_of_players integer, current_player integer,
+create table if not exists game(game_id integer, time_date text, num_of_players integer, current_player integer,
    primary key (game_id)
    );
 create table if not exists character (id integer, type text, name text, x_coord integer, y_coord integer, credits integer, coins integer, player_order integer,

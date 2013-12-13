@@ -45,6 +45,7 @@ public class BenchPressMinigame extends Activity {
 		if (characterType.equals("Engineer")) image.setImageResource(R.drawable.bench_press_engineer1);
 		else if (characterType.equals("Athlete")) image.setImageResource(R.drawable.bench_press_athlete1);
 		else if (characterType.equals("Gradugator")) image.setImageResource(R.drawable.bench_press_gradugator1);
+		else if (characterType.equals("PreMed")) image.setImageResource(R.drawable.bench_press_premed1);
 
 		timer = new CountDownTimer(10500, 1000) {
 			public void onTick(long millisUntilFinished) {
@@ -57,11 +58,18 @@ public class BenchPressMinigame extends Activity {
 				
 				Intent output = new Intent();
 				if (reps >= REPS_REQUIRED) {
-					Toast.makeText(BenchPressMinigame.this, getString(R.string.bench_press_success, reps, 
-							CREDITS_EARNED), Toast.LENGTH_LONG).show();
 					// Code to add CREDITS_EARNED number of credits to the character
-					
-					output.putExtra(Event.BENCH_PRESS_REQUEST_CODE+"", CREDITS_EARNED);	
+					// Athlete gets a credit bonus for this minigame
+					if (characterType.equals("Athlete")) {
+						Toast.makeText(BenchPressMinigame.this, getString(R.string.bench_press_success, reps, 
+								CREDITS_EARNED + 1), Toast.LENGTH_LONG).show();
+						output.putExtra(Event.BENCH_PRESS_REQUEST_CODE+"", CREDITS_EARNED + 1);
+					}
+					else {
+						Toast.makeText(BenchPressMinigame.this, getString(R.string.bench_press_success, reps, 
+								CREDITS_EARNED), Toast.LENGTH_LONG).show();
+						output.putExtra(Event.BENCH_PRESS_REQUEST_CODE+"", CREDITS_EARNED);
+					}
 				}
 				else {
 					Toast.makeText(BenchPressMinigame.this, getString(R.string.bench_press_failure, reps), 
@@ -146,6 +154,17 @@ public class BenchPressMinigame extends Activity {
 				}
 				else {
 					image.setImageResource(R.drawable.bench_press_gradugator1);
+				}
+			}
+			else if (characterType.equals("PreMed")) {
+				if (clicks % 4 == 0) {
+					image.setImageResource(R.drawable.bench_press_premed3);
+				}
+				else if (clicks == 2 || clicks % 2 == 1) {
+					image.setImageResource(R.drawable.bench_press_premed2);
+				}
+				else {
+					image.setImageResource(R.drawable.bench_press_premed1);
 				}
 			}
 		}

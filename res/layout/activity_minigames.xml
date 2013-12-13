@@ -211,7 +211,102 @@
                 android:textSize="16sp" >
             </TextView>
         </RelativeLayout>
-        
+
+        <RelativeLayout
+            android:id="@+id/moneyCount_minigame"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/button_rectangle_orange"
+            android:clickable="true"
+            android:onClick="moneyCountButtonClick"
+            android:padding="8dp" >
+
+            <ImageView
+                android:id="@+id/minigame_money_count_image"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_centerVertical="true"
+                android:background="@android:color/black"
+                android:contentDescription="@string/wait_in_line"
+                android:src="@drawable/gradugator_big" />
+
+            <TextView
+                android:id="@+id/minigame_money_count_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_margin="8dp"
+                android:layout_toRightOf="@id/minigame_money_count_image"
+                android:text="Counting money"
+                android:textColor="@color/gator_blue"
+                android:textSize="16sp" >
+            </TextView>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/minigame_libWest_game_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/button_rectangle_orange"
+            android:clickable="true"
+            android:onClick="libWestButtonClick"
+            android:padding="8dp" >
+
+            <ImageView
+                android:id="@+id/minigame_libWest_game_image"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_centerVertical="true"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/color_game"
+                android:src="@drawable/bombardmentbackground" />
+
+            <TextView
+                android:id="@+id/minigame_libWest_game_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_margin="8dp"
+                android:layout_toRightOf="@id/minigame_libWest_game_image"
+                android:text="Library West"
+                android:textColor="@color/gator_blue"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/balance_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/button_rectangle_orange"
+            android:clickable="true"
+            android:onClick="BalanceButtonClick"
+            android:padding="8dp" >
+
+            <ImageView
+                android:id="@+id/balance_image"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_centerVertical="true"
+                android:background="@android:color/black"
+                android:contentDescription="@string/wait_in_line"
+                android:src="@drawable/balance" />
+
+            <TextView
+                android:id="@+id/balance_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_margin="8dp"
+                android:layout_toRightOf="@id/balance_image"
+                android:text="Balance game"
+                android:textColor="@color/gator_blue"
+                android:textSize="16sp" >
+            </TextView>
+        </RelativeLayout>
+
         <RelativeLayout
             android:id="@+id/minigame_find_the_mac_button"
             android:layout_width="match_parent"

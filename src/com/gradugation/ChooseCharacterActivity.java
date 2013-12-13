@@ -2,6 +2,7 @@ package com.gradugation;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -153,7 +154,15 @@ public class ChooseCharacterActivity extends BaseActivity {
             
             int gameId = dbhelper.getGameCount();
             //Game Table
-            String[] game = {Integer.toString(gameId),"0",Integer.toString(playersChosen),"0"};
+            Calendar time_date = Calendar.getInstance();
+
+            int year = time_date.get(Calendar.YEAR);
+            int month = time_date.get(Calendar.MONTH) + 1;
+            int day = time_date.get(Calendar.DATE);
+            int hour = time_date.get(Calendar.HOUR_OF_DAY);
+            int minute = time_date.get(Calendar.MINUTE);
+            String timeDate = Integer.toString(month) + "/" + Integer.toString(day) + "/" + Integer.toString(year) + "   " + Integer.toString(hour) + ":" +Integer.toString(minute);
+            String[] game = {Integer.toString(gameId),timeDate,Integer.toString(playersChosen),"0"};
         	dbhelper.insertRow(1, game);
         	
         	//Item Table

@@ -56,8 +56,23 @@ public class ContinueActivity extends Activity {
 	 * at moment of save
 	 */
 	private void populateSavedGameList() {
+		
+		//Open Database
+        dbhelper = new DbHelper(this);
+        SQLiteDatabase db = dbhelper.openDB();
+        Log.d("TEST", "Database has been opened");
+        ArrayList gameList;
+        String timeDate;
+		
 		for(int i=0;i<numberSavedGames;i++){
-			mySavedGames.add(new SavedGame("Saved game "+ i, R.drawable.ic_launcher));
+			
+			String[] gameKey = { Integer.toString(i) };
+			//Grab Game info
+			gameList = dbhelper.getRow(1, gameKey);
+			
+			timeDate = (String)gameList.get(1);
+			
+			mySavedGames.add(new SavedGame("Saved game " + timeDate, R.drawable.ic_launcher));
 		}
 		if(numberSavedGames==0){
 			mySavedGames.add(new SavedGame("No saved games yet", R.drawable.ic_launcher,

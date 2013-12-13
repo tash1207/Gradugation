@@ -154,4 +154,9 @@
         <item>Medium</item>
         <item>Hard</item>
     </string-array>
+    
+    <string name="moneyCount">Money Count</string>
+    <string name="LibraryBombardment">Library Bombardment</string>
+    <string name="BalancingMiniGame">Balancing Mini Game</string>
+
 </resources>

@@ -70,6 +70,9 @@ public class Event {
 	private final static MiniGameCoordinate COLOR_MINI_GAME = new MiniGameCoordinate(PSYCHOLOGY_BUILDING);
 	private final static MiniGameCoordinate FOOD_MINI_GAME = new MiniGameCoordinate(FOOD_SCIENCE);
 	private final static MiniGameCoordinate FIND_THE_MAC_MINI_GAME = new MiniGameCoordinate(COMPUTER_SCIENCE);
+	private final static MiniGameCoordinate MCOUNT_MINI_GAME = new MiniGameCoordinate(HOUGH);
+	private final static MiniGameCoordinate LIB_WEST_MINI_GAME = new MiniGameCoordinate(LIBRARY_WEST);
+	private final static MiniGameCoordinate BALANCE_MINI_GAME = new MiniGameCoordinate(NEW_PHYSICS_BUILDING);
 	
 	private MapSet mapPath = new MapSet() ;
 
@@ -80,9 +83,17 @@ public class Event {
 	public final static int COLOR_REQUEST_CODE = 4;
 	public final static int FOOD_REQUEST_CODE = 5;
 	public final static int GRADUATION_REQUEST_CODE = 6;
-	public final static int FIND_THE_MAC_REQUEST_CODE = 7;
+	public final static int MCOUNT_REQUEST_CODE = 7;
+	public final static int LIB_WEST_REQUEST_CODE = 8;
+	public final static int BALANCE_REQUEST_CODE = 9;
+	public final static int FIND_THE_MAC_REQUEST_CODE = 10;
+
 	// maybe do something else, 2 - pick up an item
 	
+	//Array of Good Events
+	public final static String[] goodEvent = new String[5];
+	//Array of Bad Event
+	public final static String[] badEvent = new String[5];
 	
 	//public void method for each event, use switch case for each eventID
 	//eventID 0 - do nothing, 1 - lose a turn? depends on turn mechanics - maybe do something else, 2 - pick up an item
@@ -229,38 +240,35 @@ public class Event {
 			intent.putExtra("character_type", characterType);
 			context.startActivityForResult(intent, FOOD_REQUEST_CODE);
 		} else if (FIND_THE_MAC_MINI_GAME.inRange(coordinate)) {
-			//call find the mac minigame
 			Intent intent = new Intent(context, FindTheMacMinigame.class);
 			intent.putExtra("character_type", characterType);
 			context.startActivityForResult(intent, FIND_THE_MAC_REQUEST_CODE);
-		} else {
+		} else if (MCOUNT_MINI_GAME.inRange(coordinate)) {
+			Intent intent = new Intent(context, moneyCount.class);
+			intent.putExtra("character_type", characterType);
+			context.startActivityForResult(intent, MCOUNT_REQUEST_CODE);
+		}else if (LIB_WEST_MINI_GAME.inRange(coordinate)) {
+			Intent intent = new Intent(context, LibraryBombardment.class);
+			intent.putExtra("character_type", characterType);
+			context.startActivityForResult(intent, LIB_WEST_REQUEST_CODE);
+		}else if (BALANCE_MINI_GAME.inRange(coordinate)) {
+			Intent intent = new Intent(context, BalancingMiniGame.class);
+			intent.putExtra("character_type", characterType);
+			context.startActivityForResult(intent, BALANCE_REQUEST_CODE);
+		}else {
 			// generate random event
-			int[] eventArray = new int[10];
+			int magicNumber = 3;
+			int notMagicNumber = 5;
             Random r = new Random();
-            int eventIndex;
-            
-            String[] event = {"Learn from yesterday", "Live for today", "Hope for tomorrow"};
-            int eventMessage;
-            
-            for (int i = 0; i < eventArray.length; i++){
-                    eventIndex = r.nextInt(2);
-                    eventArray[i] = eventIndex;
-                    if (eventArray[i] == 1){
-                            eventMessage = r.nextInt(3);
-                            Log.d("Event message", event[eventMessage]);
-                            //Create Message for random event
-                            /*
-                            Context toastContext = context;
-                            CharSequence text = event[eventMessage];
-                            int duration = Toast.LENGTH_SHORT;
-
-                            Toast toast = Toast.makeText(toastContext, text, duration);
-                            toast.show();
-                            */
-                            
-                    }
-                    break;
+            int event  = r.nextInt(10);
+            if (event == magicNumber){
+            	//Good Random Event
+            	int goodEvent  = r.nextInt(5);
+            }else if (event == notMagicNumber){
+            	//Bad Random Event
+            	int badEvent  = r.nextInt(5);
             }
+
 		}
 	}
 }

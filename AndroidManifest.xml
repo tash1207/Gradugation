@@ -96,6 +96,13 @@
             android:label="@string/BalancingMiniGame"
             android:screenOrientation="landscape" >
         </activity>
+        
+        <activity
+            android:name=".MathMiniGame" 
+            android:label="@string/title_activity_math_mini_game"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" 
+            android:screenOrientation="landscape" >
+        </activity>
 
         <service android:name="com.gradugation.BackgroundMusicService" >
         </service>
@@ -126,11 +133,7 @@
             android:label="@string/title_activity_game_over_screen"
             android:screenOrientation="landscape" >
         </activity>
-        <activity
-            android:name="com.gradugation.MathMiniGame" 
-            android:label="@string/title_activity_color_mini_game"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
-        </activity>
+        
     </application>
 
 </manifest>

@@ -7,6 +7,7 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.BaseGameActivity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -99,15 +100,18 @@ public class MathMiniGame extends Activity {
         		}
         	}
         }
-        
+
+        Intent output = new Intent();
         if(correct){
         	//add three credits to the player passed in
         	Toast.makeText(MathMiniGame.this,  "Algebraic! You earned 3 credits!", Toast.LENGTH_LONG).show();
+        	output.putExtra(Event.MATH_REQUEST_CODE+"", 3);
         }
         else{
-        	Toast.makeText(MathMiniGame.this, "Sorry, try again", Toast.LENGTH_LONG).show();
+        	Toast.makeText(MathMiniGame.this, "Sorry, try again later", Toast.LENGTH_LONG).show();
+        	output.putExtra(Event.BENCH_PRESS_REQUEST_CODE+"", 0);
         }
-        
-        
+        setResult(RESULT_OK, output);
+        finish();
     }
 }

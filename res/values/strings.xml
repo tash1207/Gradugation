@@ -15,6 +15,7 @@
     <string name="title_activity_wires_mini_game">WiresMiniGame</string>
     <string name="title_activity_waitinline_minigame">WaitInLineMinigame</string>
     <string name="title_activity_game_over_screen">GameOverScreen</string>
+    <string name="title_activity_math_mini_game">MathMiniGame</string>
     <string name="game_over_text">Game Over Screen</string>
 
     <!-- Main Activity -->

@@ -196,8 +196,9 @@ public class BalancingMiniGame extends SimpleBaseGameActivity {
 					//Toast.makeText(getApplicationContext(), "x is "+String.valueOf(x),Toast.LENGTH_LONG).show();
 					numGuesses++;
 					
-					if (x == mysteryWeight) {
+					if ((int) x == (int) mysteryWeight) {
 						win();
+						return;
 					}
 					if (numGuesses > 7){
 						dialog.cancel();

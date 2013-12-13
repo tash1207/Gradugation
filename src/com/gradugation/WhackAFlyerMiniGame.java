@@ -17,7 +17,6 @@ import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.entity.text.Text;
 import org.andengine.entity.util.FPSLogger;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.TextureOptions;
@@ -30,6 +29,7 @@ import org.andengine.util.math.MathUtils;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
@@ -48,6 +48,8 @@ public class WhackAFlyerMiniGame extends SimpleBaseGameActivity implements IOnSc
     private static final int CREDITS_EARNED = 3;
     private HashSet<Float> xLocTaken = new HashSet<Float>();
     private HashSet<Float> yLocTaken = new HashSet<Float>();
+    
+    String characterType;
     
     // Need handler for callbacks to the UI thread
     final Handler mHandler = new Handler();
@@ -102,12 +104,27 @@ public class WhackAFlyerMiniGame extends SimpleBaseGameActivity implements IOnSc
 
     @Override
     protected void onCreateResources() throws IOException {
+    	
+    	Intent intent = getIntent();
+    	characterType = intent.getStringExtra("character_type");
+    	if (characterType == null) characterType = "Gradugator";
+    	String imgName = "splash2.png";
+    	if (characterType.equals("Athlete")) {
+    		imgName = "athlete.png";
+    	}
+    	else if (characterType.equals("Engineer")) {
+    		imgName = "engineer.png";
+    	}
+    	else if (characterType.equals("PreMed")) {
+    		imgName = "med_student.png";
+    	}
+		
         this.points = 0;
 
         this.characterTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(),
-                512,512,TextureOptions.BILINEAR);
+                600,600,TextureOptions.BILINEAR);
         this.character = BitmapTextureAtlasTextureRegionFactory.createFromAsset
-                (characterTextureAtlas, this, "gfx/splash2.png", 0, 0);;
+                (characterTextureAtlas, this, "gfx/" + imgName, 0, 0);
         this.characterTextureAtlas.load();
         
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/whack_aflyer_img/");
@@ -118,7 +135,7 @@ public class WhackAFlyerMiniGame extends SimpleBaseGameActivity implements IOnSc
         this.bgTextureAtlas.load();
     
         for (int i = 0; i < MAX_NUMBER_OF_FLYERS; i++) {
-            String imgName = "flyer_" + (i+1) + ".png";
+            imgName = "flyer_" + (i+1) + ".png";
             this.flyerAtlas[i] = new BitmapTextureAtlas(this.getTextureManager(),
                     1024,1024,TextureOptions.BILINEAR);
             this.flyers[i] = BitmapTextureAtlasTextureRegionFactory.createFromAsset
@@ -317,15 +334,27 @@ public class WhackAFlyerMiniGame extends SimpleBaseGameActivity implements IOnSc
     
     private void gameFinished() {
         finished = true;
+        Intent output = new Intent();
         if (this.points >= POINTS_REQUIRED) {
-            Toast.makeText(WhackAFlyerMiniGame.this, getString(R.string.whack_aflyer_success, this.points,
-                    CREDITS_EARNED), Toast.LENGTH_LONG).show();
             // Code to add CREDITS_EARNED number of credits to the character
+			// Gradugator gets a credit bonus for this minigame
+			if (characterType.equals("Gradugator")) {
+				Toast.makeText(WhackAFlyerMiniGame.this, getString(R.string.whack_aflyer_success, this.points,
+	                    CREDITS_EARNED + 1), Toast.LENGTH_LONG).show();
+				output.putExtra(Event.WHACK_AFLYER_REQUEST_CODE+"", CREDITS_EARNED + 1);
+			}
+			else {
+				Toast.makeText(WhackAFlyerMiniGame.this, getString(R.string.whack_aflyer_success, this.points,
+	                    CREDITS_EARNED), Toast.LENGTH_LONG).show();
+				output.putExtra(Event.WHACK_AFLYER_REQUEST_CODE+"", CREDITS_EARNED);
+			}
         }
         else {
             Toast.makeText(WhackAFlyerMiniGame.this, getString(R.string.whack_aflyer_failure, this.points), 
                     Toast.LENGTH_LONG).show();
+            output.putExtra(Event.WHACK_AFLYER_REQUEST_CODE+"", 0);
         }
+        setResult(RESULT_OK, output);
         
         BitmapTextureAtlas continueButtonAtlas = new BitmapTextureAtlas(this.getTextureManager(),
                 951,720,TextureOptions.NEAREST_PREMULTIPLYALPHA);

@@ -12,7 +12,7 @@ public class BaseActivity extends Activity{
 
 	public void onPause() {
 		super.onPause();
-		SongPlayer.stopSongDelayed();
+		if (SongPlayer.instance != null) SongPlayer.stopSongDelayed();
 	}
 	
 	protected void onResume() {
@@ -21,7 +21,7 @@ public class BaseActivity extends Activity{
 		boolean isSoundOn = settings.getBoolean(SettingsActivity.SOUND_ON, true);
 		
 		if (isSoundOn) {
-			SongPlayer.playSong();
+			if (SongPlayer.instance != null) SongPlayer.playSong();
 		}
     }
 }

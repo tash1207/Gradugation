@@ -70,7 +70,7 @@ public class FindTheMacMinigame extends Activity {
 
 				//set message
 				alertDialogBuilder
-						.setMessage("Click on the pull-down menu above to choose the desired difficulty level. Look for the pair of Macs among the PCs. You will have one second to spot them. Click on the matching pair of Macs to win. You have three tries. Press Continue to play.");
+						.setMessage("Click on the pull-down menu above to choose the desired difficulty level. Look for the pair of Macs among the PCs. You will have less than a second to spot them. Click on the matching pair of Macs to win. You have three tries. Press Continue to play.");
 				alertDialogBuilder.setCancelable(false);
 
 				// create continue button
@@ -322,7 +322,7 @@ public class FindTheMacMinigame extends Activity {
 		alertDialogBuilder = new AlertDialog.Builder(this);
 
 		// set title and message
-		alertDialogBuilder.setTitle("Congradugation! You win!");
+		alertDialogBuilder.setTitle("Congradugation! You've found the Macs and earned 3 credits!");
 		alertDialogBuilder.setMessage("Press Continue.");
 		alertDialogBuilder.setCancelable(false);
 

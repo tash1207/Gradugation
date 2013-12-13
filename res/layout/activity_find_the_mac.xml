@@ -37,12 +37,13 @@
         android:id="@+id/TableRow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center" >
+        android:gravity="center" >  
     </TableRow>
-
+    
     <ImageView
-    android:id="@+id/background"
-    android:background="@drawable/computer_lab"
-    android:layout_height="wrap_content"
-    android:layout_width="wrap_content" />
+	    android:id="@+id/background"
+	    android:background="@drawable/computer_lab"
+	    android:layout_width="wrap_content" 
+    	android:layout_height="wrap_content" />
+    
 </TableLayout>

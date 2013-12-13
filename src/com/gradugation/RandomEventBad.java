@@ -12,9 +12,11 @@ public class RandomEventBad extends BaseActivity{
 		super.onCreate(savedInstanceState);
 		Log.d("INTENT Before", "Did this thing work");
 		Dialog d = new Dialog(this);
-		d.setTitle("Dialog Title");
+		d.setCancelable(true);
+		d.setCanceledOnTouchOutside(true);
+		d.setTitle("Oh No!");
 		TextView tv = new TextView(this);
-		tv.setText("Success!");
+		tv.setText("You caught the flu...\nOff to Shands you go.");
 		d.setContentView(tv);
 		d.show();
 		Log.d("INTENT After", "Did this thing work");

@@ -171,7 +171,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	
 	private boolean finishTurn = false; 
 	private boolean diceDone = false;
-
+	private boolean music;
 	boolean swipeDone = false;
 	private DbHelper dbhelper;
 
@@ -420,8 +420,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				case TouchEvent.ACTION_DOWN:
 					if (mMusic.isPlaying()) {
 						mMusic.pause();
+						music = false;
 					} else {
 						mMusic.play();
+						music = true;
 					}
 					break;
 				case TouchEvent.ACTION_MOVE:
@@ -1058,6 +1060,21 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		
 	}
 	
+	@Override
+	public void onPause() {
+			super.onPause();
+			if (mMusic.isPlaying()) {
+				mMusic.pause();
+			}
+	}
+	
+	@Override
+	public void onResume() {
+			super.onResume();
+			if (music) {
+				mMusic.resume();
+			}
+	}
 	
 }
 

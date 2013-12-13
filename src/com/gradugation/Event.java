@@ -69,12 +69,10 @@ public class Event {
 	private final static MiniGameCoordinate WHACK_AFLYER_MINI_GAME = new MiniGameCoordinate(TURLINGTON);
 	private final static MiniGameCoordinate COLOR_MINI_GAME = new MiniGameCoordinate(PSYCHOLOGY_BUILDING);
 	private final static MiniGameCoordinate FOOD_MINI_GAME = new MiniGameCoordinate(FOOD_SCIENCE);
+	private final static MiniGameCoordinate FIND_THE_MAC_MINI_GAME = new MiniGameCoordinate(COMPUTER_SCIENCE);
 	private final static MiniGameCoordinate MCOUNT_MINI_GAME = new MiniGameCoordinate(HOUGH);
 	private final static MiniGameCoordinate LIB_WEST_MINI_GAME = new MiniGameCoordinate(LIBRARY_WEST);
 	private final static MiniGameCoordinate BALANCE_MINI_GAME = new MiniGameCoordinate(NEW_PHYSICS_BUILDING);
-
-
-
 	
 	private MapSet mapPath = new MapSet() ;
 
@@ -88,6 +86,7 @@ public class Event {
 	public final static int MCOUNT_REQUEST_CODE = 7;
 	public final static int LIB_WEST_REQUEST_CODE = 8;
 	public final static int BALANCE_REQUEST_CODE = 9;
+	public final static int FIND_THE_MAC_REQUEST_CODE = 10;
 
 	// maybe do something else, 2 - pick up an item
 	
@@ -237,6 +236,10 @@ public class Event {
 			Intent intent = new Intent(context, FoodMiniGame.class);
 			intent.putExtra("character_type", characterType);
 			context.startActivityForResult(intent, FOOD_REQUEST_CODE);
+		} else if (FIND_THE_MAC_MINI_GAME.inRange(coordinate)) {
+			Intent intent = new Intent(context, FindTheMacMinigame.class);
+			intent.putExtra("character_type", characterType);
+			context.startActivityForResult(intent, FIND_THE_MAC_REQUEST_CODE);
 		} else if (MCOUNT_MINI_GAME.inRange(coordinate)) {
 			Intent intent = new Intent(context, moneyCount.class);
 			intent.putExtra("character_type", characterType);

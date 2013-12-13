@@ -45,7 +45,7 @@ public class BenchPressMinigame extends Activity {
 		if (characterType.equals("Engineer")) image.setImageResource(R.drawable.bench_press_engineer1);
 		else if (characterType.equals("Athlete")) image.setImageResource(R.drawable.bench_press_athlete1);
 		else if (characterType.equals("Gradugator")) image.setImageResource(R.drawable.bench_press_gradugator1);
-		else if (characterType.equals("PreMed")) {/* code to set image to pre med student*/}
+		else if (characterType.equals("PreMed")) image.setImageResource(R.drawable.bench_press_premed1);
 
 		timer = new CountDownTimer(10500, 1000) {
 			public void onTick(long millisUntilFinished) {
@@ -154,6 +154,17 @@ public class BenchPressMinigame extends Activity {
 				}
 				else {
 					image.setImageResource(R.drawable.bench_press_gradugator1);
+				}
+			}
+			else if (characterType.equals("PreMed")) {
+				if (clicks % 4 == 0) {
+					image.setImageResource(R.drawable.bench_press_premed3);
+				}
+				else if (clicks == 2 || clicks % 2 == 1) {
+					image.setImageResource(R.drawable.bench_press_premed2);
+				}
+				else {
+					image.setImageResource(R.drawable.bench_press_premed1);
 				}
 			}
 		}

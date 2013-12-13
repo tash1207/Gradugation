@@ -604,7 +604,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		this.mPauseScene.setBackgroundEnabled(false);
 
 		// Main Menu Button on HUD
-		final Sprite pauseSprite = new Sprite(mCamera.getWidth() / 2 + CHARACTER_WIDTH, 300, this.mFaceTextureRegion,
+		final Sprite pauseSprite = new Sprite(mCamera.getWidth() / 2 + CHARACTER_WIDTH + 50 , 300, this.mFaceTextureRegion,
 				this.getVertexBufferObjectManager()) {
 			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
 				switch (touchEvent.getAction()) {
@@ -925,6 +925,31 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
         
         dbhelper.close();
 		
+	}
+	
+	public void deleteGame(){
+		
+		int numPlayers = thePlayers.size();
+
+		DbHelper dbhelper = new DbHelper(this);
+		SQLiteDatabase db = dbhelper.openDB();
+		
+		int gameId = thePlayers.get(0).getGameId();  
+        String[] table1Key = {Integer.toString(gameId)};
+        dbhelper.deleteRow(1, table1Key); //Delete game table
+
+        //delete numPlayers rows from table 3
+        for (int i = 0; i < numPlayers; i++)
+        {
+        	String[] characterKey = {Integer.toString((gameId<<2) + i)};
+        	dbhelper.deleteRow(2, characterKey);
+        }
+        
+        dbhelper.deleteRow(4, table1Key); //Delete minigame table
+
+		
+        dbhelper.close();
+
 	}
 	
 	@Override

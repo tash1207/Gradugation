@@ -423,8 +423,10 @@ public class DbHelper extends SQLiteOpenHelper {
             }
             c.close();
             
+            
             return count;
          }
+        
 
 }
 

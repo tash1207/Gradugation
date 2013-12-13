@@ -46,11 +46,6 @@ public class MinigamesActivity extends BaseActivity {
 		Intent intent = new Intent(this, FindTheMacMinigame.class);
     	startActivity(intent);
 	}
-
-	public void gameOverScreenButtonClick(View v) {
-		Intent intent = new Intent(this, GameOverScreen.class);
-    	startActivity(intent);
-	}
 	
 	public void moneyCountButtonClick(View v) {
 		Intent intent = new Intent(this, moneyCount.class);

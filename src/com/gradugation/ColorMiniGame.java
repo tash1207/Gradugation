@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -24,7 +25,7 @@ public class ColorMiniGame extends Activity {
 	private TextColor[] colors = TextColor.values();
 	private String currentColorText;
 	private int currentColor;
-	private float points, total;
+	private int points, total;
 	private TextView colorTextView, seconds_text, reps_text;
 	private CountDownTimer timer;
 	private boolean gameFinished;
@@ -41,8 +42,8 @@ public class ColorMiniGame extends Activity {
 		seconds_text = (TextView)(findViewById(R.id.color_mini_game_time_left));
 		reps_text = (TextView)(findViewById(R.id.color_mini_game_points));
 		
-		this.points = 0.0f;
-		this.total = 0.0f;
+		this.points = 0;
+		this.total = 0;
 		
 		timer = new CountDownTimer(10500, 1000) {
 			public void onTick(long millisUntilFinished) {
@@ -53,7 +54,7 @@ public class ColorMiniGame extends Activity {
 				seconds_text.setText("Time Left: 0 secs");
 				gameFinished = true;
 				Intent output = new Intent();
-				if (points == NUMBER_REQUIRED) {
+				if (points >= NUMBER_REQUIRED) {
 					Toast.makeText(ColorMiniGame.this, getString(R.string.color_mini_game_success, (int)points, 
 							(int)total, CREDITS_EARNED), Toast.LENGTH_LONG).show();
 					// Code to add CREDITS_EARNED number of credits to the character

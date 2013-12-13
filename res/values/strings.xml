@@ -152,7 +152,7 @@
         You did not earn any credits!</string>
     <string name="color_mini_game_instructions">You\'re part of a psychological experiment to see
         if you\'re smarter than the average chimpanzee. For every word on the screen, select
-        the color that matches the color of the text. You need to get more than %1$d%% correct. 
+        the color that matches the color of the text. You need to get more than %1$d correct. 
         Good luck!</string>
         
     <!-- Math Minigame -->

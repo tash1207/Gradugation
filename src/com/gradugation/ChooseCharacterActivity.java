@@ -97,11 +97,7 @@ public class ChooseCharacterActivity extends BaseActivity {
                 }
     }
         
-        public void startGame(View view) {
-            Intent intent = new Intent(this, MathMiniGame.class);
-            intent.putExtra(THE_PLAYERS, (Serializable)thePlayers);
-            startActivity(intent);
-        }
+        
 
         @Override
         public boolean onCreateOptionsMenu(Menu menu) {

@@ -61,6 +61,12 @@
             android:screenOrientation="landscape" >
         </activity>
         <activity
+            android:name="com.gradugation.FindTheMacMinigame"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:label="@string/title_activity_find_the_mac_minigame"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
             android:name="com.gradugation.ContinueActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_continue"

@@ -146,5 +146,12 @@
     <!-- Food Minigame -->
     <string name="title_activity_food_mini_game">FoodMiniGame</string>
     <string name="food_mini_game">Junk Food Ninja</string>
-
+	
+	<!-- Find the Mac Minigame -->
+    <string-array name="type">
+        <item>New Game</item>
+        <item>Easy</item>
+        <item>Medium</item>
+        <item>Hard</item>
+    </string-array>
 </resources>

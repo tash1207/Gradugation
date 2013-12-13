@@ -472,15 +472,18 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
                 this.getVertexBufferObjectManager()) {
 
 	        public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
-	                
-	                if (touchEvent.isActionUp()) {
-	                        this.setColor(Color.GRAY);
-	                        finishTurn = true;
-	                        }
-	                if (touchEvent.isActionDown()) {
-	                        this.setColor(Color.GRAY);
+	                if (movesLeft == 0) {
+		                if (touchEvent.isActionUp()) {
+		                        this.setColor(Color.GRAY);
+		                        finishTurn = true;
+		                        }
+		                if (touchEvent.isActionDown()) {
+		                        this.setColor(Color.GRAY);
+		                }
+		                return true;
+	                } else {
+	                	return false;
 	                }
-	                return true;
 	        };
 		};
 		finishTurnButton.setScale((float) .5);

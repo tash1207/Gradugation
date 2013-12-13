@@ -9,22 +9,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:onClick="finished"
+        android:onClick="Finished"
         android:text="@string/check_solution" />
     
-    
-    
-	<GridView 	
+	<GridView
 	    android:id="@+id/gridview"
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"
+	    android:layout_above="@+id/done_button"
+	    android:layout_gravity="top|left"
 	    android:columnWidth="125dp"
 	    android:gravity="center"
 	    android:horizontalSpacing="2dp"
 	    android:numColumns="7"
 	    android:stretchMode="none"
 	    android:verticalSpacing="2dp"
-	    tools:context=".MathMiniGame"
-	    android:layout_gravity="top|left"/>
+	    tools:context=".MathMiniGame" />
 	    
 </RelativeLayout>

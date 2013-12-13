@@ -25,27 +25,7 @@ public class MathMiniGame extends Activity {
 	int[][] colors;
 	int[][] user_solution = {{0,0,0,0}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0}};
 	
-	public void finished(View v) {
-    	Boolean correct = true;
-        for (int i = 0; i<4;i++){
-        	for(int j=0;j<4;j++){
-        		if (colors[i][j] != user_solution[i][j]){
-        			correct = false;
-        			break;
-        		}
-        	}
-        }
-        
-        if(correct){
-        	//add three credits to the player passed in
-        	Toast.makeText(MathMiniGame.this,  "Algebraic! You earned 3 credits!", Toast.LENGTH_LONG).show();
-        }
-        else{
-        	Toast.makeText(MathMiniGame.this, "Sorry, try again", Toast.LENGTH_LONG).show();
-        }
-        
-        
-    }
+	
 	
 	
 	
@@ -104,4 +84,27 @@ public class MathMiniGame extends Activity {
 	        }
 	    });
 	}
+	
+	
+	public void Finished(View v) {
+    	Boolean correct = true;
+        for (int i = 0; i<4;i++){
+        	for(int j=0;j<4;j++){
+        		if (colors[i][j] != user_solution[i][j]){
+        			correct = false;
+        			break;
+        		}
+        	}
+        }
+        
+        if(correct){
+        	//add three credits to the player passed in
+        	Toast.makeText(MathMiniGame.this,  "Algebraic! You earned 3 credits!", Toast.LENGTH_LONG).show();
+        }
+        else{
+        	Toast.makeText(MathMiniGame.this, "Sorry, try again", Toast.LENGTH_LONG).show();
+        }
+        
+        
+    }
 }

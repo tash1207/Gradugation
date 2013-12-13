@@ -2,7 +2,9 @@ package com.gradugation;
 
 import android.content.Context;
 import android.content.DialogInterface.OnClickListener;
+import android.content.res.AssetManager;
 import android.database.DataSetObserver;
+import android.graphics.Typeface;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +49,9 @@ public class ImageAdapter extends BaseAdapter {
     		textView.setGravity(Gravity.CENTER);
     		textView.setTextColor(0xff000000);
     		textView.setPadding(2,  2,  2,  2);
+    		textView.setTextSize(50);
+//    		Typeface myTypeface = Typeface.createFromAsset(getAssets(),"fonts/Algerian.ttf");
+//    		textView.setTypeface(myTypeface);
     	} else {
     		textView = (TextView) convertView;
     	}
@@ -146,7 +151,13 @@ public class ImageAdapter extends BaseAdapter {
     }
     
 
-    // references to our images
+    private AssetManager getAssets() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	// references to our images
     private Integer[] mThumbIds = {
     		R.drawable.red_square, R.drawable.green_square, 
     		R.drawable.blue_square, R.drawable.yellow_square,  

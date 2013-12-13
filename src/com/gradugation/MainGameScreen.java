@@ -87,13 +87,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 	// Need handler for callbacks to the UI thread
     final Handler mHandler = new Handler();
-
-    // Create runnable for posting
-    final Runnable mUpdateResults = new Runnable() {
-        public void run() {
-            askDirection();
-        }
-    };
     
     private AlertDialog.Builder alertDialogBuilder;
 	private AlertDialog alertDialog;
@@ -112,6 +105,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 	private BitmapTextureAtlas[] characterTextureAtlas;
 	private ITextureRegion[] character;
+	private Sprite[] spriteList;
 
 	private BitmapTextureAtlas diceTextureAtlas;
 	private TextureRegion diceTextureRegion;
@@ -119,6 +113,14 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	private TextureRegion finishTurnTextureRegion;
 	private BitmapTextureAtlas musicTextureAtlas;
 	private ITextureRegion mMusicTextureRegion;
+	private BitmapTextureAtlas rightArrowTextureAtlas;
+	private ITextureRegion rightArrowRegion;
+	private BitmapTextureAtlas leftArrowTextureAtlas;
+	private ITextureRegion leftArrowRegion;
+	private BitmapTextureAtlas downArrowTextureAtlas;
+	private ITextureRegion downArrowRegion;
+	private BitmapTextureAtlas upArrowTextureAtlas;
+	private ITextureRegion upArrowRegion;
 	
 	private ITexture mFaceTexture;
 	private ITextureRegion mFaceTextureRegion;
@@ -151,9 +153,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	public int turnNum;
 	public int currentCharacter;
 	public int currentCharacterYear;
-	public int ranNumb;
+	public int movesLeft;
 	private int numCharacters;
 	private int movementCount;
+	private Text textStroke5;
 
 	private Random random;
     private int diceRoll = 0;
@@ -326,7 +329,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 					thePlayers.get(i).getName()   +"\nCredits: " + thePlayers.get(i).getCredits()
 				    + "\nCoins: " + thePlayers.get(i).getCoins(), vertexBufferObjectManager); 
 		}
-		final Text textStroke5 = new Text(180, 20, this.mStrokeFont,
+		textStroke5 = new Text(180, 20, this.mStrokeFont,
                 " " + diceRoll, vertexBufferObjectManager);
 
 		textStroke5.setScale((float) .7 ); 
@@ -373,7 +376,11 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	                	if (touchEvent.isActionUp()) {
 	                		this.setColor(Color.GRAY);
 	                		textStroke5.setText(" " + diceRoll);
+	                		movesLeft = diceRoll;
+	                		eventCompleted = false;
 	                		diceDone = true;
+	                		move = false;
+	    					gameDone = false;
 	                		
 	                	}
 	                	if (touchEvent.isActionDown()) {
@@ -383,7 +390,100 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	                return true;
 	        };
 		};
-		diceButton.setScale((float) .5);	
+		diceButton.setScale((float) .5);
+		
+		this.rightArrowTextureAtlas = new BitmapTextureAtlas(
+				this.getTextureManager(), 120, 120, TextureOptions.BILINEAR);
+		this.rightArrowRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(rightArrowTextureAtlas, this, "right_arrow.png",
+						0, 0);
+		this.rightArrowTextureAtlas.load();
+		
+		final Sprite rightArrowButton = new Sprite(CAMERA_WIDTH-CHARACTER_WIDTH, CAMERA_HEIGHT/2, this.rightArrowRegion,
+				this.getVertexBufferObjectManager()) {
+			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
+				if (touchEvent.isActionDown()) {
+					return movement(new SpriteCoordinate(CHARACTER_WIDTH,0));
+				} else {
+					return false;
+				}
+			}
+		};
+		rightArrowButton.setScale(.5f);
+		this.mHUD.registerTouchArea(rightArrowButton);
+		this.mHUD.attachChild(rightArrowButton);
+		
+		this.leftArrowTextureAtlas = new BitmapTextureAtlas(
+				this.getTextureManager(), 120, 120, TextureOptions.BILINEAR);
+		this.leftArrowRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(leftArrowTextureAtlas, this, "left_arrow.png",
+						0, 0);
+		this.leftArrowTextureAtlas.load();
+		
+		final Sprite leftArrowButton = new Sprite(CHARACTER_WIDTH, CAMERA_HEIGHT/2, this.leftArrowRegion,
+				this.getVertexBufferObjectManager()) {
+			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
+				if (touchEvent.isActionDown()) {
+					if (touchEvent.isActionDown()) {
+						return movement(new SpriteCoordinate(-CHARACTER_WIDTH,0));
+					} else {
+						return false;
+					}
+				}
+				return true;
+			}
+		};
+		leftArrowButton.setScale(.5f);
+		this.mHUD.registerTouchArea(leftArrowButton);
+		this.mHUD.attachChild(leftArrowButton);
+		
+		this.downArrowTextureAtlas = new BitmapTextureAtlas(
+				this.getTextureManager(), 120, 120, TextureOptions.BILINEAR);
+		this.downArrowRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(downArrowTextureAtlas, this, "down_arrow.png",
+						0, 0);
+		this.downArrowTextureAtlas.load();
+		
+		final Sprite downArrowButton = new Sprite(CAMERA_WIDTH/2, CHARACTER_WIDTH, this.downArrowRegion,
+				this.getVertexBufferObjectManager()) {
+			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
+				if (touchEvent.isActionDown()) {
+					if (touchEvent.isActionDown()) {
+						return movement(new SpriteCoordinate(0, -CHARACTER_WIDTH));
+					} else {
+						return false;
+					}
+				}
+				return true;
+			}
+		};
+		downArrowButton.setScale(.5f);
+		this.mHUD.registerTouchArea(downArrowButton);
+		this.mHUD.attachChild(downArrowButton);
+		
+		this.upArrowTextureAtlas = new BitmapTextureAtlas(
+				this.getTextureManager(), 120, 120, TextureOptions.BILINEAR);
+		this.upArrowRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(upArrowTextureAtlas, this, "up_arrow.png",
+						0, 0);
+		this.upArrowTextureAtlas.load();
+		
+		final Sprite upArrowButton = new Sprite(CAMERA_WIDTH/2, CAMERA_HEIGHT-CHARACTER_WIDTH, this.upArrowRegion,
+				this.getVertexBufferObjectManager()) {
+			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
+				if (touchEvent.isActionDown()) {
+					if (touchEvent.isActionDown()) {
+						return movement(new SpriteCoordinate(0,CHARACTER_WIDTH));
+					} else {
+						return false;
+					}
+				}
+				return true;
+			}
+		};
+		upArrowButton.setScale(.5f);
+		this.mHUD.registerTouchArea(upArrowButton);
+		this.mHUD.attachChild(upArrowButton);
 		
 		final Sprite finishTurnButton = new Sprite(310, CAMERA_HEIGHT/10, this.finishTurnTextureRegion,
                 this.getVertexBufferObjectManager()) {
@@ -560,8 +660,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		this.mPauseScene.setBackgroundEnabled(false);
 
 		// Main Menu Button on HUD
-		final Sprite pauseSprite = new Sprite(mCamera.getWidth()
-				- (mCamera.getWidth() / 2), 300, this.mFaceTextureRegion,
+		final Sprite pauseSprite = new Sprite(mCamera.getWidth() / 2 + CHARACTER_WIDTH, 300, this.mFaceTextureRegion,
 				this.getVertexBufferObjectManager()) {
 			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
 				switch (touchEvent.getAction()) {
@@ -641,7 +740,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		this.mCamera.setBoundsEnabled(true);
 
 		
-		final Sprite[] spriteList = new Sprite[numCharacters];
+		spriteList = new Sprite[numCharacters];
 		
 		for (int i = 0; i < numCharacters; i++) {
 			SpriteCoordinate loc = thePlayers.get(i).getSpriteLocation();
@@ -758,8 +857,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 //							tmxLayer.getTileY(tmxTile.getTileRow()));
 //				}
 
-				if (move && !turnDone && diceDone) {
-					movementFunction(spriteList[currentCharacter]);
+				if (movesLeft == 0 && diceDone) {
 					MainGameScreen.this.mCamera.updateChaseEntity();
 					finishTurnButton.setColor(Color.WHITE);
 				}
@@ -782,14 +880,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 					checkCredits(currentCharacter);					
 
 				}
-				
-				
-
-				if (swipeDone == false) {
-					//ranNumb = (1 + (int) (Math.random() * ((MAX_CHARACTER_MOVEMENT - 1) + 1))) * CHARACTER_WIDTH;
-					ranNumb = diceRoll;// * CHARACTER_WIDTH;
-				}
-
 			}
 		});
 		
@@ -802,37 +892,31 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	}
 
 	boolean move = false;
-
-	protected void movementFunction(Sprite mySprite) {
-		if (!moving && swipeDone) {
-			//int thisCurrent = currentCharacter;
-			SpriteCoordinate offset = new SpriteCoordinate();
-
-			if (finalY - initY > 40) {
-				offset.setY(CHARACTER_WIDTH);
-			} else if (finalY - initY < -40) {
-				offset.setY(-CHARACTER_WIDTH);
-			} else if (finalX - initX > 40) {
-				offset.setX(CHARACTER_WIDTH);
-			} else if (finalX - initX < -40) {
-				offset.setX(-CHARACTER_WIDTH);
-			} else {
-				return;
-			}
-
+	
+	public boolean movement(SpriteCoordinate offset) {
+		if (movesLeft > 0) {
 			moving = true;
 
 			SpriteCoordinate characterLocation = thePlayers.get(currentCharacter).getSpriteLocation();
 			SpriteCoordinate newPosition = offset.add(characterLocation);
 			
-			newPosition = this.mainMapEvent.checkBoundaries(characterLocation, newPosition);
-			eventCompleted = false;
-			moveSprite(ranNumb-1, newPosition, offset, mySprite);		
+			if (!mainMapEvent.checkBoundaries(newPosition)) {
+				return false;
+			}
+			movesLeft--;
+			textStroke5.setText(" " + movesLeft);
+			if (movesLeft == 0) {
+				swipeDone = false;
+                turnDone = true;
+                moving = false;
+			}
+			moveSprite(newPosition, spriteList[currentCharacter]);
 		}
+		return true;
 	}
 	
-	public void moveSprite(final int moves, final SpriteCoordinate newPosition,
-			final SpriteCoordinate offset, final Sprite mySprite) {
+	public void moveSprite(final SpriteCoordinate newPosition,
+			final Sprite mySprite) {
 		
 		SpriteCoordinate characterLocation = thePlayers.get(currentCharacter).getSpriteLocation();
 		
@@ -843,9 +927,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				@Override
 				protected void onModifierStarted(IEntity pItem) {
 					super.onModifierStarted(pItem);
-					move = false;
-					gameDone = false;
-					eventCompleted = false;
 				}
 				
 				@Override
@@ -854,77 +935,12 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 					super.onModifierFinished(pItem);
 					if (!eventCompleted) {
 						checkMiniGameHotSpots(currentCharacter);
-					}
-					if (moves == 0) {
-						swipeDone = false;
-						turnDone = true;
-						moving = false;
-					} else if (thePlayers.get(currentCharacter).getSpriteLocation().compareTo(newPosition) == 0) {
-						SpriteCoordinate newPos = newPosition.add(offset);
-						newPos = mainMapEvent.checkBoundaries(thePlayers.get(currentCharacter).getSpriteLocation(), newPos);
-						int numMoves = moves - 1;
-						// if not a valid move, newPos = newPosition, and we need to show options
-						if (newPos.compareTo(newPosition) == 0) {
-							getNewMove(mainMapEvent.getPossiblePath(newPos), numMoves, mySprite);
-							return;
-						}
-						
-						moveSprite(numMoves, newPos, offset, mySprite);
+						eventCompleted = true;
 					}
 				}
 			});
 	}
 
-	private void getNewMove(SpriteCoordinate[] pathOptions, final int moves, 
-			final Sprite mySprite) {
-		StringBuilder options = new StringBuilder();
-		StringBuilder choices = new StringBuilder();
-		
-		for (Event.DIRECTION dir : Event.DIRECTION.values()) {
-			if (pathOptions[dir.getIndex()] != null) {
-				options.append(dir.getName());
-				options.append(",");
-				choices.append(dir.name());
-				choices.append(",");
-			}
-		}
-		
-		CharSequence[] dialogOptions = options.toString().split(",");
-		final String[] dialogChoices = choices.toString().split(",");
-
-		
-		alertDialogBuilder = new AlertDialog.Builder(this);
-
-		// set title and message
-		alertDialogBuilder.setTitle("Choose a direction:");
-		//alertDialogBuilder.setMessage("Please select the direction you want to go.");
-		alertDialogBuilder.setCancelable(false);
-
-		// create continue button
-		alertDialogBuilder.setItems(dialogOptions, 
-				new DialogInterface.OnClickListener() {
-					
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-						SpriteCoordinate offset = Event.getPositionFromDirection(dialogChoices[which]);
-						SpriteCoordinate newPos = offset.add(thePlayers.get(currentCharacter).getSpriteLocation());
-						moveSprite(moves, newPos, offset, mySprite);
-					}
-				});
-
-		mHandler.post(mUpdateResults);
-		
-	}
-
-	public void askDirection() {
-		// create alert dialog
-		alertDialog = alertDialogBuilder.create();
-
-		// show it
-		alertDialog.show();
-		
-	}
 	// Checks the hot spots for the minigames
 	protected void checkMiniGameHotSpots(int current) {
 		Event.getEvent(thePlayers.get(current).getSpriteLocation(), this, thePlayers.get(current).getName(), thePlayers.get(current).getGraduated(), current, thePlayers);
@@ -939,23 +955,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 	@Override
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
-		// if (pSceneTouchEvent.getAction() == MotionEvent.ACTION_UP)
-		// {
-		// move = true;
-		//
-		// }
-		if (pSceneTouchEvent.getAction() == MotionEvent.ACTION_DOWN) {
-			initX = pSceneTouchEvent.getX();
-			initY = pSceneTouchEvent.getY();
-			move = false;
-		}
-		if (pSceneTouchEvent.getAction() == MotionEvent.ACTION_MOVE) {
-			move = true;
-			finalX = pSceneTouchEvent.getX();
-			finalY = pSceneTouchEvent.getY();
-			swipeDone = true;
-
-		}
 		return false;
 	}
 

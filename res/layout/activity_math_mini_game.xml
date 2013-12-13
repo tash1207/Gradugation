@@ -11,19 +11,20 @@
         android:layout_alignParentBottom="true"
         android:onClick="Finished"
         android:text="@string/check_solution" />
-    
+
 	<GridView
 	    android:id="@+id/gridview"
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"
 	    android:layout_above="@+id/done_button"
-	    android:layout_gravity="top|left"
+	    android:layout_alignParentLeft="true"
 	    android:columnWidth="125dp"
 	    android:gravity="center"
 	    android:horizontalSpacing="2dp"
 	    android:numColumns="7"
 	    android:stretchMode="none"
 	    android:verticalSpacing="2dp"
-	    tools:context=".MathMiniGame" />
+	    tools:context=".MathMiniGame" >
+	</GridView>
 	    
 </RelativeLayout>

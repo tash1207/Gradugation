@@ -39,6 +39,7 @@
     <string name="saved_game">Load Saved Game</string>
     <string name="saved_game1">saved game1</string>
     <string name="saved_game2">saved game2</string>
+    <string name="math">Mathematics</string>
 
     <!-- Bench Press Minigame -->
     <string name="bench_press_instructions1">Tap the screen as fast as possible to make your character do reps.</string>
@@ -106,7 +107,8 @@
     <string name="food_mini_game">Junk Food Ninja</string>
 
     <!-- Math Minigame -->
-    <string name="new_puzzle">New Puzzle</string>
+    <string name="check_solution">Done</string>
+    <string name="start">Press to Start</string>
     <string name="square_size">150dp</string>
     
 </resources>

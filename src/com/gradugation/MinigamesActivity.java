@@ -27,6 +27,12 @@ public class MinigamesActivity extends BaseActivity {
 		startActivity(intent);
 	}
 	
+	public void minigameMathButtonClick(View v) {
+		Intent intent = new Intent(this, MathMiniGame.class);
+		startActivity(intent);
+	}
+	
+	
 	public void minigameColorButtonClick(View v) {
 		Intent intent = new Intent(this, ColorMiniGame.class);
 		startActivity(intent);

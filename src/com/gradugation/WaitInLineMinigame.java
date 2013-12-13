@@ -229,6 +229,17 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
 			spr2 = new Sprite(spr2X, spr2Y, character, this.getVertexBufferObjectManager());
 			spr2.setScale(0.125f);
 			spr2.setVisible(false);
+		} else {
+			sprChar = new Sprite(currentX, currentY, character, this.getVertexBufferObjectManager());
+			sprChar.setScale(0.125f);
+			
+			spr1 = new Sprite(spr1X, spr1Y, athleteTextureRegion, this.getVertexBufferObjectManager());
+			spr1.setScale(0.115f);
+			spr1.setVisible(false);
+			
+			spr2 = new Sprite(spr2X, spr2Y, engineerTextureRegion, this.getVertexBufferObjectManager());
+			spr2.setScale(0.115f);
+			spr2.setVisible(false);
 		}
 		
 		sprBus = new Sprite(sprBusX, sprBusY, busTextureRegion, this.getVertexBufferObjectManager());

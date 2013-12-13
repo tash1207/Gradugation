@@ -117,6 +117,8 @@ public class WhackAFlyerMiniGame extends SimpleBaseGameActivity implements IOnSc
     	}
     	else if (characterType.equals("PREMED")) {
     		imgName = "med_student.png";
+    	} else {
+    		imgName = "splash2.png";
     	}
 		
         this.points = 0;

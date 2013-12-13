@@ -72,7 +72,7 @@ public class ContinueActivity extends Activity {
 			
 			timeDate = (String)gameList.get(1);
 			
-			mySavedGames.add(new SavedGame("Saved game " + timeDate, R.drawable.ic_launcher));
+			mySavedGames.add(new SavedGame("Saved game from " + timeDate, R.drawable.ic_launcher));
 		}
 		if(numberSavedGames==0){
 			mySavedGames.add(new SavedGame("No saved games yet", R.drawable.ic_launcher,

@@ -64,6 +64,7 @@ public class FindTheMacMinigame extends Activity {
 		mainTable = (TableLayout) findViewById(R.id.TableLayout);
 
 		context = mainTable.getContext();
+		//spinner is a pull-down menu to choose game difficulty, set it invisible until alertDialog is clicked
 		final Spinner s = (Spinner) findViewById(R.id.Spinner);
 		s.setVisibility(View.GONE);
 		alertDialogBuilder = new AlertDialog.Builder(FindTheMacMinigame.this);
@@ -169,6 +170,7 @@ public class FindTheMacMinigame extends Activity {
 			}
 		}, 500);
 		firstCard = null;
+		//TextView to display number of tries
 		((TextView) findViewById(R.id.tries)).setText("Tries: " + tries);
 	}
 
@@ -226,7 +228,7 @@ public class FindTheMacMinigame extends Activity {
 		}
 		return row;
 	}
-
+	//buttons are created with the image face up
 	private View createImageButton(int x, int y) {
 		Button button = new Button(context);
 		button.setBackgroundDrawable(images.get(cards[x][y]));

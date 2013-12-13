@@ -201,6 +201,7 @@ public class Event {
 	public static void getEvent(SpriteCoordinate coordinate, Activity context,
 			String characterType, boolean hasGraduated, int currentCharacter, ArrayList<Character> thePlayers) {
 
+		Log.d("character type:", characterType);
 		if (GRADUATION.isEqual(coordinate) && hasGraduated) {
 			// graduate!
 			

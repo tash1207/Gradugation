@@ -109,11 +109,11 @@ public class Character implements Serializable {
         }
 
         public String getName() {
-                return name;
+                return this.name;
         }
         
         public String getType() {
-        	return this.character.toString();
+        	return this.character.name();
         }
 
         public void setId(int id) {

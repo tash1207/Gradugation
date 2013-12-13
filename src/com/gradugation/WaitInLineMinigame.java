@@ -125,8 +125,8 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
 	@Override
 	protected void onCreateResources() throws IOException {
     	Intent intent = getIntent();
-    	characterType = intent.getStringExtra("character_type");
-    	if (characterType == null) characterType = "Gradugator";
+    	characterType = intent.getStringExtra("character_type").toUpperCase();
+    	if (characterType == null) characterType = "GRADUGATOR";
     	
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		// Background
@@ -181,7 +181,7 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
 		scene.setBackground(new Background(Color.WHITE));
 		sprBg = new Sprite(CAMERA_WIDTH - 80, CAMERA_HEIGHT - 10, bgRegion, this.getVertexBufferObjectManager());
 
-		if (characterType.equals("Gradugator")) {
+		if (characterType.equals("GRADUGATOR")) {
 			sprChar = new Sprite(currentX, currentY, character, this.getVertexBufferObjectManager());
 			sprChar.setScale(0.125f);
 			
@@ -193,7 +193,7 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
 			spr2.setScale(0.115f);
 			spr2.setVisible(false);
 		}
-		else if (characterType.equals("Athlete")) {
+		else if (characterType.equals("ATHLETE")) {
 			sprChar = new Sprite(currentX, currentY, athleteTextureRegion, this.getVertexBufferObjectManager());
 			sprChar.setScale(0.115f);
 			
@@ -205,7 +205,7 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
 			spr2.setScale(0.115f);
 			spr2.setVisible(false);
 		}
-		else if (characterType.equals("Engineer")) {
+		else if (characterType.equals("ENGINEER")) {
 			sprChar = new Sprite(currentX, currentY, engineerTextureRegion, this.getVertexBufferObjectManager());
 			sprChar.setScale(0.115f);
 			
@@ -218,7 +218,7 @@ public class WaitInLineMinigame extends SimpleBaseGameActivity implements IOnSce
 			spr2.setVisible(false);
 		}
 		
-		else if (characterType.equals("PreMed")) {
+		else if (characterType.equals("PREMED")) {
 			sprChar = new Sprite(currentX, currentY, premedTextureRegion, this.getVertexBufferObjectManager());
 			sprChar.setScale(0.115f);
 			

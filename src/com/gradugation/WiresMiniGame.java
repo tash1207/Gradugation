@@ -24,8 +24,8 @@ public class WiresMiniGame extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_wires_mini_game);
 		
-		characterType = getIntent().getStringExtra("character_type");
-		if (characterType == null) characterType = "Gradugator";
+		characterType = getIntent().getStringExtra("character_type").toUpperCase();
+		if (characterType == null) characterType = "GRADUGATOR";
 		
 		gameNumber = 1 + (int) (Math.random() * 4);
 

@@ -167,7 +167,7 @@ public class FindTheMacMinigame extends Activity {
 					}
 				}
 			}
-		}, 700);
+		}, 500);
 		firstCard = null;
 		((TextView) findViewById(R.id.tries)).setText("Tries: " + tries);
 	}

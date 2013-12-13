@@ -157,9 +157,6 @@ public class ChooseCharacterActivity extends BaseActivity {
         	// need credits/coints = 0 for each player
         	// need to generate gameId for use in db
         	
-        	
-        	
-        	
         	dbhelper = new DbHelper(this);
             SQLiteDatabase db = dbhelper.openDB();
             

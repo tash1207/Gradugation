@@ -133,13 +133,10 @@ public class Event {
 	}
 
 	
-	public SpriteCoordinate checkBoundaries(SpriteCoordinate coordinate, SpriteCoordinate offset) {
-		MapCoordinate mapEndLocation = offset.spriteToMap();
+	public boolean checkBoundaries(SpriteCoordinate endLocation) {
+		MapCoordinate mapEndLocation = endLocation.spriteToMap();
 
-		if (!mapPath.contains(mapEndLocation)) {
-			return coordinate;
-		}
-		return mapEndLocation.mapToSprite();
+		return mapPath.contains(mapEndLocation);
 	}
 
 	public SpriteCoordinate[] getPossiblePath(SpriteCoordinate position) {

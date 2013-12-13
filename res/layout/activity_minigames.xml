@@ -369,28 +369,6 @@
                 android:textSize="16sp" >
             </TextView>
         </RelativeLayout>
-        
-        <RelativeLayout
-            android:id="@+id/minigame_game_over_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/button_rectangle_orange"
-            android:clickable="true"
-            android:onClick="gameOverScreenButtonClick"
-            android:padding="8dp" >
-
-            <TextView
-                android:id="@+id/game_over_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_margin="8dp"
-                android:text="@string/game_over_text"
-                android:textColor="@color/gator_blue"
-                android:textSize="16sp" >
-            </TextView>
-        </RelativeLayout>
     </LinearLayout>
 
 </ScrollView>

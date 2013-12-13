@@ -50,6 +50,7 @@ import org.andengine.util.Constants;
 import org.andengine.util.debug.Debug;
 
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -63,6 +64,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.coordinates.MapCoordinate;
@@ -87,13 +89,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 	// Need handler for callbacks to the UI thread
     final Handler mHandler = new Handler();
-
-    // Create runnable for posting
-    final Runnable mUpdateResults = new Runnable() {
-        public void run() {
-            askDirection();
-        }
-    };
     
     private AlertDialog.Builder alertDialogBuilder;
 	private AlertDialog alertDialog;
@@ -107,11 +102,9 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	protected int mCactusCount;
 	private int CREDITS_NEEDED_GRADUATE = 15;
 
-	//private BitmapTextureAtlas characterTextureAtlas,characterTextureAtlas2,characterTextureAtlas3,characterTextureAtlas4;
-	//public ITextureRegion character,character2,character3,character4;
-
 	private BitmapTextureAtlas[] characterTextureAtlas;
 	private ITextureRegion[] character;
+	private Sprite[] spriteList;
 
 	private BitmapTextureAtlas diceTextureAtlas;
 	private TextureRegion diceTextureRegion;
@@ -119,6 +112,14 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	private TextureRegion finishTurnTextureRegion;
 	private BitmapTextureAtlas musicTextureAtlas;
 	private ITextureRegion mMusicTextureRegion;
+	private BitmapTextureAtlas rightArrowTextureAtlas;
+	private ITextureRegion rightArrowRegion;
+	private BitmapTextureAtlas leftArrowTextureAtlas;
+	private ITextureRegion leftArrowRegion;
+	private BitmapTextureAtlas downArrowTextureAtlas;
+	private ITextureRegion downArrowRegion;
+	private BitmapTextureAtlas upArrowTextureAtlas;
+	private ITextureRegion upArrowRegion;
 	
 	private ITexture mFaceTexture;
 	private ITextureRegion mFaceTextureRegion;
@@ -151,9 +152,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	public int turnNum;
 	public int currentCharacter;
 	public int currentCharacterYear;
-	public int ranNumb;
+	public int movesLeft;
 	private int numCharacters;
 	private int movementCount;
+	private Text textStroke5;
 
 	private Random random;
     private int diceRoll = 0;
@@ -171,16 +173,12 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	
 	private boolean finishTurn = false; 
 	private boolean diceDone = false;
-
+	private boolean music;
 	boolean swipeDone = false;
 	private DbHelper dbhelper;
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {
-		// Toast.makeText(this,
-		// "The tile the player is walking on will be highlighted.",
-		// Toast.LENGTH_LONG).show();
-
 		final float maxVelocityX = 150;
 		final float maxVelocityY = 150;
 		final float maxZoomFactorChange = 5;
@@ -315,7 +313,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 		textStrokes = new Text[numCharacters];
 
-
 		/*
 		 * To update text, use [text].setText("blah blah"); In which "blah blah"
 		 * is whatever you want to change the text to. You can use variables.
@@ -326,27 +323,18 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 					thePlayers.get(i).getName()   +"\nCredits: " + thePlayers.get(i).getCredits()
 				    + "\nCoins: " + thePlayers.get(i).getCoins(), vertexBufferObjectManager); 
 		}
-		final Text textStroke5 = new Text(180, 20, this.mStrokeFont,
+		textStroke5 = new Text(180, 20, this.mStrokeFont,
                 " " + diceRoll, vertexBufferObjectManager);
 
 		textStroke5.setScale((float) .7 ); 
 		mHUD = new HUD();
 		mHUD.attachChild(scene);
 
-		/*
-		 * Where the button should go A fancier button should go here, but to
-		 * test the randomizer, I believe this should suffice.
-		 */
 
 		final Sprite diceButton = new Sprite(180, CAMERA_HEIGHT/10, this.diceTextureRegion,
                 this.getVertexBufferObjectManager()) {
 
 	        public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
-	                /*
-	                 * Here, you can update the randomizer when the user presses the
-	                 * button. Disregard the effect, just lets me know that the
-	                 * button is being pressed.
-	                 */
 	                //generate random number [1,3]
 	        	
 	        	currentCharacterYear = (thePlayers.get(currentCharacter).getCredits()/3) + 1;
@@ -373,7 +361,11 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	                	if (touchEvent.isActionUp()) {
 	                		this.setColor(Color.GRAY);
 	                		textStroke5.setText(" " + diceRoll);
+	                		movesLeft = diceRoll;
+	                		eventCompleted = false;
 	                		diceDone = true;
+	                		move = false;
+	    					gameDone = false;
 	                		
 	                	}
 	                	if (touchEvent.isActionDown()) {
@@ -383,21 +375,117 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	                return true;
 	        };
 		};
-		diceButton.setScale((float) .5);	
+		diceButton.setScale((float) .5);
+		
+		this.rightArrowTextureAtlas = new BitmapTextureAtlas(
+				this.getTextureManager(), 120, 120, TextureOptions.BILINEAR);
+		this.rightArrowRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(rightArrowTextureAtlas, this, "right_arrow.png",
+						0, 0);
+		this.rightArrowTextureAtlas.load();
+		
+		final Sprite rightArrowButton = new Sprite(CAMERA_WIDTH-CHARACTER_WIDTH, CAMERA_HEIGHT/2, this.rightArrowRegion,
+				this.getVertexBufferObjectManager()) {
+			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
+				if (touchEvent.isActionDown()) {
+					return movement(new SpriteCoordinate(CHARACTER_WIDTH,0));
+				} else {
+					return false;
+				}
+			}
+		};
+		rightArrowButton.setScale(.5f);
+		this.mHUD.registerTouchArea(rightArrowButton);
+		this.mHUD.attachChild(rightArrowButton);
+		
+		this.leftArrowTextureAtlas = new BitmapTextureAtlas(
+				this.getTextureManager(), 120, 120, TextureOptions.BILINEAR);
+		this.leftArrowRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(leftArrowTextureAtlas, this, "left_arrow.png",
+						0, 0);
+		this.leftArrowTextureAtlas.load();
+		
+		final Sprite leftArrowButton = new Sprite(CHARACTER_WIDTH, CAMERA_HEIGHT/2, this.leftArrowRegion,
+				this.getVertexBufferObjectManager()) {
+			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
+				if (touchEvent.isActionDown()) {
+					if (touchEvent.isActionDown()) {
+						return movement(new SpriteCoordinate(-CHARACTER_WIDTH,0));
+					} else {
+						return false;
+					}
+				}
+				return true;
+			}
+		};
+		leftArrowButton.setScale(.5f);
+		this.mHUD.registerTouchArea(leftArrowButton);
+		this.mHUD.attachChild(leftArrowButton);
+		
+		this.downArrowTextureAtlas = new BitmapTextureAtlas(
+				this.getTextureManager(), 120, 120, TextureOptions.BILINEAR);
+		this.downArrowRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(downArrowTextureAtlas, this, "down_arrow.png",
+						0, 0);
+		this.downArrowTextureAtlas.load();
+		
+		final Sprite downArrowButton = new Sprite(CAMERA_WIDTH/2, CHARACTER_WIDTH, this.downArrowRegion,
+				this.getVertexBufferObjectManager()) {
+			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
+				if (touchEvent.isActionDown()) {
+					if (touchEvent.isActionDown()) {
+						return movement(new SpriteCoordinate(0, -CHARACTER_WIDTH));
+					} else {
+						return false;
+					}
+				}
+				return true;
+			}
+		};
+		downArrowButton.setScale(.5f);
+		this.mHUD.registerTouchArea(downArrowButton);
+		this.mHUD.attachChild(downArrowButton);
+		
+		this.upArrowTextureAtlas = new BitmapTextureAtlas(
+				this.getTextureManager(), 120, 120, TextureOptions.BILINEAR);
+		this.upArrowRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(upArrowTextureAtlas, this, "up_arrow.png",
+						0, 0);
+		this.upArrowTextureAtlas.load();
+		
+		final Sprite upArrowButton = new Sprite(CAMERA_WIDTH/2, CAMERA_HEIGHT-CHARACTER_WIDTH, this.upArrowRegion,
+				this.getVertexBufferObjectManager()) {
+			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
+				if (touchEvent.isActionDown()) {
+					if (touchEvent.isActionDown()) {
+						return movement(new SpriteCoordinate(0,CHARACTER_WIDTH));
+					} else {
+						return false;
+					}
+				}
+				return true;
+			}
+		};
+		upArrowButton.setScale(.5f);
+		this.mHUD.registerTouchArea(upArrowButton);
+		this.mHUD.attachChild(upArrowButton);
 		
 		final Sprite finishTurnButton = new Sprite(310, CAMERA_HEIGHT/10, this.finishTurnTextureRegion,
                 this.getVertexBufferObjectManager()) {
 
 	        public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
-	                
-	                if (touchEvent.isActionUp()) {
-	                        this.setColor(Color.GRAY);
-	                        finishTurn = true;
-	                        }
-	                if (touchEvent.isActionDown()) {
-	                        this.setColor(Color.GRAY);
+	                if (movesLeft == 0) {
+		                if (touchEvent.isActionUp()) {
+		                        this.setColor(Color.GRAY);
+		                        finishTurn = true;
+		                        }
+		                if (touchEvent.isActionDown()) {
+		                        this.setColor(Color.GRAY);
+		                }
+		                return true;
+	                } else {
+	                	return false;
 	                }
-	                return true;
 	        };
 		};
 		finishTurnButton.setScale((float) .5);
@@ -420,8 +508,10 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				case TouchEvent.ACTION_DOWN:
 					if (mMusic.isPlaying()) {
 						mMusic.pause();
+						music = false;
 					} else {
 						mMusic.play();
+						music = true;
 					}
 					break;
 				case TouchEvent.ACTION_MOVE:
@@ -509,59 +599,12 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		};
 		this.mPauseScene.registerTouchArea(saveButton);
 		this.mPauseScene.attachChild(saveButton);
-		
-//		final Sprite saveGameButton = new Sprite(cX+(CAMERA_WIDTH/10), cY + (CAMERA_HEIGHT/4),
-//				this.mSaveGameTextureRegion, this.getVertexBufferObjectManager()) {
-//			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
-//				switch (touchEvent.getAction()) {
-//				case TouchEvent.ACTION_DOWN:
-//					String[] key1 = {"128"};
-//					String[] key2 = {"128"};
-//					String[] key3 = {"128","1"};
-//					String[] key4 = {"128"};
-//					String[] key5 = {"128","1"};
-//					String[] key6 = {"128"};
-//					String[] key7 = {"128"};
-//					String[] key8 = {"128"};
-//					String[] key9 = {"128","1","2"};
-//			        
-//					String[] newTable1Values = {"128","1","2"};
-//			        String[] newTable2Values = {"128","1","2","4"};
-//			        String[] newTable3Values = {"128","1","2","3","4","5"};
-//			        String[] newTable4Values = {"128","1","4","3","4"};
-//			        String[] newTable5Values = {"128","1","9"};
-//			        String[] newTable6Values = {"128","1","5","3","4"};
-//			        String[] newTable7Values = {"128","1","5","1","4","5","6"};
-//			        String[] newTable8Values = {"128","0"};
-//			        String[] newTable9Values = {"128","1","2","3"};
-//					//db.updateRow(tableNum, table1Values, newTable1Values);
-//			        dbhelper.updateRow(1,key1,newTable1Values);
-//			        dbhelper.updateRow(2,key2,newTable2Values);
-//			        dbhelper.updateRow(3,key3,newTable3Values);
-//			        dbhelper.updateRow(4,key4,newTable4Values);
-//			        dbhelper.updateRow(5,key5,newTable5Values);
-//			        dbhelper.updateRow(6,key6,newTable6Values);
-//			        dbhelper.updateRow(7,key7,newTable7Values);
-//			        dbhelper.updateRow(8,key8,newTable8Values);
-//			        dbhelper.updateRow(9,key9,newTable9Values);
-//					break;
-//				case TouchEvent.ACTION_MOVE:
-//					break;
-//				case TouchEvent.ACTION_UP:
-//					break;
-//				}
-//				return true;
-//			};
-//		};
-//		this.mPauseScene.registerTouchArea(saveGameButton);
-//		this.mPauseScene.attachChild(saveGameButton);
 
 		/* Makes the paused Game look through. */
 		this.mPauseScene.setBackgroundEnabled(false);
 
 		// Main Menu Button on HUD
-		final Sprite pauseSprite = new Sprite(mCamera.getWidth()
-				- (mCamera.getWidth() / 2), 300, this.mFaceTextureRegion,
+		final Sprite pauseSprite = new Sprite(mCamera.getWidth() / 2 + CHARACTER_WIDTH, 300, this.mFaceTextureRegion,
 				this.getVertexBufferObjectManager()) {
 			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
 				switch (touchEvent.getAction()) {
@@ -608,14 +651,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 								final TMXLayer pTMXLayer,
 								final TMXTile pTMXTile,
 								final TMXProperties<TMXTileProperty> pTMXTileProperties) {
-							/*
-							 * We are going to count the tiles that have the
-							 * property "cactus=true" set.
-							 */
-							// if(pTMXTileProperties.containsTMXProperty("cactus",
-							// "true")) {
-							// MainGameScreen.this.mCactusCount++;
-							// }
 						}
 					});
 			this.mTMXTiledMap = tmxLoader
@@ -630,7 +665,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		moving = false;
 		turnDone = false;
 		turnNum = 1;
-		//ranNumb = 1 + (int) (Math.random() * ((6 - 1) + 1));
 
 		scene.attachChild(this.mTMXTiledMap);
 
@@ -641,7 +675,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		this.mCamera.setBoundsEnabled(true);
 
 		
-		final Sprite[] spriteList = new Sprite[numCharacters];
+		spriteList = new Sprite[numCharacters];
 		
 		for (int i = 0; i < numCharacters; i++) {
 			SpriteCoordinate loc = thePlayers.get(i).getSpriteLocation();
@@ -649,18 +683,12 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 					this.getVertexBufferObjectManager());
 		}
 
-		/* Create the sprite and add it to the scene. */
-		// final AnimatedSprite player = new AnimatedSprite(centerX, centerY,
-		// this.character, this.getVertexBufferObjectManager());
-
 		//Open Database
         dbhelper = new DbHelper(this);
         SQLiteDatabase db = dbhelper.openDB();
         Log.d("TEST", "Database has been opened");
         Log.d("TEST2", Integer.toString(thePlayers.get(0).gameId));
 
-        
-        
         String[] gameKey = { Integer.toString(thePlayers.get(0).gameId) };
       //Grab Game info
       		ArrayList gameList = dbhelper.getRow(1, gameKey);
@@ -672,62 +700,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
       	dbhelper.close();
         
 		this.mCamera.setChaseEntity(spriteList[currentCharacter]);
-
-		// final Path path = new Path(5).to(50, 740).to(50, 1000).to(820,
-		// 1000).to(820, 740).to(0);
-
-		// player.registerEntityModifier(new LoopEntityModifier(new
-		// PathModifier(30, path, null, new IPathModifierListener() {
-		// @Override
-		// public void onPathStarted(final PathModifier pPathModifier, final
-		// IEntity pEntity) {
-		//
-		// }
-		//
-		// @Override
-		// public void onPathWaypointStarted(final PathModifier pPathModifier,
-		// final IEntity pEntity, final int pWaypointIndex) {
-		// switch(pWaypointIndex) {
-		// case 0:
-		// player.animate(new long[] { 200, 200, 200 }, 0, 2, true);
-		// break;
-		// case 1:
-		// player.animate(new long[] { 200, 200, 200 }, 3, 5, true);
-		// break;
-		// case 2:
-		// player.animate(new long[] { 200, 200, 200 }, 6, 8, true);
-		// break;
-		// case 3:
-		// player.animate(new long[] { 200, 200, 200 }, 9, 11, true);
-		// break;
-		// }
-		// }
-		//
-		// @Override
-		// public void onPathWaypointFinished(final PathModifier pPathModifier,
-		// final IEntity pEntity, final int pWaypointIndex) {
-		//
-		// }
-		//
-		// @Override
-		// public void onPathFinished(final PathModifier pPathModifier, final
-		// IEntity pEntity) {
-		//
-		// }
-		// })));
-
-		/*
-		 * Now we are going to create a rectangle that will always highlight the
-		 * tile below the feet of the pEntity.
-		 */
-//		final Rectangle currentTileRectangle = new Rectangle(0, 0,
-//				this.mTMXTiledMap.getTileWidth(),
-//				this.mTMXTiledMap.getTileHeight(),
-//				this.getVertexBufferObjectManager());
-//		/* Set the OffsetCenter to 0/0, so that it aligns with the TMXTiles. */
-//		currentTileRectangle.setOffsetCenter(0, 0);
-		//currentTileRectangle.setColor(1, 0, 0, 0.25f);
-		//scene.attachChild(currentTileRectangle);
 
 		/* The layer for the player to walk on. */
 		final TMXLayer tmxLayer = this.mTMXTiledMap.getTMXLayers().get(0);
@@ -745,26 +717,16 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				localCoord[1] = spriteList[currentCharacter].getHeight() * .5f;
 				final float[] playerFootCordinates = spriteList[currentCharacter]
 						.convertLocalCoordinatesToSceneCoordinates(localCoord);
-				//
+				
 				/* Get the tile the feet of the player are currently waking on. */
 				final TMXTile tmxTile = tmxLayer.getTMXTileAt(
 						playerFootCordinates[Constants.VERTEX_INDEX_X],
 						playerFootCordinates[Constants.VERTEX_INDEX_Y]);
-//				if (tmxTile != null) {
-//					// tmxTile.setTextureRegion(null); <-- Eraser-style removing
-//					// of tiles =D
-//					currentTileRectangle.setPosition(
-//							tmxLayer.getTileX(tmxTile.getTileColumn()),
-//							tmxLayer.getTileY(tmxTile.getTileRow()));
-//				}
 
-				if (move && !turnDone && diceDone) {
-					movementFunction(spriteList[currentCharacter]);
+				if (movesLeft == 0 && diceDone) {
 					MainGameScreen.this.mCamera.updateChaseEntity();
 					finishTurnButton.setColor(Color.WHITE);
 				}
-				
-				
 
 				if (turnDone && finishTurn) { //&& swipeDone == false
 					moving = false;
@@ -782,14 +744,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 					checkCredits(currentCharacter);					
 
 				}
-				
-				
-
-				if (swipeDone == false) {
-					//ranNumb = (1 + (int) (Math.random() * ((MAX_CHARACTER_MOVEMENT - 1) + 1))) * CHARACTER_WIDTH;
-					ranNumb = diceRoll;// * CHARACTER_WIDTH;
-				}
-
 			}
 		});
 		
@@ -802,37 +756,32 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	}
 
 	boolean move = false;
-
-	protected void movementFunction(Sprite mySprite) {
-		if (!moving && swipeDone) {
-			//int thisCurrent = currentCharacter;
-			SpriteCoordinate offset = new SpriteCoordinate();
-
-			if (finalY - initY > 40) {
-				offset.setY(CHARACTER_WIDTH);
-			} else if (finalY - initY < -40) {
-				offset.setY(-CHARACTER_WIDTH);
-			} else if (finalX - initX > 40) {
-				offset.setX(CHARACTER_WIDTH);
-			} else if (finalX - initX < -40) {
-				offset.setX(-CHARACTER_WIDTH);
-			} else {
-				return;
-			}
+	
+	public boolean movement(SpriteCoordinate offset) {
+		if (movesLeft > 0) {
 
 			moving = true;
 
 			SpriteCoordinate characterLocation = thePlayers.get(currentCharacter).getSpriteLocation();
 			SpriteCoordinate newPosition = offset.add(characterLocation);
 			
-			newPosition = this.mainMapEvent.checkBoundaries(characterLocation, newPosition);
-			eventCompleted = false;
-			moveSprite(ranNumb-1, newPosition, offset, mySprite);		
+			if (!mainMapEvent.checkBoundaries(newPosition)) {
+				return false;
+			}
+			movesLeft--;
+			textStroke5.setText(" " + movesLeft);
+			if (movesLeft == 0) {
+				swipeDone = false;
+                turnDone = true;
+                moving = false;
+			}
+			moveSprite(newPosition, spriteList[currentCharacter]);
 		}
+		return true;
 	}
 	
-	public void moveSprite(final int moves, final SpriteCoordinate newPosition,
-			final SpriteCoordinate offset, final Sprite mySprite) {
+	public void moveSprite(final SpriteCoordinate newPosition,
+			final Sprite mySprite) {
 		
 		SpriteCoordinate characterLocation = thePlayers.get(currentCharacter).getSpriteLocation();
 		
@@ -843,9 +792,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 				@Override
 				protected void onModifierStarted(IEntity pItem) {
 					super.onModifierStarted(pItem);
-					move = false;
-					gameDone = false;
-					eventCompleted = false;
 				}
 				
 				@Override
@@ -854,77 +800,12 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 					super.onModifierFinished(pItem);
 					if (!eventCompleted) {
 						checkMiniGameHotSpots(currentCharacter);
-					}
-					if (moves == 0) {
-						swipeDone = false;
-						turnDone = true;
-						moving = false;
-					} else if (thePlayers.get(currentCharacter).getSpriteLocation().compareTo(newPosition) == 0) {
-						SpriteCoordinate newPos = newPosition.add(offset);
-						newPos = mainMapEvent.checkBoundaries(thePlayers.get(currentCharacter).getSpriteLocation(), newPos);
-						int numMoves = moves - 1;
-						// if not a valid move, newPos = newPosition, and we need to show options
-						if (newPos.compareTo(newPosition) == 0) {
-							getNewMove(mainMapEvent.getPossiblePath(newPos), numMoves, mySprite);
-							return;
-						}
-						
-						moveSprite(numMoves, newPos, offset, mySprite);
+						eventCompleted = true;
 					}
 				}
 			});
 	}
 
-	private void getNewMove(SpriteCoordinate[] pathOptions, final int moves, 
-			final Sprite mySprite) {
-		StringBuilder options = new StringBuilder();
-		StringBuilder choices = new StringBuilder();
-		
-		for (Event.DIRECTION dir : Event.DIRECTION.values()) {
-			if (pathOptions[dir.getIndex()] != null) {
-				options.append(dir.getName());
-				options.append(",");
-				choices.append(dir.name());
-				choices.append(",");
-			}
-		}
-		
-		CharSequence[] dialogOptions = options.toString().split(",");
-		final String[] dialogChoices = choices.toString().split(",");
-
-		
-		alertDialogBuilder = new AlertDialog.Builder(this);
-
-		// set title and message
-		alertDialogBuilder.setTitle("Choose a direction:");
-		//alertDialogBuilder.setMessage("Please select the direction you want to go.");
-		alertDialogBuilder.setCancelable(false);
-
-		// create continue button
-		alertDialogBuilder.setItems(dialogOptions, 
-				new DialogInterface.OnClickListener() {
-					
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-						SpriteCoordinate offset = Event.getPositionFromDirection(dialogChoices[which]);
-						SpriteCoordinate newPos = offset.add(thePlayers.get(currentCharacter).getSpriteLocation());
-						moveSprite(moves, newPos, offset, mySprite);
-					}
-				});
-
-		mHandler.post(mUpdateResults);
-		
-	}
-
-	public void askDirection() {
-		// create alert dialog
-		alertDialog = alertDialogBuilder.create();
-
-		// show it
-		alertDialog.show();
-		
-	}
 	// Checks the hot spots for the minigames
 	protected void checkMiniGameHotSpots(int current) {
 		Event.getEvent(thePlayers.get(current).getSpriteLocation(), this, thePlayers.get(current).getName(), thePlayers.get(current).getGraduated(), current, thePlayers);
@@ -939,23 +820,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 	@Override
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
-		// if (pSceneTouchEvent.getAction() == MotionEvent.ACTION_UP)
-		// {
-		// move = true;
-		//
-		// }
-		if (pSceneTouchEvent.getAction() == MotionEvent.ACTION_DOWN) {
-			initX = pSceneTouchEvent.getX();
-			initY = pSceneTouchEvent.getY();
-			move = false;
-		}
-		if (pSceneTouchEvent.getAction() == MotionEvent.ACTION_MOVE) {
-			move = true;
-			finalX = pSceneTouchEvent.getX();
-			finalY = pSceneTouchEvent.getY();
-			swipeDone = true;
-
-		}
 		return false;
 	}
 
@@ -1003,12 +867,17 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 	private void checkCredits(final int character) {
 		if (thePlayers.get(character).getCredits() >= CREDITS_NEEDED_GRADUATE) {
 			runOnUiThread(new Runnable() {                  
-	            @Override
 	            public void run() {
+	            	if (thePlayers.get(character).getGraduated() == false) {
+	            	    Builder alert = new AlertDialog.Builder(MainGameScreen.this);
+	            	    alert.setTitle("You have graduated!");
+	            	    alert.setMessage("Please head to the O'Connoll Center.");
+	            	    alert.setPositiveButton("OK", null);
+	            	    alert.show();
+	            	}
 	            	thePlayers.get(character).setGraduated(true);
-	            	Toast.makeText(getApplicationContext(), getString(R.string.ready_to_graduate, thePlayers.get(character).getName(), thePlayers.get(character).getCredits()),
-	            			   Toast.LENGTH_SHORT).show();
-	            	mMusic.stop();
+	            	/*Toast.makeText(getApplicationContext(), getString(R.string.ready_to_graduate, thePlayers.get(character).getName(), thePlayers.get(character).getCredits()),
+	            			   Toast.LENGTH_SHORT).show();*/
 	                }                  
 	            });
 
@@ -1058,7 +927,21 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		
 	}
 	
+	@Override
+	public void onPause() {
+			super.onPause();
+			if (mMusic.isPlaying()) {
+				mMusic.pause();
+			}
+	}
 	
+	@Override
+	public void onResume() {
+			super.onResume();
+			if (music) {
+				mMusic.resume();
+			}
+	}
 }
 
 

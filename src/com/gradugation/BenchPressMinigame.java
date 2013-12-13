@@ -123,7 +123,7 @@ public class BenchPressMinigame extends Activity {
 			
 			reps_text.setText("Reps: " + reps);
 			
-			if (characterType.equals("Engineer")) {
+			if (characterType.equals("ENGINEER")) {
 				if (clicks % 4 == 0) {
 					image.setImageResource(R.drawable.bench_press_engineer3);
 				}
@@ -134,7 +134,7 @@ public class BenchPressMinigame extends Activity {
 					image.setImageResource(R.drawable.bench_press_engineer1);
 				}
 			}
-			else if (characterType.equals("Athlete")) {
+			else if (characterType.equals("ATHLETE")) {
 				if (clicks % 4 == 0) {
 					image.setImageResource(R.drawable.bench_press_athlete3);
 				}
@@ -145,7 +145,7 @@ public class BenchPressMinigame extends Activity {
 					image.setImageResource(R.drawable.bench_press_athlete1);
 				}
 			}
-			else if (characterType.equals("Gradugator")) {
+			else if (characterType.equals("GRADUGATOR")) {
 				if (clicks % 4 == 0) {
 					image.setImageResource(R.drawable.bench_press_gradugator3);
 				}
@@ -156,7 +156,7 @@ public class BenchPressMinigame extends Activity {
 					image.setImageResource(R.drawable.bench_press_gradugator1);
 				}
 			}
-			else if (characterType.equals("PreMed")) {
+			else if (characterType.equals("PREMED")) {
 				if (clicks % 4 == 0) {
 					image.setImageResource(R.drawable.bench_press_premed3);
 				}

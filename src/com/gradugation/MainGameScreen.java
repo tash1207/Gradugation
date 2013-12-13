@@ -604,7 +604,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		this.mPauseScene.setBackgroundEnabled(false);
 
 		// Main Menu Button on HUD
-		final Sprite pauseSprite = new Sprite(mCamera.getWidth() / 2 + CHARACTER_WIDTH, 300, this.mFaceTextureRegion,
+		final Sprite pauseSprite = new Sprite(mCamera.getWidth() / 2 + CHARACTER_WIDTH + 50 , 300, this.mFaceTextureRegion,
 				this.getVertexBufferObjectManager()) {
 			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
 				switch (touchEvent.getAction()) {

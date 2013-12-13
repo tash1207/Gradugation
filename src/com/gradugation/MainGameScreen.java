@@ -1058,6 +1058,31 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 		
 	}
 	
+	public void deleteGame(){
+		
+		int numPlayers = thePlayers.size();
+
+		DbHelper dbhelper = new DbHelper(this);
+		SQLiteDatabase db = dbhelper.openDB();
+		
+		int gameId = thePlayers.get(0).getGameId();  
+        String[] table1Key = {Integer.toString(gameId)};
+        dbhelper.deleteRow(1, table1Key); //Delete game table
+
+        //delete numPlayers rows from table 3
+        for (int i = 0; i < numPlayers; i++)
+        {
+        	String[] characterKey = {Integer.toString((gameId<<2) + i)};
+        	dbhelper.deleteRow(2, characterKey);
+        }
+        
+        dbhelper.deleteRow(4, table1Key); //Delete minigame table
+
+		
+        dbhelper.close();
+
+	}
+	
 	
 }
 

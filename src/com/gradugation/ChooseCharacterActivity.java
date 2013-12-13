@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -26,7 +27,7 @@ public class ChooseCharacterActivity extends BaseActivity {
         public static final String THE_PLAYERS = "com.gradugation.the_players";
         private RadioGroup radioGroup;
         private RadioButton radioGroup1Button;
-        
+        private EditText textBox;
         private ImageView characterImage;
         private TextView characterAttributes;
     	private final MapCoordinate centerMap = new MapCoordinate(7,7);
@@ -37,6 +38,9 @@ public class ChooseCharacterActivity extends BaseActivity {
 
         ArrayList<Character> thePlayers = new ArrayList<Character>();
         int playersChosen = 0;
+        
+        
+        
         @Override
         protected void onCreate(Bundle savedInstanceState) {
                 super.onCreate(savedInstanceState);
@@ -60,9 +64,10 @@ public class ChooseCharacterActivity extends BaseActivity {
                 radioGroup = (RadioGroup) findViewById(R.id.radioGroup1);
                 characterImage = (ImageView) findViewById(R.id.character_image);
                 characterAttributes = (TextView) findViewById(R.id.character_attributes);
-                
-                radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                textBox = (EditText) findViewById(R.id.editText1);
+			
 					
+                radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 					@Override
 					public void onCheckedChanged(RadioGroup group, int checkedId) {
 						if (checkedId == R.id.radio0) {
@@ -104,15 +109,17 @@ public class ChooseCharacterActivity extends BaseActivity {
                     radioGroup1Button = (RadioButton) findViewById(selectedId);
                     
                     String type = (String)radioGroup1Button.getText();
+                    String name = textBox.getText().toString();
+
                     // need to grab game id from database when we are saving this
                     int gameID = dbhelper.getGameCount();
-                    Character thePlayer = new Character(type.toUpperCase(), type, defaultLocation[playersChosen].mapToSprite(), playersChosen, gameID, 0, 0);
+                    Character thePlayer = new Character(type.toUpperCase(), name, defaultLocation[playersChosen].mapToSprite(), playersChosen, gameID, 0, 0);
                     thePlayers.add(thePlayer);
                     
                     
                     Toast.makeText(ChooseCharacterActivity.this,  
-                    		"Player " + Integer.toString(playersChosen+1) + " is " + 
-                    		thePlayers.get(playersChosen).getName(), Toast.LENGTH_SHORT).show();
+                    		thePlayers.get(playersChosen).getName() + " is Player " + Integer.toString(playersChosen+1) + "\n" + 
+                            		thePlayers.get(playersChosen).getName() + " chose " + thePlayers.get(playersChosen).getType(),  Toast.LENGTH_SHORT).show();
                     playersChosen++;
                     startGame();
             }
@@ -123,16 +130,19 @@ public class ChooseCharacterActivity extends BaseActivity {
                     radioGroup1Button = (RadioButton) findViewById(selectedId);
                     
                     String type = (String)radioGroup1Button.getText();
+                    String name = textBox.getText().toString();
                     // need to grab game id from database when we are saving this
                     int gameID = dbhelper.getGameCount();
-                    Character thePlayer = new Character(type.toUpperCase(), type, defaultLocation[playersChosen].mapToSprite(), playersChosen, gameID, 0, 0);
+                    Character thePlayer = new Character(type.toUpperCase(), name, defaultLocation[playersChosen].mapToSprite(), playersChosen, gameID, 0, 0);
 
                     thePlayers.add(thePlayer);
                     
                     Toast.makeText(ChooseCharacterActivity.this,  
-                    		"Player " + Integer.toString(playersChosen+1) + " is " + 
-                    		thePlayers.get(playersChosen).getName(), Toast.LENGTH_SHORT).show();
+                    		thePlayers.get(playersChosen).getName() + " is Player " + Integer.toString(playersChosen+1) + "\n" + 
+                    		thePlayers.get(playersChosen).getName() + " chose " + thePlayers.get(playersChosen).getType(), Toast.LENGTH_SHORT).show();
                     playersChosen++;
+                    ((EditText) findViewById(R.id.editText1)).setText("");
+
             }
             dbhelper.close();
         }

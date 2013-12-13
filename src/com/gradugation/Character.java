@@ -113,7 +113,7 @@ public class Character implements Serializable {
         }
         
         public String getType() {
-        	return name;
+        	return this.character.toString();
         }
 
         public void setId(int id) {

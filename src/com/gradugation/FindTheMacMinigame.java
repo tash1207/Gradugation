@@ -322,7 +322,7 @@ public class FindTheMacMinigame extends Activity {
 		alertDialogBuilder = new AlertDialog.Builder(this);
 
 		// set title and message
-		alertDialogBuilder.setTitle("Congradugation! You win!");
+		alertDialogBuilder.setTitle("Congradugation! You've found the Macs and earned 3 credits!");
 		alertDialogBuilder.setMessage("Press Continue.");
 		alertDialogBuilder.setCancelable(false);
 

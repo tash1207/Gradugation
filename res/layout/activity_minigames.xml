@@ -339,6 +339,38 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/minigame_find_the_mac_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/button_rectangle_orange"
+            android:clickable="true"
+            android:onClick="minigameFindTheMacButtonClick"
+            android:padding="8dp" >
+
+            <ImageView
+                android:id="@+id/minigame_find_the_mac_image"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_centerVertical="true"
+                android:background="@android:color/black"
+                android:contentDescription="@string/find_the_mac"
+                android:src="@drawable/computer_lab" />
+
+            <TextView
+                android:id="@+id/minigame_find_the_mac_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_margin="8dp"
+                android:layout_toRightOf="@id/minigame_find_the_mac_image"
+                android:text="@string/find_the_mac"
+                android:textColor="@color/gator_blue"
+                android:textSize="16sp" >
+            </TextView>
+        </RelativeLayout>
+        
+        <RelativeLayout
             android:id="@+id/minigame_game_over_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

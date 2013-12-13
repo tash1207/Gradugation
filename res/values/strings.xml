@@ -14,6 +14,7 @@
     <string name="title_activity_bench_press_minigame">BenchPressMinigame</string>
     <string name="title_activity_wires_mini_game">WiresMiniGame</string>
     <string name="title_activity_waitinline_minigame">WaitInLineMinigame</string>
+    <string name="title_activity_find_the_mac_minigame">FindTheMacMinigame</string>
     <string name="title_activity_game_over_screen">GameOverScreen</string>
     <string name="title_activity_math_mini_game">MathMiniGame</string>
     <string name="game_over_text">Game Over Screen</string>
@@ -60,6 +61,7 @@
     <string name="bench_press">Bench Press</string>
     <string name="whack_aflyer">Whack-A-Flyer</string>
     <string name="wait_in_line">Wait In Line</string>
+    <string name="find_the_mac">Find The Mac</string>
     <string name="title_activity_continue">MainActivity</string>
     <string name="saved_game">Load Saved Game</string>
     <string name="saved_game1">saved game1</string>
@@ -92,17 +94,25 @@
 	    by the dialogue box at the beginning of the wires game. The time allotted to to the player is not very long,
 	    so be quick!</string>
     <string name="bench_press_title">2. Bench Press</string>
-    <string name="bench_press_body">Quickly tap the screen, right onto the dapper, weight-lifting engineer on the screen
+    <string name="bench_press_body">Quickly tap the screen, right onto the dapper, weight-lifting athlete on the screen
 	    to perform as many reps as possible in the allotted time.</string>
 	<string name="whack_aflyer_title">3. Whack-A-Flyer</string>
     <string name="whack_aflyer_body">Whack as many flyers as you can to get through Turlington Plaza. Whack the flyers by tapping on them.</string> 
     <string name="color_title">4. Color</string>
     <string name="color_body">For every word on the screen, select the color that matches the color of the text.</string>  
-    <string name="wait_in_line_title">4. Wait in Line</string>
+    <string name="wait_in_line_title">5. Wait in Line</string>
     <string name="wait_in_line_body">Make it through the hub in 16 seconds to get to class. Watch out for other students. If you hit them, you won\'t make it to class! Touch the screen to stop your character from moving.</string>
-    <string name="food_title">5. Junk Food Ninja</string>
+    <string name="food_title">6. Junk Food Ninja</string>
     <string name="food_body">Click on the apples to get 5 points in 15 seconds. Lose points if you click on fries. </string>  
-	    
+	<string name="money_title">7. Counting Money</string>
+    <string name="money_body">Keep track of the amount of money that passes by the screen and then enter that amount into the dialog box at the end. </string>  
+	<string name="library_title">8. Library West</string>
+    <string name="library_body">This game will test your memory to the extreme! Remember how many books, coffee mugs, and friends appear on screen. You will be asked to type in how many you saw when time is up! </string>  
+	<string name="balance_title">9. Balance Game</string>
+    <string name="balance_body">You have 7 tries to guess how much weight is on the scale. After each guess, you will be notified if the correct weight is greater than or less than your guess.</string>  
+	
+    
+    
     <!-- Wait in Line Minigame -->
     <string name="wait_in_line_instructions">You have 16 seconds to make it through the Hub to get to class! 
         Touch the screen to stop your character from moving. Watch out for other students! 
@@ -146,6 +156,14 @@
     <!-- Food Minigame -->
     <string name="title_activity_food_mini_game">FoodMiniGame</string>
     <string name="food_mini_game">Junk Food Ninja</string>
+	
+	<!-- Find the Mac Minigame -->
+    <string-array name="type">
+        <item>New Game</item>
+        <item>Easy</item>
+        <item>Medium</item>
+        <item>Hard</item>
+    </string-array>
     
     <string name="moneyCount">Money Count</string>
     <string name="LibraryBombardment">Library Bombardment</string>

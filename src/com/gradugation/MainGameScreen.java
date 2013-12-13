@@ -290,7 +290,7 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
         
 		MusicFactory.setAssetBasePath("mfx/");
         try {
-                this.mMusic = MusicFactory.createMusicFromAsset(this.mEngine.getMusicManager(), this, "wagner_the_ride_of_the_valkyries.ogg");
+                this.mMusic = MusicFactory.createMusicFromAsset(this.mEngine.getMusicManager(), this, "DST-TowerDefenseTheme.mp3");
                 this.mMusic.setLooping(true);
         } catch (final IOException e) {
                 Debug.e(e);

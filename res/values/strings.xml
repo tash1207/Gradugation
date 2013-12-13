@@ -150,5 +150,9 @@
     <!-- Food Minigame -->
     <string name="title_activity_food_mini_game">FoodMiniGame</string>
     <string name="food_mini_game">Junk Food Ninja</string>
+    
+    <string name="moneyCount">Money Count</string>
+    <string name="LibraryBombardment">Library Bombardment</string>
+    <string name="BalancingMiniGame">Balancing Mini Game</string>
 
 </resources>

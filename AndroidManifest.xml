@@ -72,11 +72,28 @@
             android:label="@string/title_activity_bench_press_minigame"
             android:screenOrientation="landscape" >
         </activity>
-        
         <activity
             android:name=".WaitInLineMinigame"
-            android:label="@string/title_activity_waitinline_minigame"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:label="@string/title_activity_waitinline_minigame"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name=".moneyCount"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:label="@string/moneyCount"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name=".LibraryBombardment"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:label="@string/LibraryBombardment"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name=".BalancingMiniGame"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:label="@string/BalancingMiniGame"
             android:screenOrientation="landscape" >
         </activity>
 
@@ -85,12 +102,12 @@
 
         <activity
             android:name="com.gradugation.MainGameScreen"
-            android:label="@string/title_activity_main_game_screen"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:label="@string/title_activity_main_game_screen" >
         </activity>
         <activity
             android:name="com.gradugation.WhackAFlyerMiniGame"
-            android:label="@string/title_activity_whack_aflyer" 
+            android:label="@string/title_activity_whack_aflyer"
             android:screenOrientation="landscape" >
         </activity>
         <activity
@@ -100,14 +117,14 @@
         </activity>
         <activity
             android:name="com.gradugation.FoodMiniGame"
-            android:label="@string/title_activity_food_mini_game"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:label="@string/title_activity_food_mini_game" >
         </activity>
         <activity
             android:name="com.gradugation.GameOverScreen"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_game_over_screen"
-            android:screenOrientation="landscape"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
+            android:screenOrientation="landscape" >
         </activity>
     </application>
 

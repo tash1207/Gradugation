@@ -20,6 +20,7 @@
         android:textSize="@dimen/header_text_size" />
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/choose_character_text"
@@ -36,16 +37,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:drawableRight="@drawable/athlete"
                 android:drawablePadding="4dp"
+                android:drawableRight="@drawable/athlete"
                 android:text="@string/character_athlete" />
 
             <RadioButton
                 android:id="@+id/radio1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableRight="@drawable/engineer"
                 android:drawablePadding="6dp"
+                android:drawableRight="@drawable/engineer"
                 android:text="@string/character_engineer" />
 
             <RadioButton
@@ -59,15 +60,9 @@
                 android:id="@+id/radio3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableRight="@drawable/med_student"
                 android:drawablePadding="6dp"
+                android:drawableRight="@drawable/med_student"
                 android:text="@string/character_med_student" />
-            <RadioButton
-                android:id="@+id/radio4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableRight="@drawable/ic_launcher"
-                android:text="@string/character_gradugator" />
         </RadioGroup>
 
         <LinearLayout
@@ -96,6 +91,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -133,5 +129,14 @@
             android:textColor="@android:color/black"
             android:textSize="16sp" />
     </LinearLayout>
+
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/linearLayout2"
+        android:layout_below="@+id/linearLayout2"
+        android:ems="10"
+        android:hint="Enter name here" />
 
 </RelativeLayout>

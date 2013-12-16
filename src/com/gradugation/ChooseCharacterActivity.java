@@ -8,8 +8,11 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnKeyListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -65,6 +68,22 @@ public class ChooseCharacterActivity extends BaseActivity {
                 characterImage = (ImageView) findViewById(R.id.character_image);
                 characterAttributes = (TextView) findViewById(R.id.character_attributes);
                 textBox = (EditText) findViewById(R.id.editText1);
+                
+                textBox.setOnKeyListener(new OnKeyListener() {
+                    @Override
+                	public boolean onKey(View v, int keyCode, KeyEvent event) {
+                        // If the event is a key-down event on the "enter" button
+                        if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                            (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                        	InputMethodManager imm = (InputMethodManager) getSystemService(ChooseCharacterActivity.INPUT_METHOD_SERVICE);
+                            imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                            return true;
+                        }
+                        return false;
+                    }
+
+					
+                });
 			
 					
                 radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -18,13 +19,13 @@ import android.widget.Toast;
 
 public class ColorMiniGame extends Activity {
 	
-	private static final float PERCENTAGE_REQUIRED = .8f;
+	private static final int NUMBER_REQUIRED = 6;
 	private static final int CREDITS_EARNED = 3;
 	private enum TextColor {BLACK, BLUE, GREEN, RED, YELLOW, ORANGE, PURPLE, PINK};
 	private TextColor[] colors = TextColor.values();
 	private String currentColorText;
 	private int currentColor;
-	private float points, total;
+	private int points, total;
 	private TextView colorTextView, seconds_text, reps_text;
 	private CountDownTimer timer;
 	private boolean gameFinished;
@@ -41,8 +42,8 @@ public class ColorMiniGame extends Activity {
 		seconds_text = (TextView)(findViewById(R.id.color_mini_game_time_left));
 		reps_text = (TextView)(findViewById(R.id.color_mini_game_points));
 		
-		this.points = 0.0f;
-		this.total = 0.0f;
+		this.points = 0;
+		this.total = 0;
 		
 		timer = new CountDownTimer(10500, 1000) {
 			public void onTick(long millisUntilFinished) {
@@ -53,7 +54,7 @@ public class ColorMiniGame extends Activity {
 				seconds_text.setText("Time Left: 0 secs");
 				gameFinished = true;
 				Intent output = new Intent();
-				if (points/total >= PERCENTAGE_REQUIRED && points != 0) {
+				if (points >= NUMBER_REQUIRED) {
 					Toast.makeText(ColorMiniGame.this, getString(R.string.color_mini_game_success, (int)points, 
 							(int)total, CREDITS_EARNED), Toast.LENGTH_LONG).show();
 					// Code to add CREDITS_EARNED number of credits to the character
@@ -82,8 +83,7 @@ public class ColorMiniGame extends Activity {
 		};
 		
 		builder = new AlertDialog.Builder(this);
-		int needToPass = (int)(PERCENTAGE_REQUIRED * 100);
-        builder.setMessage(getString(R.string.color_mini_game_instructions, needToPass));
+        builder.setMessage(getString(R.string.color_mini_game_instructions, NUMBER_REQUIRED));
         builder.setCancelable(false);
         builder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
             //@Override

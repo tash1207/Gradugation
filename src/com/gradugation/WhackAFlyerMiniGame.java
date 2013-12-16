@@ -106,17 +106,19 @@ public class WhackAFlyerMiniGame extends SimpleBaseGameActivity implements IOnSc
     protected void onCreateResources() throws IOException {
     	
     	Intent intent = getIntent();
-    	characterType = intent.getStringExtra("character_type");
-    	if (characterType == null) characterType = "Gradugator";
+    	characterType = intent.getStringExtra("character_type").toUpperCase();
+    	if (characterType == null) characterType = "GRADUGATOR";
     	String imgName = "splash2.png";
-    	if (characterType.equals("Athlete")) {
+    	if (characterType.equals("ATHLETE")) {
     		imgName = "athlete.png";
     	}
-    	else if (characterType.equals("Engineer")) {
+    	else if (characterType.equals("ENGINEER")) {
     		imgName = "engineer.png";
     	}
-    	else if (characterType.equals("PreMed")) {
+    	else if (characterType.equals("PREMED")) {
     		imgName = "med_student.png";
+    	} else {
+    		imgName = "splash2.png";
     	}
 		
         this.points = 0;

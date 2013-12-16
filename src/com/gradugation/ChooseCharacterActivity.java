@@ -129,6 +129,9 @@ public class ChooseCharacterActivity extends BaseActivity {
                     
                     String type = (String)radioGroup1Button.getText();
                     String name = textBox.getText().toString();
+                    if (name.length() == 0) {
+                    	name = type;
+                    }
 
                     // need to grab game id from database when we are saving this
                     int gameID = dbhelper.getGameCount();
@@ -150,6 +153,9 @@ public class ChooseCharacterActivity extends BaseActivity {
                     
                     String type = (String)radioGroup1Button.getText();
                     String name = textBox.getText().toString();
+                    if (name.length() == 0) {
+                    	name = type;
+                    }
                     // need to grab game id from database when we are saving this
                     int gameID = dbhelper.getGameCount();
                     Character thePlayer = new Character(type.toUpperCase(), name, defaultLocation[playersChosen].mapToSprite(), playersChosen, gameID, 0, 0);

@@ -800,7 +800,6 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 					super.onModifierFinished(pItem);
 					if (!eventCompleted) {
 						checkMiniGameHotSpots(currentCharacter);
-						eventCompleted = true;
 					}
 				}
 			});
@@ -808,8 +807,8 @@ public class MainGameScreen extends SimpleBaseGameActivity implements
 
 	// Checks the hot spots for the minigames
 	protected void checkMiniGameHotSpots(int current) {
-		Event.getEvent(thePlayers.get(current).getSpriteLocation(), this, thePlayers.get(current).getName(), thePlayers.get(current).getGraduated(), current, thePlayers);
-		
+		Event.getEvent(thePlayers.get(current).getSpriteLocation(), this, thePlayers.get(current).getType(), thePlayers.get(current).getGraduated(), current, thePlayers);
+
 		if (!(move || gameDone)) {
 			gameDone = true;
 		}
